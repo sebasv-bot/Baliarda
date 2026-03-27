@@ -7,6 +7,7 @@
 <style>
 *{
   font-family:"Comic Sans MS", cursive !important;
+  box-sizing:border-box;
 }
 
 body{
@@ -16,36 +17,48 @@ body{
   text-align:center;
 }
 
-/* 🔹 PANELES SUPERIORES */
+/* 🔹 TOP BAR RESPONSIVE */
 .top-bar{
   position:absolute;
   top:10px;
+  left:0;
   width:100%;
   display:flex;
   justify-content:space-between;
-  padding:0 20px;
+  align-items:flex-start;
+  padding:0 40px;
 }
 
+/* 🔹 PANELES */
 .panel{
-  width:160px;
-  padding:10px;
+  min-width:140px;
+  padding:10px 14px;
   font-size:13px;
-  color:#ccc;
-  border-radius:8px;
-  border:1px solid rgba(0,150,255,0.3);
-  box-shadow:0 0 8px rgba(0,150,255,0.3);
-  background:rgba(0,0,0,0.3);
+  border-radius:10px;
+  background:rgba(0,0,0,0.35);
+}
+
+/* HOY (VERDE) */
+.panel-left{
+  border:1px solid rgba(0,255,150,0.4);
+  box-shadow:0 0 10px rgba(0,255,150,0.4);
+}
+
+/* RESTANTE (ROJO) */
+.panel-right{
+  border:1px solid rgba(255,60,60,0.4);
+  box-shadow:0 0 10px rgba(255,60,60,0.4);
 }
 
 .panel-title{
-  font-size:12px;
+  font-size:11px;
   letter-spacing:1px;
-  opacity:0.8;
-  margin-bottom:5px;
+  opacity:0.7;
+  margin-bottom:4px;
 }
 
 .panel-main{
-  font-size:16px;
+  font-size:15px;
   color:white;
 }
 
@@ -56,7 +69,7 @@ body{
 
 /* 🔹 GVS */
 .gvs-title{
-  margin-top:50px;
+  margin-top:60px;
   font-size:36px;
   letter-spacing:2px;
   background: linear-gradient(180deg,#ffffff 0%,#bbbbbb 100%);
@@ -81,18 +94,31 @@ body{
   margin-bottom:10px;
 }
 
-/* CONTROLES */
-.controles{margin:20px;}
+/* 🔹 CONTROLES */
+.controles{
+  margin:20px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
 
-.timeline{width:95%;margin:30px auto;}
+/* 🔹 TIMELINE */
+.timeline{
+  width:95%;
+  margin:30px auto;
+}
 
 .fila{
   display:flex;
   justify-content:space-between;
-  margin:8px 0;
+  flex-wrap:wrap;
 }
 
-.celda{width:12%;}
+.celda{
+  flex:1;
+  min-width:120px;
+}
 
 /* HORARIOS */
 .horarios{
@@ -101,7 +127,7 @@ body{
 }
 
 .horarios span{
-  width:12%;
+  flex:1;
   opacity:0;
   transition:.3s;
 }
@@ -116,8 +142,9 @@ body{
 
 /* SEGMENTOS */
 .segmento{
-  width:10%;
+  flex:1;
   height:6px;
+  margin:0 3px;
   background:#333;
   transform:scaleX(0);
   transform-origin:left;
@@ -157,17 +184,19 @@ body{
 
 <!-- 🔹 PANELES -->
 <div class="top-bar">
-  <div class="panel">
+
+  <div class="panel panel-left">
     <div class="panel-title">HOY</div>
     <div id="fecha" class="panel-main"></div>
     <div id="hora" class="panel-sub"></div>
   </div>
 
-  <div class="panel">
+  <div class="panel panel-right">
     <div class="panel-title">TIEMPO RESTANTE</div>
     <div id="dias" class="panel-main"></div>
     <div id="horas" class="panel-sub"></div>
   </div>
+
 </div>
 
 <h1 class="gvs-title">GVS PRODUCCIONES</h1>
@@ -216,7 +245,7 @@ body{
 
 <script>
 
-/* 🔹 FECHA Y HORA */
+/* 🔹 FECHA */
 function actualizarHora(){
   const now=new Date();
   document.getElementById("fecha").innerText=now.toLocaleDateString("es-AR");
@@ -242,7 +271,7 @@ setInterval(()=>{
   actualizarCountdown();
 },1000);
 
-/* 🔹 SISTEMA ORIGINAL */
+/* 🔹 SISTEMA ORIGINAL (SIN CAMBIOS) */
 
 const horarios=["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"];
 const limites=[8,8,3];
@@ -282,7 +311,6 @@ function toggle(i){
 }
 
 function avanzar(i){
-
   const cont=document.getElementById(carriles[i]);
   cont.querySelectorAll(".pelota").forEach(p=>p.remove());
 
@@ -295,26 +323,18 @@ function avanzar(i){
   const hrs=document.getElementById(horariosIds[i]).children;
 
   function step(){
-
     if(!estados[i]) return;
 
     if(progreso[i]===limites[i]){
-
       const last=limites[i]-1;
       const rect=seg[last].getBoundingClientRect();
       const parent=cont.getBoundingClientRect();
-
       pelota.style.left=(rect.left-parent.left+rect.width)+"px";
-
-      setTimeout(()=>{
-        pelota.classList.add("campeon");
-      },200);
-
+      setTimeout(()=>pelota.classList.add("campeon"),200);
       return;
     }
 
     const idx=progreso[i];
-
     seg[idx].classList.add("activo");
     seg[idx].style.background=colores[i];
 
@@ -334,13 +354,11 @@ function avanzar(i){
 }
 
 function retroceder(i){
-
   const cont=document.getElementById(carriles[i]);
   const seg=cont.children;
   const hrs=document.getElementById(horariosIds[i]).children;
 
   function step(){
-
     if(estados[i]) return;
 
     if(progreso[i]<=0){
@@ -349,7 +367,6 @@ function retroceder(i){
     }
 
     progreso[i]--;
-
     seg[progreso[i]].classList.remove("activo");
 
     hrs[progreso[i]].style.opacity=0;
