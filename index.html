@@ -49,6 +49,22 @@
   .hora-actual{background:linear-gradient(90deg,#00330022,#00660033);box-shadow:0 0 12px #00ff88;border-radius:6px;color:#bff;padding:6px 4px}
   .panel-right{box-shadow:0 0 16px rgba(255,60,60,0.25)}
   @media (max-width:800px){.btn{width:72px;height:56px;font-size:14px}}
+ }
+.texto-extra{
+  position:absolute;
+  right:-260px;
+  top:50%;
+  transform:translateY(-50%) scale(0.6);
+  color:#ff3c3c;
+  opacity:0;
+  transition:.3s;
+  white-space:nowrap;
+}
+
+.texto-extra.show{
+  opacity:1;
+  transform:translateY(-50%) scale(1);
+}
 </style>
 </head>
 <body>
@@ -171,6 +187,29 @@ function init(){
   // NOTA: no marcamos horas al inicio (evita iluminación inicial)
 }
 init();
+ function mostrarTexto(i){
+  if(i===2){
+    const el=document.getElementById("t3");
+    if(el){
+      el.style.display="block";
+      el.classList.add("show");
+    }
+  }
+  if(i===3){
+    const el=document.getElementById("t4");
+    if(el){
+      el.style.display="block";
+      el.classList.add("show");
+    }
+  }
+  if(i===4){
+    const el=document.getElementById("t5");
+    if(el){
+      el.style.display="block";
+      el.classList.add("show");
+    }
+  }
+}
 
 /* ---------- POSICIONAMIENTO CORREGIDO (usa píxeles por bloque) ---------- */
 function posicionarPelota(i){
@@ -250,12 +289,12 @@ function avanzar(i){
     if(!estados[i]) return;
 
     if(progreso[i] >= total){
-      // --- FIX AQUI: no mandamos la pelota al 100% del ancho del carril ---
-      progreso[i] = total;           // garantizamos el tope
-      posicionarPelota(i);          // la posicionamos en su segmento final (pixel-perfect)
-      pelota.classList.add("campeon");
-      return;
-    }
+  progreso[i] = total;
+  posicionarPelota(i);
+  pelota.classList.add("campeon");
+  mostrarTexto(i);   // 👈 ESTA ES LA ÚNICA LÍNEA NUEVA
+  return;
+}
 
     const idx = progreso[i];
     segs[idx].classList.add("activo");
