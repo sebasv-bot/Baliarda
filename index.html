@@ -49,7 +49,7 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 /* CONTROLES */
 .controles{margin:20px;display:flex;justify-content:center;gap:20px}
 
-/* GRID GLOBAL */
+/* GRID */
 .row, .carril, .horarios{
   display:grid;
   grid-template-columns:repeat(8,1fr);
@@ -59,23 +59,16 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 .container{width:95%;margin:auto}
 
 /* CELDAS */
-.celda{
-  text-align:center;
-  font-size:13px;
-}
+.celda{font-size:13px}
 
 /* HORARIOS */
 .horarios span{
-  text-align:center;
   opacity:0;
   font-size:12px;
 }
 
 /* CARRILES */
-.carril{
-  position:relative;
-  margin:25px 0;
-}
+.carril{position:relative;margin:25px 0}
 
 /* SEGMENTOS */
 .segmento{
@@ -95,10 +88,9 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
   width:14px;height:14px;
   border-radius:50%;
   transform:translate(-50%,-50%);
-  transition:left .3s linear;
+  transition:left .2s linear;
 }
 
-/* CAMPEON */
 .campeon{animation:pulse 1s infinite}
 @keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.4)}}
 </style>
@@ -171,11 +163,6 @@ setInterval(()=>{
   const n=new Date();
   fecha.innerText=n.toLocaleDateString("es-AR");
   hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
-
-  const m=new Date("2026-06-11");
-  const d=m-n;
-  dias.innerText=Math.floor(d/86400000)+" días";
-  horas.innerText=Math.floor((d/3600000)%24)+" hs";
 },1000);
 
 /* CONFIG */
@@ -189,8 +176,11 @@ const colores=["#00ff88","#ffd000","#ff3c3c"];
 const carriles=["c1","c2","c3"];
 const horariosIds=["h1","h2","h3"];
 
-const totalColumnas = 8;
+const totalColumnas=8;
 const limites=horarios.map(h=>h.filter(x=>x!="").length);
+
+const estados=[false,false,false];
+const progreso=[0,0,0];
 
 /* INIT */
 function init(){
@@ -212,8 +202,35 @@ function init(){
 }
 init();
 
-const estados=[false,false,false];
-const progreso=[0,0,0];
+/* POSICIONADOR CENTRAL */
+function posicionarPelota(i){
+  const cont=document.getElementById(carriles[i]);
+  const pelota=cont.querySelector(".pelota");
+  if(!pelota) return;
+
+  const seg=cont.children;
+
+  let idx = progreso[i]-1;
+  if(idx < 0) return;
+
+  if(idx >= limites[i]) idx = limites[i]-1;
+
+  const segmento = seg[idx];
+  const rect = segmento.getBoundingClientRect();
+  const contRect = cont.getBoundingClientRect();
+
+  const left = rect.left - contRect.left + rect.width;
+  pelota.style.left = left + "px";
+}
+
+/* RESIZE AUTO */
+window.addEventListener("resize", ()=>{
+  for(let i=0;i<3;i++){
+    if(estados[i]){
+      posicionarPelota(i);
+    }
+  }
+});
 
 function toggle(i){
   estados[i]=!estados[i];
@@ -239,11 +256,7 @@ function avanzar(i){
     if(!estados[i]) return;
 
     if(progreso[i]>=limites[i]){
-      const segmentoFinal = seg[limites[i]-1];
-      const rect = segmentoFinal.getBoundingClientRect();
-      const contRect = cont.getBoundingClientRect();
-      const left = rect.left - contRect.left + rect.width;
-      pelota.style.left = left + "px";
+      posicionarPelota(i);
       pelota.classList.add("campeon");
       return;
     }
@@ -256,14 +269,9 @@ function avanzar(i){
     hrs[idx].style.opacity=1;
     hrs[idx].style.color=colores[i];
 
-    const segmentoActual = seg[idx];
-    const rect = segmentoActual.getBoundingClientRect();
-    const contRect = cont.getBoundingClientRect();
-    const left = rect.left - contRect.left + rect.width;
-
-    pelota.style.left = left + "px";
-
     progreso[i]++;
+    posicionarPelota(i);
+
     setTimeout(step,300);
   }
 
