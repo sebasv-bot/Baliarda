@@ -47,10 +47,10 @@ body{
 
 .panel-title{font-size:11px;opacity:.7}
 
-/* 🔥 LATIDO EN DATOS */
+/* 🔥 LATIDO */
 #hora, #dias, #horas{
   animation:latido 1.2s infinite;
-  display:inline-block;
+  display:block;
 }
 
 /* TITULO */
@@ -224,17 +224,22 @@ body{
 
 <script>
 
-/* RELOJ */
+/* RELOJ + TIEMPO RESTANTE PRO */
 setInterval(()=>{
   const n=new Date();
   fecha.innerText=n.toLocaleDateString("es-AR");
   hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
 
-  const mundial=new Date("2026-06-11");
+  const mundial=new Date("2026-06-11T00:00:00");
   const diff=mundial-n;
 
-  dias.innerText=Math.floor(diff/86400000)+" días";
-  horas.innerText=Math.floor((diff/3600000)%24)+" hs";
+  const diasRest=Math.floor(diff/86400000);
+  const horasRest=Math.floor((diff/3600000)%24);
+  const minutosRest=Math.floor((diff/60000)%60);
+
+  dias.innerText=diasRest+" días";
+  horas.innerText=horasRest+" hs "+minutosRest+" min";
+
 },1000);
 
 /* CONFIG */
