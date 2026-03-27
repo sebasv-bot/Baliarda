@@ -74,7 +74,7 @@ h2{margin-top:10px;}
   transition:left .5s cubic-bezier(.25,1.5,.5,1);
 }
 
-/* 🔥 EFECTO CAMPEÓN */
+/* CAMPEÓN */
 .campeon{
   animation:pulse 1s infinite;
 }
@@ -113,6 +113,11 @@ h2{margin-top:10px;}
 <label><input type="checkbox" onchange="toggle(0)">1°</label>
 <label><input type="checkbox" onchange="toggle(1)">2°</label>
 <label><input type="checkbox" onchange="toggle(2)">3°</label>
+
+<!-- 🔊 CONTROL SONIDO -->
+<label style="margin-left:30px;">
+<input type="checkbox" id="soundToggle" checked> 🔊 Sonido
+</label>
 </div>
 
 <div class="timeline">
@@ -148,6 +153,9 @@ h2{margin-top:10px;}
 <div id="c3" class="carril"></div>
 
 </div>
+
+<!-- 🔊 AUDIO -->
+<audio id="aplausos" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9b0b60.mp3?filename=applause-8-99843.mp3"></audio>
 
 <script>
 
@@ -191,7 +199,6 @@ function toggle(i){
 function avanzar(i){
 
   const cont=document.getElementById(carriles[i]);
-
   cont.querySelectorAll(".pelota").forEach(p=>p.remove());
 
   const pelota=document.createElement("div");
@@ -208,15 +215,19 @@ function avanzar(i){
     if(progreso[i] >= limites[i]){
 
       const last = limites[i] - 1;
-
       const rect = seg[last].getBoundingClientRect();
       const parent = cont.getBoundingClientRect();
-
       const x = (rect.left - parent.left + rect.width);
-      pelota.style.left = x + "px";
 
-      // 🔥 EFECTO CAMPEÓN
+      pelota.style.left = x + "px";
       pelota.classList.add("campeon");
+
+      // 🔊 SONIDO
+      if(document.getElementById("soundToggle").checked){
+        const audio = document.getElementById("aplausos");
+        audio.currentTime = 0;
+        audio.play();
+      }
 
       return;
     }
@@ -237,7 +248,6 @@ function avanzar(i){
 
     pelota.style.left=x+"px";
 
-    // trail
     const t=document.createElement("div");
     t.className="trail";
     t.style.background=colores[i];
