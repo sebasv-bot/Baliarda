@@ -13,55 +13,37 @@ body{
   text-align:center;
 }
 
-h1{margin-top:30px;}
-h2{margin-top:10px;}
+button{
+  padding:10px 20px;
+  margin:10px;
+  font-size:16px;
+  cursor:pointer;
+}
 
 .controles{margin:20px;}
-.controles label{margin:0 15px;cursor:pointer;}
+.controles label{margin:0 15px;}
 
 .timeline{width:95%;margin:40px auto;}
 
-.fila{
-  display:flex;
-  justify-content:space-between;
-  margin:10px 0;
-}
+.fila{display:flex;justify-content:space-between;margin:10px 0;}
 .celda{width:12%;}
 
-/* HORARIOS */
-.horarios{
-  display:flex;
-  justify-content:space-between;
-}
-.horarios span{
-  width:12%;
-  opacity:0;
-  transition:.3s;
-}
+.horarios{display:flex;justify-content:space-between;}
+.horarios span{width:12%;opacity:0;transition:.3s;}
 
-/* CARRILES */
-.carril{
-  display:flex;
-  justify-content:space-between;
-  margin:30px 0;
-  position:relative;
-}
+.carril{display:flex;justify-content:space-between;margin:30px 0;position:relative;}
 
-/* SEGMENTOS */
 .segmento{
   width:10%;
   height:6px;
   border-radius:10px;
   transform:scaleX(0);
   transform-origin:left;
-  transition:transform .5s ease;
+  transition:.5s;
 }
 
-.segmento.activo{
-  transform:scaleX(1);
-}
+.segmento.activo{transform:scaleX(1);}
 
-/* PELOTA */
 .pelota{
   position:absolute;
   top:50%;
@@ -70,22 +52,19 @@ h2{margin-top:10px;}
   border-radius:50%;
   transform:translate(-50%,-50%);
   box-shadow:0 0 25px currentColor;
-  pointer-events:none;
   transition:left .5s cubic-bezier(.25,1.5,.5,1);
 }
 
-/* CAMPEÓN */
 .campeon{
   animation:pulse 1s infinite;
 }
 
 @keyframes pulse{
-  0%{ transform:translate(-50%,-50%) scale(1); box-shadow:0 0 20px currentColor;}
-  50%{ transform:translate(-50%,-50%) scale(1.4); box-shadow:0 0 40px currentColor;}
-  100%{ transform:translate(-50%,-50%) scale(1); box-shadow:0 0 20px currentColor;}
+  0%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.4);}
+  100%{transform:translate(-50%,-50%) scale(1);}
 }
 
-/* TRAIL */
 .trail{
   position:absolute;
   width:14px;
@@ -96,10 +75,7 @@ h2{margin-top:10px;}
 }
 
 @keyframes fadeOut{
-  to{
-    opacity:0;
-    transform:scale(.5);
-  }
+  to{opacity:0;transform:scale(.5);}
 }
 </style>
 </head>
@@ -107,41 +83,26 @@ h2{margin-top:10px;}
 <body>
 
 <h1>GVS PRODUCCIONES</h1>
-<h2>CAMINO DE ARGENTINA - MUNDIAL</h2>
+
+<!-- 🔊 BOTÓN ACTIVAR -->
+<button onclick="activarAudio()">🔊 Activar sonido</button>
 
 <div class="controles">
 <label><input type="checkbox" onchange="toggle(0)">1°</label>
 <label><input type="checkbox" onchange="toggle(1)">2°</label>
 <label><input type="checkbox" onchange="toggle(2)">3°</label>
 
-<!-- 🔊 CONTROL SONIDO -->
-<label style="margin-left:30px;">
-<input type="checkbox" id="soundToggle" checked> 🔊 Sonido
+<label style="margin-left:20px;">
+<input type="checkbox" id="soundToggle" checked> 🔊 ON
 </label>
 </div>
 
 <div class="timeline">
 
 <div class="fila">
-<div class="celda">16/6</div>
-<div class="celda">22/6</div>
-<div class="celda">27/6</div>
-<div class="celda">3/7</div>
-<div class="celda">7/7</div>
-<div class="celda">11/7</div>
-<div class="celda">15/7</div>
-<div class="celda">19/7</div>
-</div>
-
-<div class="fila">
-<div class="celda">Grupos</div>
-<div class="celda">Grupos</div>
-<div class="celda">Grupos</div>
-<div class="celda">16avos</div>
-<div class="celda">Octavos</div>
-<div class="celda">Cuartos</div>
-<div class="celda">Semi</div>
-<div class="celda">Final 🏆</div>
+<div class="celda">16/6</div><div class="celda">22/6</div><div class="celda">27/6</div>
+<div class="celda">3/7</div><div class="celda">7/7</div><div class="celda">11/7</div>
+<div class="celda">15/7</div><div class="celda">19/7</div>
 </div>
 
 <div id="h1" class="horarios"></div>
@@ -154,10 +115,23 @@ h2{margin-top:10px;}
 
 </div>
 
-<!-- 🔊 AUDIO -->
-<audio id="aplausos" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9b0b60.mp3?filename=applause-8-99843.mp3"></audio>
+<audio id="aplausos" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9b0b60.mp3"></audio>
 
 <script>
+
+let audioHabilitado=false;
+
+function activarAudio(){
+  const audio=document.getElementById("aplausos");
+  audio.play().then(()=>{
+    audio.pause();
+    audio.currentTime=0;
+    audioHabilitado=true;
+    alert("Sonido activado 🔊");
+  }).catch(()=>{
+    alert("Tocá de nuevo");
+  });
+}
 
 const horarios=["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"];
 const limites=[8,8,3];
@@ -193,7 +167,6 @@ const progreso=[0,0,0];
 function toggle(i){
   estados[i]=!estados[i];
   if(estados[i]) avanzar(i);
-  else retroceder(i);
 }
 
 function avanzar(i){
@@ -212,27 +185,24 @@ function avanzar(i){
 
   function step(){
 
-    if(progreso[i] >= limites[i]){
+    if(progreso[i]>=limites[i]){
 
-      const last = limites[i] - 1;
-      const rect = seg[last].getBoundingClientRect();
-      const parent = cont.getBoundingClientRect();
-      const x = (rect.left - parent.left + rect.width);
+      const last=limites[i]-1;
+      const rect=seg[last].getBoundingClientRect();
+      const parent=cont.getBoundingClientRect();
+      const x=(rect.left-parent.left+rect.width);
 
-      pelota.style.left = x + "px";
+      pelota.style.left=x+"px";
       pelota.classList.add("campeon");
 
-      // 🔊 SONIDO
-      if(document.getElementById("soundToggle").checked){
-        const audio = document.getElementById("aplausos");
-        audio.currentTime = 0;
+      if(audioHabilitado && document.getElementById("soundToggle").checked){
+        const audio=document.getElementById("aplausos");
+        audio.currentTime=0;
         audio.play();
       }
 
       return;
     }
-
-    if(!estados[i]) return;
 
     const idx=progreso[i];
 
@@ -240,7 +210,6 @@ function avanzar(i){
     seg[idx].style.background=colores[i];
 
     hrs[idx].style.opacity=1;
-    hrs[idx].style.color=colores[i];
 
     const rect=seg[idx].getBoundingClientRect();
     const parent=cont.getBoundingClientRect();
@@ -248,41 +217,8 @@ function avanzar(i){
 
     pelota.style.left=x+"px";
 
-    const t=document.createElement("div");
-    t.className="trail";
-    t.style.background=colores[i];
-    t.style.left=x+"px";
-    t.style.top="50%";
-    t.style.transform="translate(-50%,-50%)";
-    cont.appendChild(t);
-    setTimeout(()=>t.remove(),600);
-
     progreso[i]++;
     setTimeout(step,350);
-  }
-
-  step();
-}
-
-function retroceder(i){
-
-  const cont=document.getElementById(carriles[i]);
-  const seg=cont.children;
-  const hrs=document.getElementById(horariosIds[i]).children;
-
-  function step(){
-    if(estados[i]) return;
-    if(progreso[i]<=0){
-      cont.querySelectorAll(".pelota").forEach(p=>p.remove());
-      return;
-    }
-
-    progreso[i]--;
-
-    seg[progreso[i]].classList.remove("activo");
-    hrs[progreso[i]].style.opacity=0;
-
-    setTimeout(step,150);
   }
 
   step();
