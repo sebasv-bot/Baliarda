@@ -19,7 +19,6 @@ button{
   margin:10px;
   padding:8px 16px;
   font-size:16px;
-  cursor:pointer;
 }
 
 .controles{margin:20px;}
@@ -76,7 +75,7 @@ button{
   height:14px;
   border-radius:50%;
   transform:translate(-50%,-50%);
-  transition:left .4s;
+  transition:left .4s linear;
   box-shadow:0 0 15px currentColor;
 }
 
@@ -107,7 +106,6 @@ button{
 
 <div class="timeline">
 
-<!-- FECHAS -->
 <div class="fila">
 <div class="celda">16/6 - lunes</div>
 <div class="celda">22/6 - domingo</div>
@@ -119,7 +117,6 @@ button{
 <div class="celda">19/7 - viernes</div>
 </div>
 
-<!-- ETAPAS -->
 <div class="fila">
 <div class="celda">Fase de grupos</div>
 <div class="celda">Fase de grupos</div>
@@ -131,12 +128,10 @@ button{
 <div class="celda">Final 🏆</div>
 </div>
 
-<!-- HORARIOS -->
 <div id="h1" class="horarios"></div>
 <div id="h2" class="horarios"></div>
 <div id="h3" class="horarios"></div>
 
-<!-- CARRILES -->
 <div id="c1" class="carril"></div>
 <div id="c2" class="carril"></div>
 <div id="c3" class="carril"></div>
@@ -215,15 +210,25 @@ function avanzar(i){
 
     if(!estados[i]) return;
 
-    if(progreso[i]>=limites[i]){
+    // 🔥 FINAL CORRECTO
+    if(progreso[i] === limites[i]){
 
-      pelota.classList.add("campeon");
+      const last = limites[i]-1;
+      const rect = seg[last].getBoundingClientRect();
+      const parent = cont.getBoundingClientRect();
 
-      if(audioActivo){
-        const a=document.getElementById("aplausos");
-        a.currentTime=0;
-        a.play();
-      }
+      pelota.style.left = (rect.left-parent.left+rect.width)+"px";
+
+      setTimeout(()=>{
+        pelota.classList.add("campeon");
+
+        if(audioActivo){
+          const a=document.getElementById("aplausos");
+          a.currentTime=0;
+          a.play();
+        }
+
+      },200);
 
       return;
     }
