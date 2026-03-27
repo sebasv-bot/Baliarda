@@ -13,8 +13,30 @@ body{
   text-align:center;
 }
 
+/* 🔥 HEADER SUPERIOR */
+.top-bar{
+  position:absolute;
+  top:10px;
+  left:0;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:0 20px;
+  font-size:14px;
+  color:#ccc;
+}
+
+.top-left{
+  text-align:left;
+}
+
+.top-right{
+  text-align:right;
+}
+
 /* 🔥 GVS TITLE */
 .gvs-title{
+  margin-top:40px;
   font-size:36px;
   letter-spacing:2px;
   background: linear-gradient(180deg,#ffffff 0%,#bbbbbb 100%);
@@ -23,36 +45,20 @@ body{
   text-shadow:
     0 0 10px rgba(255,255,255,0.6),
     0 0 20px rgba(0,150,255,0.4);
-  animation:fadeIn 1.2s ease;
 }
 
-/* 🔥 línea glow */
 .gvs-line{
   width:300px;
   height:2px;
   margin:8px auto;
   background:linear-gradient(90deg,transparent,#00aaff,transparent);
   box-shadow:0 0 10px #00aaff;
-  animation:lineGlow 2s infinite alternate;
 }
 
-@keyframes lineGlow{
-  from{opacity:0.4;}
-  to{opacity:1;}
-}
-
-/* 🔥 subtítulo */
 .gvs-sub{
   font-size:14px;
   color:#aaa;
-  letter-spacing:1px;
   margin-bottom:10px;
-  animation:fadeIn 2s ease;
-}
-
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(-10px);}
-  to{opacity:1; transform:translateY(0);}
 }
 
 .controles{margin:20px;}
@@ -128,6 +134,12 @@ body{
 
 <body>
 
+<!-- 🔥 HEADER -->
+<div class="top-bar">
+  <div class="top-left" id="fechaHora"></div>
+  <div class="top-right" id="contador"></div>
+</div>
+
 <h1 class="gvs-title">GVS PRODUCCIONES</h1>
 <div class="gvs-line"></div>
 <div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
@@ -174,6 +186,36 @@ body{
 
 <script>
 
+/* 🔥 FECHA ACTUAL */
+function actualizarFechaHora(){
+  const ahora = new Date();
+  const texto = ahora.toLocaleDateString('es-AR') + " " +
+                ahora.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById("fechaHora").innerText = "📅 " + texto;
+}
+
+/* 🔥 COUNTDOWN */
+const fechaMundial = new Date("2026-06-11T00:00:00");
+
+function actualizarContador(){
+  const ahora = new Date();
+  const diff = fechaMundial - ahora;
+
+  const dias = Math.floor(diff / (1000*60*60*24));
+  const horas = Math.floor((diff / (1000*60*60)) % 24);
+  const minutos = Math.floor((diff / (1000*60)) % 60);
+
+  document.getElementById("contador").innerText =
+    `⏳ Faltan: ${dias} días ${horas}:${minutos}`;
+}
+
+setInterval(()=>{
+  actualizarFechaHora();
+  actualizarContador();
+},1000);
+
+/* 🔥 SISTEMA ORIGINAL */
+
 const horarios=["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"];
 const limites=[8,8,3];
 const colores=["#00ff88","#ffd000","#ff3c3c"];
@@ -181,7 +223,6 @@ const carriles=["c1","c2","c3"];
 const horariosIds=["h1","h2","h3"];
 
 function init(){
-
   carriles.forEach(id=>{
     const c=document.getElementById(id);
     for(let i=0;i<8;i++){
@@ -199,7 +240,6 @@ function init(){
       c.appendChild(s);
     }
   });
-
 }
 
 init();
