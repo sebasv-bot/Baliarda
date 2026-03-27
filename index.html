@@ -28,11 +28,6 @@ h2{margin-top:10px;}
 }
 .celda{width:12%;}
 
-/* COLORES */
-.verde{color:#00ff88;}
-.amarillo{color:#ffd000;}
-.rojo{color:#ff3c3c;}
-
 /* HORARIOS */
 .horarios{
   display:flex;
@@ -187,7 +182,6 @@ function avanzar(i){
 
   const cont=document.getElementById(carriles[i]);
 
-  // 🔥 limpia pelotas previas
   cont.querySelectorAll(".pelota").forEach(p=>p.remove());
 
   const pelota=document.createElement("div");
@@ -200,8 +194,23 @@ function avanzar(i){
   const hrs=document.getElementById(horariosIds[i]).children;
 
   function step(){
+
+    // 🔥 CUANDO LLEGA AL FINAL → SE QUEDA
+    if(progreso[i] >= limites[i]){
+
+      const last = limites[i] - 1;
+
+      const rect = seg[last].getBoundingClientRect();
+      const parent = cont.getBoundingClientRect();
+
+      const x = (rect.left - parent.left + rect.width);
+
+      pelota.style.left = x + "px";
+
+      return;
+    }
+
     if(!estados[i]) return;
-    if(progreso[i]>=limites[i]) return;
 
     const idx=progreso[i];
 
