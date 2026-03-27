@@ -15,12 +15,6 @@ body{
 
 h1{margin-top:20px;}
 
-button{
-  margin:10px;
-  padding:8px 16px;
-  font-size:16px;
-}
-
 .controles{margin:20px;}
 
 .timeline{width:95%;margin:30px auto;}
@@ -96,8 +90,6 @@ button{
 
 <h1>GVS PRODUCCIONES</h1>
 
-<button onclick="activarAudio()">🔊 Activar sonido</button>
-
 <div class="controles">
 <label><input type="checkbox" onclick="toggle(0)">1° en fase de grupo</label>
 <label><input type="checkbox" onclick="toggle(1)">2° en fase de grupo</label>
@@ -138,21 +130,7 @@ button{
 
 </div>
 
-<audio id="aplausos" src="https://actions.google.com/sounds/v1/crowds/applause.ogg"></audio>
-
 <script>
-
-let audioActivo=false;
-
-function activarAudio(){
-  const a=document.getElementById("aplausos");
-  a.play().then(()=>{
-    a.pause();
-    a.currentTime=0;
-    audioActivo=true;
-    alert("🔊 Sonido activado");
-  });
-}
 
 const horarios=["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"];
 const limites=[8,8,3];
@@ -210,7 +188,6 @@ function avanzar(i){
 
     if(!estados[i]) return;
 
-    // 🔥 FINAL CORRECTO
     if(progreso[i] === limites[i]){
 
       const last = limites[i]-1;
@@ -221,13 +198,6 @@ function avanzar(i){
 
       setTimeout(()=>{
         pelota.classList.add("campeon");
-
-        if(audioActivo){
-          const a=document.getElementById("aplausos");
-          a.currentTime=0;
-          a.play();
-        }
-
       },200);
 
       return;
