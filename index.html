@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Baliarda GVS - SHOW</title>
+<title>Baliarda GVS</title>
 
 <style>
 body{
@@ -29,9 +29,9 @@ h2{margin-top:10px;}
 .celda{width:12%;}
 
 /* COLORES */
-.verde{color:#00ff88;text-shadow:0 0 10px #00ff88;}
-.amarillo{color:#ffd000;text-shadow:0 0 10px #ffd000;}
-.rojo{color:#ff3c3c;text-shadow:0 0 10px #ff3c3c;}
+.verde{color:#00ff88;}
+.amarillo{color:#ffd000;}
+.rojo{color:#ff3c3c;}
 
 /* HORARIOS */
 .horarios{
@@ -41,7 +41,7 @@ h2{margin-top:10px;}
 .horarios span{
   width:12%;
   opacity:0;
-  transition:0.3s;
+  transition:.3s;
 }
 
 /* CARRILES */
@@ -66,24 +66,6 @@ h2{margin-top:10px;}
   transform:scaleX(1);
 }
 
-.segmento::after{
-  content:"";
-  position:absolute;
-  width:12px;
-  height:12px;
-  border-radius:50%;
-  right:-6px;
-  top:50%;
-  transform:translateY(-50%);
-  background:currentColor;
-  box-shadow:0 0 12px currentColor;
-  opacity:0;
-}
-
-.segmento.activo::after{
-  opacity:1;
-}
-
 /* PELOTA */
 .pelota{
   position:absolute;
@@ -103,15 +85,15 @@ h2{margin-top:10px;}
   width:14px;
   height:14px;
   border-radius:50%;
-  pointer-events:none;
   opacity:.4;
+  pointer-events:none;
   animation:fadeOut .6s forwards;
 }
 
 @keyframes fadeOut{
   to{
     opacity:0;
-    transform:scale(0.5);
+    transform:scale(.5);
   }
 }
 </style>
@@ -205,7 +187,7 @@ function avanzar(i){
 
   const cont=document.getElementById(carriles[i]);
 
-  // 🔥 elimina cualquier pelota previa
+  // 🔥 limpia pelotas previas
   cont.querySelectorAll(".pelota").forEach(p=>p.remove());
 
   const pelota=document.createElement("div");
@@ -225,19 +207,17 @@ function avanzar(i){
 
     seg[idx].classList.add("activo");
     seg[idx].style.background=colores[i];
-    seg[idx].style.color=colores[i];
 
     hrs[idx].style.opacity=1;
     hrs[idx].style.color=colores[i];
 
     const rect=seg[idx].getBoundingClientRect();
     const parent=cont.getBoundingClientRect();
-
     const x=(rect.left-parent.left+rect.width);
 
     pelota.style.left=x+"px";
 
-    // 🔥 TRAIL
+    // trail
     const t=document.createElement("div");
     t.className="trail";
     t.style.background=colores[i];
@@ -245,7 +225,6 @@ function avanzar(i){
     t.style.top="50%";
     t.style.transform="translate(-50%,-50%)";
     cont.appendChild(t);
-
     setTimeout(()=>t.remove(),600);
 
     progreso[i]++;
