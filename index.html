@@ -5,26 +5,29 @@
 <title>Baliarda GVS WOW</title>
 
 <style>
-*{box-sizing:border-box;font-family:"Arial",sans-serif}
+*{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
 body{
   margin:0;
   background:radial-gradient(circle,#0b1f3a,#000);
   color:#fff;
   text-align:center;
-  overflow:hidden;
 }
 
 /* ENTRADA */
 body{
   opacity:0;
   transform:scale(1.05);
-  animation:entrada 1.2s ease forwards;
+  animation:entrada 1s ease forwards;
 }
 @keyframes entrada{
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
+  to{opacity:1;transform:scale(1)}
+}
+
+/* LATIDO */
+@keyframes latido{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+  100%{transform:scale(1)}
 }
 
 /* TOP */
@@ -44,11 +47,16 @@ body{
 
 .panel-title{font-size:11px;opacity:.7}
 
+/* 🔥 LATIDO EN DATOS */
+#hora, #dias, #horas{
+  animation:latido 1.2s infinite;
+  display:inline-block;
+}
+
 /* TITULO */
 .gvs-title{
   margin-top:60px;
   font-size:40px;
-  letter-spacing:2px;
   background:linear-gradient(#fff,#bbb);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -72,7 +80,7 @@ body{
 .controles{margin:20px;display:flex;justify-content:center;gap:20px}
 
 /* GRID */
-.row,.carril,.horarios{
+.row,.horarios{
   display:grid;
   grid-template-columns:repeat(8,1fr);
   gap:6px;
@@ -80,13 +88,20 @@ body{
 
 .container{width:95%;margin:auto}
 
+.carril{
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:6px;
+  margin:35px 0;
+}
+
 .celda{font-size:13px}
 
 /* HORARIOS */
 .horarios span{
   opacity:0;
   font-size:12px;
-  transition:.3s;
 }
 
 /* SEGMENTOS */
@@ -104,11 +119,11 @@ body{
   box-shadow:0 0 10px currentColor;
 }
 
-/* EFECTO ENERGÍA */
+/* ENERGÍA */
 .segmento.activo::after{
   content:"";
   position:absolute;
-  top:0;left:0;height:100%;width:100%;
+  inset:0;
   background:linear-gradient(90deg,transparent,white,transparent);
   animation:energia 1s linear infinite;
 }
@@ -126,6 +141,7 @@ body{
   transform:translate(-50%,-50%);
   transition:left .2s linear;
   box-shadow:0 0 15px currentColor;
+  z-index:10;
 }
 
 .pelota::after{
@@ -135,14 +151,11 @@ body{
   border-radius:50%;
   top:50%;left:50%;
   transform:translate(-50%,-50%);
-  background:radial-gradient(circle, currentColor, transparent);
+  background:radial-gradient(circle,currentColor,transparent);
   opacity:.3;
 }
 
-/* FINAL */
-.campeon{
-  animation:pulse 0.8s infinite;
-}
+.campeon{animation:pulse .8s infinite}
 @keyframes pulse{
   50%{transform:translate(-50%,-50%) scale(1.4)}
 }
@@ -211,13 +224,13 @@ body{
 
 <script>
 
-/* RELOJ + COUNTDOWN */
+/* RELOJ */
 setInterval(()=>{
   const n=new Date();
   fecha.innerText=n.toLocaleDateString("es-AR");
   hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
 
-  const mundial=new Date("2026-06-11T00:00:00");
+  const mundial=new Date("2026-06-11");
   const diff=mundial-n;
 
   dias.innerText=Math.floor(diff/86400000)+" días";
@@ -261,7 +274,7 @@ function init(){
 }
 init();
 
-/* POSICIONADOR */
+/* POSICION */
 function posicionarPelota(i){
   const cont=document.getElementById(carriles[i]);
   const pelota=cont.querySelector(".pelota");
@@ -273,16 +286,14 @@ function posicionarPelota(i){
   if(idx < 0) return;
   if(idx >= limites[i]) idx = limites[i]-1;
 
-  const segmento = seg[idx];
-  const rect = segmento.getBoundingClientRect();
-  const contRect = cont.getBoundingClientRect();
+  const rect=seg[idx].getBoundingClientRect();
+  const contRect=cont.getBoundingClientRect();
 
-  const left = rect.left - contRect.left + rect.width;
-  pelota.style.left = left + "px";
+  pelota.style.left=(rect.left-contRect.left+rect.width)+"px";
 }
 
 /* RESIZE */
-window.addEventListener("resize", ()=>{
+window.addEventListener("resize",()=>{
   for(let i=0;i<3;i++){
     if(estados[i]) posicionarPelota(i);
   }
