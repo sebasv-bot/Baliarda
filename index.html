@@ -5,169 +5,62 @@
 <title>Baliarda GVS</title>
 
 <style>
-*{
-  font-family:"Comic Sans MS", cursive !important;
-  box-sizing:border-box;
-}
+*{font-family:"Comic Sans MS",cursive!important;box-sizing:border-box;}
+body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-align:center;}
 
-body{
-  margin:0;
-  background: radial-gradient(circle at center,#0b1f3a 0%,#000 100%);
-  color:white;
-  text-align:center;
-}
-
-/* 🔹 TOP BAR */
 .top-bar{
-  position:absolute;
-  top:10px;
-  left:0;
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  padding:0 40px;
+  position:absolute;top:10px;width:100%;
+  display:flex;justify-content:space-between;padding:0 40px;
 }
 
-/* PANELES */
 .panel{
-  min-width:140px;
-  padding:10px 14px;
-  font-size:13px;
-  border-radius:10px;
-  background:rgba(0,0,0,0.35);
+  min-width:140px;padding:10px;border-radius:10px;
+  background:rgba(0,0,0,0.3);
 }
 
-/* COLORES */
-.panel-left{
-  border:1px solid rgba(0,255,150,0.4);
-  box-shadow:0 0 10px rgba(0,255,150,0.4);
-}
+.panel-left{border:1px solid rgba(0,255,150,.4);box-shadow:0 0 10px rgba(0,255,150,.4);}
+.panel-right{border:1px solid rgba(255,60,60,.4);box-shadow:0 0 10px rgba(255,60,60,.4);}
 
-.panel-right{
-  border:1px solid rgba(255,60,60,0.4);
-  box-shadow:0 0 10px rgba(255,60,60,0.4);
-}
+.panel-title{font-size:11px;opacity:.7;}
+.panel-main{font-size:15px;}
+.panel-sub{font-size:13px;opacity:.8;}
 
-.panel-title{
-  font-size:11px;
-  opacity:0.7;
-}
+.gvs-title{margin-top:60px;font-size:36px;}
+.gvs-line{width:300px;height:2px;margin:8px auto;background:#00aaff;}
+.gvs-sub{font-size:14px;color:#aaa;}
 
-.panel-main{
-  font-size:15px;
-}
+.controles{margin:20px;display:flex;justify-content:center;gap:20px;}
 
-.panel-sub{
-  font-size:13px;
-  opacity:0.8;
-}
+.timeline{width:95%;margin:30px auto;}
 
-/* GVS */
-.gvs-title{
-  margin-top:60px;
-  font-size:36px;
-  letter-spacing:2px;
-  background: linear-gradient(180deg,#ffffff 0%,#bbbbbb 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
+.fila{display:flex;justify-content:space-between;flex-wrap:wrap;}
+.celda{flex:1;min-width:120px;}
 
-.gvs-line{
-  width:300px;
-  height:2px;
-  margin:8px auto;
-  background:linear-gradient(90deg,transparent,#00aaff,transparent);
-}
+.horarios{display:flex;}
+.horarios span{flex:1;opacity:0;}
 
-.gvs-sub{
-  font-size:14px;
-  color:#aaa;
-}
+.carril{display:flex;position:relative;margin:25px 0;}
 
-/* CONTROLES */
-.controles{
-  margin:20px;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-}
-
-/* TIMELINE */
-.timeline{
-  width:95%;
-  margin:30px auto;
-}
-
-.fila{
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
-}
-
-.celda{
-  flex:1;
-  min-width:120px;
-}
-
-/* HORARIOS */
-.horarios{
-  display:flex;
-}
-
-.horarios span{
-  flex:1;
-  opacity:0;
-  transition:.3s;
-}
-
-/* CARRILES */
-.carril{
-  display:flex;
-  position:relative;
-  margin:25px 0;
-}
-
-/* SEGMENTOS */
 .segmento{
-  flex:1;
-  height:6px;
-  margin:0 3px;
-  background:#333;
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:.4s;
+  flex:1;height:6px;margin:0 3px;background:#333;
+  transform:scaleX(0);transform-origin:left;transition:.4s;
 }
+.segmento.activo{transform:scaleX(1);}
 
-.segmento.activo{
-  transform:scaleX(1);
-}
-
-/* PELOTA */
 .pelota{
-  position:absolute;
-  top:50%;
-  width:14px;
-  height:14px;
-  border-radius:50%;
+  position:absolute;top:50%;
+  width:14px;height:14px;border-radius:50%;
   transform:translate(-50%,-50%);
   transition:left .4s linear;
 }
 
-/* CAMPEON */
-.campeon{
-  animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-  50%{transform:translate(-50%,-50%) scale(1.4);}
-}
+.campeon{animation:pulse 1s infinite;}
+@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.4);}}
 </style>
 </head>
 
 <body>
 
-<!-- PANELES -->
 <div class="top-bar">
   <div class="panel panel-left">
     <div class="panel-title">HOY</div>
@@ -187,33 +80,16 @@ body{
 <div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
 
 <div class="controles">
-<label><input type="checkbox" onclick="toggle(0)">1° en fase de grupo</label>
-<label><input type="checkbox" onclick="toggle(1)">2° en fase de grupo</label>
-<label><input type="checkbox" onclick="toggle(2)">3° en fase de grupo</label>
+<label><input type="checkbox" onclick="toggle(0)">1°</label>
+<label><input type="checkbox" onclick="toggle(1)">2°</label>
+<label><input type="checkbox" onclick="toggle(2)">3°</label>
 </div>
 
 <div class="timeline">
-
 <div class="fila">
-<div class="celda">16/6 - lunes</div>
-<div class="celda">22/6 - domingo</div>
-<div class="celda">27/6 - viernes</div>
-<div class="celda">3/7 - miércoles</div>
-<div class="celda">7/7 - domingo</div>
-<div class="celda">11/7 - jueves</div>
-<div class="celda">15/7 - lunes</div>
-<div class="celda">19/7 - viernes</div>
-</div>
-
-<div class="fila">
-<div class="celda">Fase de grupos</div>
-<div class="celda">Fase de grupos</div>
-<div class="celda">Fase de grupos</div>
-<div class="celda">16 Avos</div>
-<div class="celda">Octavos</div>
-<div class="celda">Cuartos</div>
-<div class="celda">Semifinal</div>
-<div class="celda">Final 🏆</div>
+<div class="celda">16/6</div><div class="celda">22/6</div><div class="celda">27/6</div>
+<div class="celda">3/7</div><div class="celda">7/7</div><div class="celda">11/7</div>
+<div class="celda">15/7</div><div class="celda">19/7</div>
 </div>
 
 <div id="h1" class="horarios"></div>
@@ -223,29 +99,26 @@ body{
 <div id="c1" class="carril"></div>
 <div id="c2" class="carril"></div>
 <div id="c3" class="carril"></div>
-
 </div>
 
 <script>
 
-/* FECHA */
+/* reloj */
 setInterval(()=>{
-  const now=new Date();
-  document.getElementById("fecha").innerText=now.toLocaleDateString("es-AR");
-  document.getElementById("hora").innerText=now.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
+  const n=new Date();
+  fecha.innerText=n.toLocaleDateString("es-AR");
+  hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
 
-  const mundial=new Date("2026-06-11T00:00:00");
-  const diff=mundial-now;
-
-  document.getElementById("dias").innerText=Math.floor(diff/86400000)+" días";
-  document.getElementById("horas").innerText=Math.floor((diff/3600000)%24)+" hs";
-
+  const m=new Date("2026-06-11");
+  const d=m-n;
+  dias.innerText=Math.floor(d/86400000)+" días";
+  horas.innerText=Math.floor((d/3600000)%24)+" hs";
 },1000);
 
-/* SISTEMA */
-const horarios=["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"];
+/* sistema */
+const horarios=["22","14","23","19","13","22","16","16"];
 const limites=[8,8,3];
-const colores=["#00ff88","#ffd000","#ff3c3c"];
+const colores=["#0f8","#fd0","#f33"];
 const carriles=["c1","c2","c3"];
 const horariosIds=["h1","h2","h3"];
 
@@ -258,17 +131,7 @@ function init(){
       c.appendChild(d);
     }
   });
-
-  horariosIds.forEach(id=>{
-    const c=document.getElementById(id);
-    for(let i=0;i<8;i++){
-      const s=document.createElement("span");
-      s.textContent=horarios[i];
-      c.appendChild(s);
-    }
-  });
 }
-
 init();
 
 const estados=[false,false,false];
@@ -277,13 +140,11 @@ const progreso=[0,0,0];
 function toggle(i){
   estados[i]=!estados[i];
   if(estados[i]) avanzar(i);
-  else retroceder(i);
 }
 
 function avanzar(i){
-
   const cont=document.getElementById(carriles[i]);
-  cont.querySelectorAll(".pelota").forEach(p=>p.remove());
+  cont.innerHTML=cont.innerHTML; // limpia pelotas
 
   const pelota=document.createElement("div");
   pelota.className="pelota";
@@ -291,14 +152,14 @@ function avanzar(i){
   cont.appendChild(pelota);
 
   const seg=cont.children;
-  const hrs=document.getElementById(horariosIds[i]).children;
 
   function step(){
 
     if(!estados[i]) return;
 
     if(progreso[i]===limites[i]){
-      pelota.style.left="100%";
+      const porcentaje=(limites[i]/limites[i])*100;
+      pelota.style.left=porcentaje+"%";
       setTimeout(()=>pelota.classList.add("campeon"),200);
       return;
     }
@@ -306,45 +167,13 @@ function avanzar(i){
     const idx=progreso[i];
 
     seg[idx].classList.add("activo");
-    seg[idx].style.background=colores[i];
 
-    hrs[idx].style.opacity=1;
-    hrs[idx].style.color=colores[i];
-
-    // 🔥 POSICIÓN RESPONSIVE
+    // 🔥 CORRECCIÓN FINAL
     const porcentaje=((idx+1)/limites[i])*100;
     pelota.style.left=porcentaje+"%";
 
     progreso[i]++;
     setTimeout(step,300);
-  }
-
-  step();
-}
-
-function retroceder(i){
-
-  const cont=document.getElementById(carriles[i]);
-  const seg=cont.children;
-  const hrs=document.getElementById(horariosIds[i]).children;
-
-  function step(){
-
-    if(estados[i]) return;
-
-    if(progreso[i]<=0){
-      cont.querySelectorAll(".pelota").forEach(p=>p.remove());
-      return;
-    }
-
-    progreso[i]--;
-
-    seg[progreso[i]].classList.remove("activo");
-
-    hrs[progreso[i]].style.opacity=0;
-    hrs[progreso[i]].style.color="";
-
-    setTimeout(step,150);
   }
 
   step();
