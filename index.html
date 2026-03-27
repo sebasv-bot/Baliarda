@@ -47,8 +47,8 @@ body{
 
 .panel-title{font-size:11px;opacity:.7}
 
-/* 🔥 LATIDO */
-#hora, #dias, #horas{
+/* LATIDO */
+#hora,#dias,#horas{
   animation:latido 1.2s infinite;
   display:block;
 }
@@ -76,8 +76,81 @@ body{
 
 .gvs-sub{font-size:14px;color:#aaa}
 
-/* CONTROLES */
-.controles{margin:20px;display:flex;justify-content:center;gap:20px}
+/* 🔥 BOTONES PREMIUM */
+.controles{
+  margin:20px;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+.btn{
+  width:70px;
+  height:70px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  cursor:pointer;
+  color:#fff;
+
+  background:linear-gradient(145deg,#1a1a1a,#000);
+  border:2px solid rgba(255,255,255,0.2);
+
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,0.1),
+    0 0 10px rgba(0,0,0,0.8);
+
+  transition:.25s;
+}
+
+/* HOVER */
+.btn:hover{
+  transform:scale(1.05);
+}
+
+/* CLICK */
+.btn:active{
+  transform:scale(0.95);
+  box-shadow:inset 0 0 15px rgba(0,0,0,0.8);
+}
+
+/* GLOW BASE */
+.btn[data-id="0"]{
+  box-shadow:
+    0 0 10px rgba(0,255,136,0.4),
+    inset 0 0 8px rgba(255,255,255,0.1);
+}
+.btn[data-id="1"]{
+  box-shadow:
+    0 0 10px rgba(255,208,0,0.4),
+    inset 0 0 8px rgba(255,255,255,0.1);
+}
+.btn[data-id="2"]{
+  box-shadow:
+    0 0 10px rgba(255,60,60,0.4),
+    inset 0 0 8px rgba(255,255,255,0.1);
+}
+
+/* ACTIVO */
+.btn[data-id="0"].activo{
+  background:#00ff88;
+  color:#000;
+  box-shadow:0 0 25px #00ff88,0 0 50px #00ff88;
+}
+
+.btn[data-id="1"].activo{
+  background:#ffd000;
+  color:#000;
+  box-shadow:0 0 25px #ffd000,0 0 50px #ffd000;
+}
+
+.btn[data-id="2"].activo{
+  background:#ff3c3c;
+  color:#000;
+  box-shadow:0 0 25px #ff3c3c,0 0 50px #ff3c3c;
+}
 
 /* GRID */
 .row,.horarios{
@@ -119,7 +192,6 @@ body{
   box-shadow:0 0 10px currentColor;
 }
 
-/* ENERGÍA */
 .segmento.activo::after{
   content:"";
   position:absolute;
@@ -183,9 +255,9 @@ body{
 <div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
 
 <div class="controles">
-<label><input type="checkbox" onclick="toggle(0)">1°</label>
-<label><input type="checkbox" onclick="toggle(1)">2°</label>
-<label><input type="checkbox" onclick="toggle(2)">3°</label>
+  <div class="btn" data-id="0" onclick="toggle(0,this)">1</div>
+  <div class="btn" data-id="1" onclick="toggle(1,this)">2</div>
+  <div class="btn" data-id="2" onclick="toggle(2,this)">3</div>
 </div>
 
 <div class="container">
@@ -224,7 +296,7 @@ body{
 
 <script>
 
-/* RELOJ + TIEMPO RESTANTE PRO */
+/* RELOJ */
 setInterval(()=>{
   const n=new Date();
   fecha.innerText=n.toLocaleDateString("es-AR");
@@ -233,13 +305,8 @@ setInterval(()=>{
   const mundial=new Date("2026-06-11T00:00:00");
   const diff=mundial-n;
 
-  const diasRest=Math.floor(diff/86400000);
-  const horasRest=Math.floor((diff/3600000)%24);
-  const minutosRest=Math.floor((diff/60000)%60);
-
-  dias.innerText=diasRest+" días";
-  horas.innerText=horasRest+" hs "+minutosRest+" min";
-
+  dias.innerText=Math.floor(diff/86400000)+" días";
+  horas.innerText=Math.floor((diff/3600000)%24)+" hs "+Math.floor((diff/60000)%60)+" min";
 },1000);
 
 /* CONFIG */
@@ -304,8 +371,11 @@ window.addEventListener("resize",()=>{
   }
 });
 
-function toggle(i){
+/* TOGGLE */
+function toggle(i,el){
   estados[i]=!estados[i];
+  el.classList.toggle("activo");
+
   if(estados[i]) avanzar(i);
   else retroceder(i);
 }
