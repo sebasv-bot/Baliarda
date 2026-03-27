@@ -58,19 +58,15 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 
 .container{width:95%;margin:auto}
 
-/* CELDAS */
 .celda{font-size:13px}
 
-/* HORARIOS */
 .horarios span{
   opacity:0;
   font-size:12px;
 }
 
-/* CARRILES */
 .carril{position:relative;margin:25px 0}
 
-/* SEGMENTOS */
 .segmento{
   height:6px;
   background:#333;
@@ -81,7 +77,6 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 
 .segmento.activo{transform:scaleX(1)}
 
-/* PELOTA */
 .pelota{
   position:absolute;
   top:50%;
@@ -158,11 +153,20 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 
 <script>
 
-/* RELOJ */
+/* RELOJ + COUNTDOWN */
 setInterval(()=>{
   const n=new Date();
   fecha.innerText=n.toLocaleDateString("es-AR");
   hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
+
+  const mundial=new Date("2026-06-11T00:00:00");
+  const diff=mundial-n;
+
+  const diasRest=Math.floor(diff/86400000);
+  const horasRest=Math.floor((diff/3600000)%24);
+
+  dias.innerText=diasRest+" días";
+  horas.innerText=horasRest+" hs";
 },1000);
 
 /* CONFIG */
@@ -202,7 +206,7 @@ function init(){
 }
 init();
 
-/* POSICIONADOR CENTRAL */
+/* POSICIONADOR */
 function posicionarPelota(i){
   const cont=document.getElementById(carriles[i]);
   const pelota=cont.querySelector(".pelota");
@@ -212,7 +216,6 @@ function posicionarPelota(i){
 
   let idx = progreso[i]-1;
   if(idx < 0) return;
-
   if(idx >= limites[i]) idx = limites[i]-1;
 
   const segmento = seg[idx];
@@ -223,12 +226,10 @@ function posicionarPelota(i){
   pelota.style.left = left + "px";
 }
 
-/* RESIZE AUTO */
+/* RESIZE */
 window.addEventListener("resize", ()=>{
   for(let i=0;i<3;i++){
-    if(estados[i]){
-      posicionarPelota(i);
-    }
+    if(estados[i]) posicionarPelota(i);
   }
 });
 
