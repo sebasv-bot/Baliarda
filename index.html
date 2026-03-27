@@ -1,176 +1,255 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Baliarda GVS</title>
-
+<meta charset="utf-8" />
+<title>Baliarda GVS - FINAL</title>
 <style>
-*{font-family:"Comic Sans MS",cursive!important;box-sizing:border-box;}
-body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-align:center;}
+*{box-sizing:border-box;font-family:"Comic Sans MS",cursive!important}
+html,body{height:100%;margin:0;background:radial-gradient(circle at center,#0b1f3a 0%,#000 100%);color:#fff}
+body{text-align:center}
 
-.top-bar{
-  position:absolute;top:10px;width:100%;
-  display:flex;justify-content:space-between;padding:0 40px;
+/* Top bar */
+.top-bar{position:absolute;top:10px;left:0;width:100%;display:flex;justify-content:space-between;padding:0 28px;align-items:flex-start;z-index:5}
+.panel{min-width:140px;padding:10px 14px;border-radius:10px;background:rgba(0,0,0,0.32)}
+.panel-left{border:1px solid rgba(0,255,150,.35);box-shadow:0 0 10px rgba(0,255,150,.28)}
+.panel-right{border:1px solid rgba(255,60,60,.35);box-shadow:0 0 10px rgba(255,60,60,.28)}
+.panel-title{font-size:11px;opacity:.75;margin-bottom:4px}
+.panel-main{font-size:15px}
+.panel-sub{font-size:13px;opacity:.8}
+
+/* GVS title */
+.gvs-title{margin-top:60px;font-size:36px;letter-spacing:2px;
+  background:linear-gradient(180deg,#fff,#bbb);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:0 0 10px rgba(255,255,255,0.7),0 0 20px rgba(0,150,255,0.5),0 0 30px rgba(0,150,255,0.3)}
+.gvs-line{width:300px;height:2px;margin:8px auto;background:linear-gradient(90deg,transparent,#00aaff,transparent);box-shadow:0 0 10px #00aaff}
+.gvs-sub{font-size:14px;color:#aaa;margin-bottom:10px}
+
+/* controls */
+.controles{margin:20px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+
+/* timeline layout */
+.container{width:95%;margin:8px auto 60px;max-width:1400px}
+.row-dates,.row-tramos{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:nowrap}
+.celda{flex:1;min-width:110px;padding:6px 4px;text-align:center;font-size:13px;color:#ddd}
+
+/* horarios (cada carril tiene su fila de spans) */
+.horarios{display:flex;justify-content:space-between;margin-top:6px}
+.horarios span{flex:1;text-align:center;opacity:0;transition:opacity .28s,color .28s;font-size:13px;color:#ddd}
+
+/* carriles */
+.carril{position:relative;margin:18px 0;display:flex;align-items:center;gap:6px;height:26px}
+.segmento{flex:1;height:6px;background:#333;transform:scaleX(0);transform-origin:left;transition:transform .36s,background .36s}
+.segmento.activo{transform:scaleX(1)}
+
+/* pelota (posición en %) */
+.pelota{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);transition:left .36s linear;box-shadow:0 0 10px currentColor}
+
+/* campeón */
+.campeon{animation:pulse 1s infinite}
+@keyframes pulse{0%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.35)}100%{transform:translate(-50%,-50%) scale(1)}}
+
+/* responsive tweaks */
+@media (max-width:720px){
+  .gvs-title{font-size:26px}
+  .celda{font-size:12px}
+  .panel{min-width:110px;padding:8px}
 }
-
-.panel{
-  min-width:140px;padding:10px;border-radius:10px;
-  background:rgba(0,0,0,0.3);
-}
-
-.panel-left{border:1px solid rgba(0,255,150,.4);box-shadow:0 0 10px rgba(0,255,150,.4);}
-.panel-right{border:1px solid rgba(255,60,60,.4);box-shadow:0 0 10px rgba(255,60,60,.4);}
-
-.panel-title{font-size:11px;opacity:.7;}
-.panel-main{font-size:15px;}
-.panel-sub{font-size:13px;opacity:.8;}
-
-.gvs-title{margin-top:60px;font-size:36px;}
-.gvs-line{width:300px;height:2px;margin:8px auto;background:#00aaff;}
-.gvs-sub{font-size:14px;color:#aaa;}
-
-.controles{margin:20px;display:flex;justify-content:center;gap:20px;}
-
-.timeline{width:95%;margin:30px auto;}
-
-.fila{display:flex;justify-content:space-between;flex-wrap:wrap;}
-.celda{flex:1;min-width:120px;}
-
-.horarios{display:flex;}
-.horarios span{flex:1;opacity:0;}
-
-.carril{display:flex;position:relative;margin:25px 0;}
-
-.segmento{
-  flex:1;height:6px;margin:0 3px;background:#333;
-  transform:scaleX(0);transform-origin:left;transition:.4s;
-}
-.segmento.activo{transform:scaleX(1);}
-
-.pelota{
-  position:absolute;top:50%;
-  width:14px;height:14px;border-radius:50%;
-  transform:translate(-50%,-50%);
-  transition:left .4s linear;
-}
-
-.campeon{animation:pulse 1s infinite;}
-@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.4);}}
 </style>
 </head>
-
 <body>
 
+<!-- TOP BAR -->
 <div class="top-bar">
   <div class="panel panel-left">
     <div class="panel-title">HOY</div>
-    <div id="fecha" class="panel-main"></div>
-    <div id="hora" class="panel-sub"></div>
+    <div id="fecha" class="panel-main">--/--/----</div>
+    <div id="hora" class="panel-sub">--:--</div>
   </div>
-
   <div class="panel panel-right">
     <div class="panel-title">TIEMPO RESTANTE</div>
-    <div id="dias" class="panel-main"></div>
-    <div id="horas" class="panel-sub"></div>
+    <div id="dias" class="panel-main">-- días</div>
+    <div id="horas" class="panel-sub">-- hs</div>
   </div>
 </div>
 
+<!-- TITLE -->
 <h1 class="gvs-title">GVS PRODUCCIONES</h1>
 <div class="gvs-line"></div>
 <div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
 
+<!-- CONTROLES -->
 <div class="controles">
-<label><input type="checkbox" onclick="toggle(0)">1°</label>
-<label><input type="checkbox" onclick="toggle(1)">2°</label>
-<label><input type="checkbox" onclick="toggle(2)">3°</label>
+  <label><input type="checkbox" onclick="toggle(0)"> 1° en fase de grupo</label>
+  <label><input type="checkbox" onclick="toggle(1)"> 2° en fase de grupo</label>
+  <label><input type="checkbox" onclick="toggle(2)"> 3° en fase de grupo</label>
 </div>
 
-<div class="timeline">
-<div class="fila">
-<div class="celda">16/6</div><div class="celda">22/6</div><div class="celda">27/6</div>
-<div class="celda">3/7</div><div class="celda">7/7</div><div class="celda">11/7</div>
-<div class="celda">15/7</div><div class="celda">19/7</div>
-</div>
+<!-- TIMELINE -->
+<div class="container">
 
-<div id="h1" class="horarios"></div>
-<div id="h2" class="horarios"></div>
-<div id="h3" class="horarios"></div>
+  <!-- FECHAS con día -->
+  <div id="rowDates" class="row-dates">
+    <!-- celdas llenadas por JS -->
+  </div>
 
-<div id="c1" class="carril"></div>
-<div id="c2" class="carril"></div>
-<div id="c3" class="carril"></div>
+  <!-- TRAMOS -->
+  <div id="rowTramos" class="row-tramos" style="margin-top:6px">
+    <!-- celdas llenadas por JS -->
+  </div>
+
+  <!-- HORARIOS (uno por carril) -->
+  <div id="h1" class="horarios"></div>
+  <div id="h2" class="horarios"></div>
+  <div id="h3" class="horarios"></div>
+
+  <!-- CARRILES -->
+  <div id="c1" class="carril"></div>
+  <div id="c2" class="carril"></div>
+  <div id="c3" class="carril"></div>
+
 </div>
 
 <script>
+/* ---------- CONFIG (Modificable) ---------- */
+/* fechas del timeline (dd/mm) y sus dias */
+const fechas = [
+  {label:"16/6", dia:"lunes"},
+  {label:"22/6", dia:"domingo"},
+  {label:"27/6", dia:"viernes"},
+  {label:"3/7", dia:"miércoles"},
+  {label:"7/7", dia:"domingo"},
+  {label:"11/7", dia:"jueves"},
+  {label:"15/7", dia:"lunes"},
+  {label:"19/7", dia:"viernes"}
+];
+const tramos = ["Fase de grupos","Fase de grupos","Fase de grupos","16 Avos","Octavos","Cuartos","Semifinal","Final 🏆"];
 
-/* reloj */
-setInterval(()=>{
-  const n=new Date();
-  fecha.innerText=n.toLocaleDateString("es-AR");
-  hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
+/* Horarios por tramo para cada carril (si un carril tiene menos horarios, solo pon los que corresponden) */
+const horariosCarril = [
+  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"], // carril 1 (8)
+  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"], // carril 2 (8)
+  ["22:00","14:00","23:00"]                                           // carril 3 (3)
+];
 
-  const m=new Date("2026-06-11");
-  const d=m-n;
-  dias.innerText=Math.floor(d/86400000)+" días";
-  horas.innerText=Math.floor((d/3600000)%24)+" hs";
-},1000);
+/* número de segmentos por carril = longitud de su array de horarios */
+const limites = horariosCarril.map(h => h.length);
 
-/* sistema */
-const horarios=["22","14","23","19","13","22","16","16"];
-const limites=[8,8,3];
-const colores=["#0f8","#fd0","#f33"];
-const carriles=["c1","c2","c3"];
-const horariosIds=["h1","h2","h3"];
+/* colores por carril */
+const colores = ["#00ff88","#ffd000","#ff3c3c"];
+/* ------------------------------------------ */
 
-function init(){
-  carriles.forEach(id=>{
-    const c=document.getElementById(id);
-    for(let i=0;i<8;i++){
-      const d=document.createElement("div");
-      d.className="segmento";
-      c.appendChild(d);
-    }
-  });
+/* rellenar fechas y tramos */
+const rowDates = document.getElementById("rowDates");
+const rowTramos = document.getElementById("rowTramos");
+fechas.forEach(f=>{
+  const d = document.createElement("div");
+  d.className = "celda";
+  d.innerHTML = `<div style="font-weight:700">${f.label}</div><div style="opacity:.8;font-size:12px">${f.dia}</div>`;
+  rowDates.appendChild(d);
+});
+tramos.forEach(t=>{
+  const d = document.createElement("div");
+  d.className = "celda";
+  d.textContent = t;
+  rowTramos.appendChild(d);
+});
+
+/* rellenar carriles y horarios dinámicamente (con la cantidad correcta de segmentos) */
+const carrilIds = ["c1","c2","c3"];
+const horarioIds = ["h1","h2","h3"];
+
+for(let i=0;i<carrilIds.length;i++){
+  const cont = document.getElementById(carrilIds[i]);
+  cont.innerHTML = ""; // limpiar
+  // crear los N segmentos para este carril
+  for(let s=0;s<limites[i];s++){
+    const seg = document.createElement("div");
+    seg.className = "segmento";
+    cont.appendChild(seg);
+  }
+
+  // horarios: crear spans (uno por segmento), si no hay horario para ese segmento se deja vacío
+  const hh = document.getElementById(horarioIds[i]);
+  hh.innerHTML = "";
+  for(let s=0;s<limites[i];s++){
+    const sp = document.createElement("span");
+    sp.textContent = horariosCarril[i][s] || "";
+    hh.appendChild(sp);
+  }
 }
-init();
 
-const estados=[false,false,false];
-const progreso=[0,0,0];
+/* reloj + countdown */
+const mundial = new Date("2026-06-11T00:00:00");
+function actualizarHeader(){
+  const now = new Date();
+  document.getElementById("fecha").innerText = now.toLocaleDateString("es-AR");
+  document.getElementById("hora").innerText = now.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
 
+  const diff = Math.max(0, mundial - now);
+  const dias = Math.floor(diff / (1000*60*60*24));
+  const horas = Math.floor((diff / (1000*60*60)) % 24);
+  document.getElementById("dias").innerText = dias + " días";
+  document.getElementById("horas").innerText = horas + " hs";
+}
+actualizarHeader();
+setInterval(actualizarHeader,1000);
+
+/* estado */
+const estados = [false,false,false];
+const progreso = [0,0,0];
+
+/* helpers: get segments & horarios elements for a carril */
+function getSegs(i){ return Array.from(document.getElementById(carrilIds[i]).children).filter(el=>el.classList.contains('segmento')) }
+function getHoras(i){ return Array.from(document.getElementById(horarioIds[i]).children) }
+
+/* activar/desactivar */
 function toggle(i){
-  estados[i]=!estados[i];
-  if(estados[i]) avanzar(i);
+  estados[i] = !estados[i];
+  if(estados[i]) startAvanzar(i);
+  else startRetroceder(i);
 }
 
-function avanzar(i){
-  const cont=document.getElementById(carriles[i]);
-  cont.innerHTML=cont.innerHTML; // limpia pelotas
-
-  const pelota=document.createElement("div");
-  pelota.className="pelota";
-  pelota.style.background=colores[i];
+/* avanza con posicion en % centrada en el segmento */
+function startAvanzar(i){
+  const cont = document.getElementById(carrilIds[i]);
+  // eliminar pelotas previas
+  cont.querySelectorAll('.pelota').forEach(p=>p.remove());
+  // crear pelota nueva
+  const pelota = document.createElement('div');
+  pelota.className = 'pelota';
+  pelota.style.background = colores[i];
+  pelota.style.color = colores[i];
   cont.appendChild(pelota);
 
-  const seg=cont.children;
+  const segs = getSegs(i);
+  const hrs = getHoras(i);
+  const total = limites[i];
 
   function step(){
-
     if(!estados[i]) return;
-
-    if(progreso[i]===limites[i]){
-      const porcentaje=(limites[i]/limites[i])*100;
-      pelota.style.left=porcentaje+"%";
-      setTimeout(()=>pelota.classList.add("campeon"),200);
+    // cuando progreso == total => posición final centrada en último segmento
+    if(progreso[i] >= total){
+      const finalPct = ((total - 0.5) / total) * 100; // centro último segmento
+      pelota.style.left = finalPct + '%';
+      pelota.classList.add('campeon');
       return;
     }
 
-    const idx=progreso[i];
+    const idx = progreso[i]; // 0..total-1
+    // activar segmento y colorear
+    segs[idx].classList.add('activo');
+    segs[idx].style.background = colores[i];
 
-    seg[idx].classList.add("activo");
+    // mostrar horario correspondiente (si existe)
+    if(hrs[idx]){
+      hrs[idx].style.opacity = 1;
+      hrs[idx].style.color = colores[i];
+    }
 
-    // 🔥 CORRECCIÓN FINAL
-    const porcentaje=((idx+1)/limites[i])*100;
-    pelota.style.left=porcentaje+"%";
+    // posicionar pelota en el centro del segmento idx: ((idx + 0.5)/total)*100%
+    const pct = ((idx + 0.5) / total) * 100;
+    pelota.style.left = pct + '%';
 
     progreso[i]++;
     setTimeout(step,300);
@@ -179,7 +258,52 @@ function avanzar(i){
   step();
 }
 
-</script>
+/* retrocede suavemente: quita segmentos y oculta horarios; al llegar a 0 elimina pelota */
+function startRetroceder(i){
+  const cont = document.getElementById(carrilIds[i]);
+  const segs = getSegs(i);
+  const hrs = getHoras(i);
 
+  function stepBack(){
+    if(estados[i]) return; // si lo reactivaron, cortamos el retroceso
+    if(progreso[i] <= 0){
+      // quitar pelota si quedó
+      cont.querySelectorAll('.pelota').forEach(p=>p.remove());
+      return;
+    }
+    // retrocede 1
+    progreso[i]--;
+    const idx = progreso[i];
+    // quitar activo y color
+    if(segs[idx]){
+      segs[idx].classList.remove('activo');
+      segs[idx].style.background = '#333';
+    }
+    // ocultar horario
+    if(hrs[idx]){
+      hrs[idx].style.opacity = 0;
+      hrs[idx].style.color = '';
+    }
+    // reposicionar pelota (si existe) al índice anterior (si queda)
+    const pelota = cont.querySelector('.pelota');
+    if(pelota){
+      if(progreso[i] > 0){
+        const pct = ((progreso[i]-0.5) / limites[i]) * 100;
+        pelota.style.left = pct + '%';
+      } else {
+        // si ya no hay progreso, la borramos
+        pelota.remove();
+      }
+    }
+    setTimeout(stepBack,150);
+  }
+
+  stepBack();
+}
+
+/* inicialización limpia: progreso en 0 */
+for(let k=0;k<3;k++) progreso[k]=0;
+
+</script>
 </body>
 </html>
