@@ -2,11 +2,30 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Baliarda GVS</title>
+<title>Baliarda GVS WOW</title>
 
 <style>
-*{box-sizing:border-box;font-family:"Comic Sans MS",cursive!important}
-body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-align:center}
+*{box-sizing:border-box;font-family:"Arial",sans-serif}
+body{
+  margin:0;
+  background:radial-gradient(circle,#0b1f3a,#000);
+  color:#fff;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* ENTRADA */
+body{
+  opacity:0;
+  transform:scale(1.05);
+  animation:entrada 1.2s ease forwards;
+}
+@keyframes entrada{
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
 
 /* TOP */
 .top-bar{
@@ -15,33 +34,36 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 }
 
 .panel{
-  padding:10px 14px;border-radius:10px;background:rgba(0,0,0,0.3);
+  padding:10px 14px;border-radius:10px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(6px);
 }
 
-.panel-left{
-  border:1px solid rgba(0,255,150,.4);
-  box-shadow:0 0 10px rgba(0,255,150,.4);
-}
-
-.panel-right{
-  border:1px solid rgba(255,60,60,.4);
-  box-shadow:0 0 10px rgba(255,60,60,.4);
-}
+.panel-left{box-shadow:0 0 15px rgba(0,255,150,.5)}
+.panel-right{box-shadow:0 0 15px rgba(255,60,60,.5)}
 
 .panel-title{font-size:11px;opacity:.7}
 
-/* GVS */
+/* TITULO */
 .gvs-title{
-  margin-top:60px;font-size:36px;
+  margin-top:60px;
+  font-size:40px;
+  letter-spacing:2px;
   background:linear-gradient(#fff,#bbb);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:0 0 15px rgba(0,150,255,.6);
+  text-shadow:0 0 20px rgba(0,150,255,.8);
 }
 
 .gvs-line{
-  width:300px;height:2px;margin:8px auto;
-  background:linear-gradient(90deg,transparent,#00aaff,transparent);
+  width:300px;height:2px;margin:10px auto;
+  background:linear-gradient(90deg,transparent,#00eaff,transparent);
+  animation:glowline 2s linear infinite;
+}
+@keyframes glowline{
+  0%{opacity:.2}
+  50%{opacity:1}
+  100%{opacity:.2}
 }
 
 .gvs-sub{font-size:14px;color:#aaa}
@@ -50,7 +72,7 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 .controles{margin:20px;display:flex;justify-content:center;gap:20px}
 
 /* GRID */
-.row, .carril, .horarios{
+.row,.carril,.horarios{
   display:grid;
   grid-template-columns:repeat(8,1fr);
   gap:6px;
@@ -60,34 +82,70 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 
 .celda{font-size:13px}
 
+/* HORARIOS */
 .horarios span{
   opacity:0;
   font-size:12px;
-}
-
-.carril{position:relative;margin:25px 0}
-
-.segmento{
-  height:6px;
-  background:#333;
-  transform:scaleX(0);
-  transform-origin:left;
   transition:.3s;
 }
 
-.segmento.activo{transform:scaleX(1)}
+/* SEGMENTOS */
+.segmento{
+  height:6px;
+  background:#222;
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:.4s;
+  position:relative;
+}
 
+.segmento.activo{
+  transform:scaleX(1);
+  box-shadow:0 0 10px currentColor;
+}
+
+/* EFECTO ENERGÍA */
+.segmento.activo::after{
+  content:"";
+  position:absolute;
+  top:0;left:0;height:100%;width:100%;
+  background:linear-gradient(90deg,transparent,white,transparent);
+  animation:energia 1s linear infinite;
+}
+@keyframes energia{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(100%)}
+}
+
+/* PELOTA */
 .pelota{
   position:absolute;
   top:50%;
-  width:14px;height:14px;
+  width:16px;height:16px;
   border-radius:50%;
   transform:translate(-50%,-50%);
   transition:left .2s linear;
+  box-shadow:0 0 15px currentColor;
 }
 
-.campeon{animation:pulse 1s infinite}
-@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.4)}}
+.pelota::after{
+  content:"";
+  position:absolute;
+  width:30px;height:30px;
+  border-radius:50%;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, currentColor, transparent);
+  opacity:.3;
+}
+
+/* FINAL */
+.campeon{
+  animation:pulse 0.8s infinite;
+}
+@keyframes pulse{
+  50%{transform:translate(-50%,-50%) scale(1.4)}
+}
 </style>
 </head>
 
@@ -162,11 +220,8 @@ setInterval(()=>{
   const mundial=new Date("2026-06-11T00:00:00");
   const diff=mundial-n;
 
-  const diasRest=Math.floor(diff/86400000);
-  const horasRest=Math.floor((diff/3600000)%24);
-
-  dias.innerText=diasRest+" días";
-  horas.innerText=horasRest+" hs";
+  dias.innerText=Math.floor(diff/86400000)+" días";
+  horas.innerText=Math.floor((diff/3600000)%24)+" hs";
 },1000);
 
 /* CONFIG */
