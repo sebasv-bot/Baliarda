@@ -5,38 +5,58 @@
 <title>Baliarda GVS</title>
 
 <style>
+*{
+  font-family:"Comic Sans MS", cursive !important;
+}
+
 body{
   margin:0;
   background: radial-gradient(circle at center,#0b1f3a 0%,#000 100%);
-  font-family:"Comic Sans MS",cursive;
   color:white;
   text-align:center;
 }
 
-/* 🔥 HEADER SUPERIOR */
+/* 🔹 PANELES SUPERIORES */
 .top-bar{
   position:absolute;
   top:10px;
-  left:0;
   width:100%;
   display:flex;
   justify-content:space-between;
   padding:0 20px;
-  font-size:14px;
+}
+
+.panel{
+  width:160px;
+  padding:10px;
+  font-size:13px;
   color:#ccc;
+  border-radius:8px;
+  border:1px solid rgba(0,150,255,0.3);
+  box-shadow:0 0 8px rgba(0,150,255,0.3);
+  background:rgba(0,0,0,0.3);
 }
 
-.top-left{
-  text-align:left;
+.panel-title{
+  font-size:12px;
+  letter-spacing:1px;
+  opacity:0.8;
+  margin-bottom:5px;
 }
 
-.top-right{
-  text-align:right;
+.panel-main{
+  font-size:16px;
+  color:white;
 }
 
-/* 🔥 GVS TITLE */
+.panel-sub{
+  font-size:13px;
+  opacity:0.8;
+}
+
+/* 🔹 GVS */
 .gvs-title{
-  margin-top:40px;
+  margin-top:50px;
   font-size:36px;
   letter-spacing:2px;
   background: linear-gradient(180deg,#ffffff 0%,#bbbbbb 100%);
@@ -61,6 +81,7 @@ body{
   margin-bottom:10px;
 }
 
+/* CONTROLES */
 .controles{margin:20px;}
 
 .timeline{width:95%;margin:30px auto;}
@@ -134,10 +155,19 @@ body{
 
 <body>
 
-<!-- 🔥 HEADER -->
+<!-- 🔹 PANELES -->
 <div class="top-bar">
-  <div class="top-left" id="fechaHora"></div>
-  <div class="top-right" id="contador"></div>
+  <div class="panel">
+    <div class="panel-title">HOY</div>
+    <div id="fecha" class="panel-main"></div>
+    <div id="hora" class="panel-sub"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">TIEMPO RESTANTE</div>
+    <div id="dias" class="panel-main"></div>
+    <div id="horas" class="panel-sub"></div>
+  </div>
 </div>
 
 <h1 class="gvs-title">GVS PRODUCCIONES</h1>
@@ -186,35 +216,33 @@ body{
 
 <script>
 
-/* 🔥 FECHA ACTUAL */
-function actualizarFechaHora(){
-  const ahora = new Date();
-  const texto = ahora.toLocaleDateString('es-AR') + " " +
-                ahora.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById("fechaHora").innerText = "📅 " + texto;
+/* 🔹 FECHA Y HORA */
+function actualizarHora(){
+  const now=new Date();
+  document.getElementById("fecha").innerText=now.toLocaleDateString("es-AR");
+  document.getElementById("hora").innerText=now.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
 }
 
-/* 🔥 COUNTDOWN */
-const fechaMundial = new Date("2026-06-11T00:00:00");
+/* 🔹 COUNTDOWN */
+const mundial=new Date("2026-06-11T00:00:00");
 
-function actualizarContador(){
-  const ahora = new Date();
-  const diff = fechaMundial - ahora;
+function actualizarCountdown(){
+  const now=new Date();
+  const diff=mundial-now;
 
-  const dias = Math.floor(diff / (1000*60*60*24));
-  const horas = Math.floor((diff / (1000*60*60)) % 24);
-  const minutos = Math.floor((diff / (1000*60)) % 60);
+  const dias=Math.floor(diff/(1000*60*60*24));
+  const horas=Math.floor((diff/(1000*60*60))%24);
 
-  document.getElementById("contador").innerText =
-    `⏳ Faltan: ${dias} días ${horas}:${minutos}`;
+  document.getElementById("dias").innerText=dias+" días";
+  document.getElementById("horas").innerText=horas+" hs";
 }
 
 setInterval(()=>{
-  actualizarFechaHora();
-  actualizarContador();
+  actualizarHora();
+  actualizarCountdown();
 },1000);
 
-/* 🔥 SISTEMA ORIGINAL */
+/* 🔹 SISTEMA ORIGINAL */
 
 const horarios=["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"];
 const limites=[8,8,3];
@@ -270,13 +298,13 @@ function avanzar(i){
 
     if(!estados[i]) return;
 
-    if(progreso[i] === limites[i]){
+    if(progreso[i]===limites[i]){
 
-      const last = limites[i]-1;
-      const rect = seg[last].getBoundingClientRect();
-      const parent = cont.getBoundingClientRect();
+      const last=limites[i]-1;
+      const rect=seg[last].getBoundingClientRect();
+      const parent=cont.getBoundingClientRect();
 
-      pelota.style.left = (rect.left-parent.left+rect.width)+"px";
+      pelota.style.left=(rect.left-parent.left+rect.width)+"px";
 
       setTimeout(()=>{
         pelota.classList.add("campeon");
