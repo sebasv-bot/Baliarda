@@ -74,6 +74,17 @@ h2{margin-top:10px;}
   transition:left .5s cubic-bezier(.25,1.5,.5,1);
 }
 
+/* 🔥 EFECTO CAMPEÓN */
+.campeon{
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+  0%{ transform:translate(-50%,-50%) scale(1); box-shadow:0 0 20px currentColor;}
+  50%{ transform:translate(-50%,-50%) scale(1.4); box-shadow:0 0 40px currentColor;}
+  100%{ transform:translate(-50%,-50%) scale(1); box-shadow:0 0 20px currentColor;}
+}
+
 /* TRAIL */
 .trail{
   position:absolute;
@@ -81,7 +92,6 @@ h2{margin-top:10px;}
   height:14px;
   border-radius:50%;
   opacity:.4;
-  pointer-events:none;
   animation:fadeOut .6s forwards;
 }
 
@@ -126,7 +136,7 @@ h2{margin-top:10px;}
 <div class="celda">Octavos</div>
 <div class="celda">Cuartos</div>
 <div class="celda">Semi</div>
-<div class="celda">Final</div>
+<div class="celda">Final 🏆</div>
 </div>
 
 <div id="h1" class="horarios"></div>
@@ -195,7 +205,6 @@ function avanzar(i){
 
   function step(){
 
-    // 🔥 CUANDO LLEGA AL FINAL → SE QUEDA
     if(progreso[i] >= limites[i]){
 
       const last = limites[i] - 1;
@@ -204,8 +213,10 @@ function avanzar(i){
       const parent = cont.getBoundingClientRect();
 
       const x = (rect.left - parent.left + rect.width);
-
       pelota.style.left = x + "px";
+
+      // 🔥 EFECTO CAMPEÓN
+      pelota.classList.add("campeon");
 
       return;
     }
