@@ -29,8 +29,6 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 }
 
 .panel-title{font-size:11px;opacity:.7}
-.panel-main{font-size:15px}
-.panel-sub{font-size:13px;opacity:.8}
 
 /* GVS */
 .gvs-title{
@@ -51,43 +49,38 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 /* CONTROLES */
 .controles{margin:20px;display:flex;justify-content:center;gap:20px}
 
-/* GRID */
-.container{width:95%;margin:auto}
-
-.row{
-  display:flex;
+/* GRID GLOBAL */
+.row, .carril, .horarios{
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
   gap:6px;
 }
 
+.container{width:95%;margin:auto}
+
+/* CELDAS */
 .celda{
-  flex:1;
   text-align:center;
   font-size:13px;
 }
 
 /* HORARIOS */
-.horarios{
-  display:flex;
-  gap:6px;
-}
-
 .horarios span{
-  flex:1;
   text-align:center;
   opacity:0;
+  font-size:12px;
 }
 
 /* CARRILES */
 .carril{
-  display:flex;
-  gap:6px;
   position:relative;
   margin:25px 0;
 }
 
 /* SEGMENTOS */
 .segmento{
-  flex:1;height:6px;background:#333;
+  height:6px;
+  background:#333;
   transform:scaleX(0);
   transform-origin:left;
   transition:.3s;
@@ -97,8 +90,10 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 
 /* PELOTA */
 .pelota{
-  position:absolute;top:50%;
-  width:14px;height:14px;border-radius:50%;
+  position:absolute;
+  top:50%;
+  width:14px;height:14px;
+  border-radius:50%;
   transform:translate(-50%,-50%);
   transition:left .3s linear;
 }
@@ -141,11 +136,11 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-al
 <div class="celda">16/6<br>lunes</div>
 <div class="celda">22/6<br>domingo</div>
 <div class="celda">27/6<br>viernes</div>
-<div class="celda">3/7</div>
-<div class="celda">7/7</div>
-<div class="celda">11/7</div>
-<div class="celda">15/7</div>
-<div class="celda">19/7</div>
+<div class="celda">3/7<br>jueves</div>
+<div class="celda">7/7<br>lunes</div>
+<div class="celda">11/7<br>viernes</div>
+<div class="celda">15/7<br>martes</div>
+<div class="celda">19/7<br>sábado</div>
 </div>
 
 <div class="row">
@@ -185,31 +180,32 @@ setInterval(()=>{
 
 /* CONFIG */
 const horarios=[
-["22","14","23","19","13","22","16","16"],
-["22","14","23","19","13","22","16","16"],
-["22","14","23"]
+["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+["22:00","14:00","23:00","","","","",""]
 ];
 
 const colores=["#00ff88","#ffd000","#ff3c3c"];
 const carriles=["c1","c2","c3"];
 const horariosIds=["h1","h2","h3"];
 
-const limites=horarios.map(h=>h.length);
+const totalColumnas = 8;
+const limites=horarios.map(h=>h.filter(x=>x!="").length);
 
 /* INIT */
 function init(){
   carriles.forEach((id,i)=>{
     const c=document.getElementById(id);
-    for(let j=0;j<limites[i];j++){
+    for(let j=0;j<totalColumnas;j++){
       const d=document.createElement("div");
       d.className="segmento";
       c.appendChild(d);
     }
 
     const h=document.getElementById(horariosIds[i]);
-    for(let j=0;j<limites[i];j++){
+    for(let j=0;j<totalColumnas;j++){
       const s=document.createElement("span");
-      s.textContent=horarios[i][j];
+      s.textContent=horarios[i][j] || "";
       h.appendChild(s);
     }
   });
@@ -237,14 +233,17 @@ function avanzar(i){
 
   const seg=cont.children;
   const hrs=document.getElementById(horariosIds[i]).children;
-  const total=limites[i];
 
   function step(){
 
     if(!estados[i]) return;
 
-    if(progreso[i]>=total){
-      pelota.style.left="100%";
+    if(progreso[i]>=limites[i]){
+      const segmentoFinal = seg[limites[i]-1];
+      const rect = segmentoFinal.getBoundingClientRect();
+      const contRect = cont.getBoundingClientRect();
+      const left = rect.left - contRect.left + rect.width;
+      pelota.style.left = left + "px";
       pelota.classList.add("campeon");
       return;
     }
@@ -257,9 +256,12 @@ function avanzar(i){
     hrs[idx].style.opacity=1;
     hrs[idx].style.color=colores[i];
 
-    // 🔥 POSICIÓN CORRECTA PARA TODOS
-    const pct=(idx/(total-1))*100;
-    pelota.style.left=pct+"%";
+    const segmentoActual = seg[idx];
+    const rect = segmentoActual.getBoundingClientRect();
+    const contRect = cont.getBoundingClientRect();
+    const left = rect.left - contRect.left + rect.width;
+
+    pelota.style.left = left + "px";
 
     progreso[i]++;
     setTimeout(step,300);
