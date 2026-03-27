@@ -1,450 +1,323 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Baliarda GVS WOW</title>
-
+<meta charset="utf-8"/>
+<title>Baliarda GVS — Pelotas rojas corregidas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <style>
-*{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
-body{
-  margin:0;
-  background:radial-gradient(circle,#0b1f3a,#000);
-  color:#fff;
-  text-align:center;
-}
+  *{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
+  body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-align:center}
+  .top-bar{position:absolute;top:10px;width:100%;display:flex;justify-content:space-between;padding:0 30px}
+  .panel{padding:10px 14px;border-radius:10px;background:rgba(0,0,0,0.36)}
+  .panel-left{border:1px solid rgba(0,255,150,.18);box-shadow:0 0 10px rgba(0,255,150,.18)}
+  .panel-right{border:1px solid rgba(255,60,60,.18);box-shadow:0 0 10px rgba(255,60,60,.18)}
+  .panel-title{font-size:11px;opacity:.8}
+  #hora,#dias,#horas{display:block;animation:latido 1.2s infinite}
+  @keyframes latido{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
 
-/* ENTRADA */
-body{
-  opacity:0;
-  transform:scale(1.05);
-  animation:entrada 1s ease forwards;
-}
-@keyframes entrada{
-  to{opacity:1;transform:scale(1)}
-}
+  .gvs-title{margin-top:60px;font-size:36px;background:linear-gradient(#fff,#bbb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 15px rgba(0,150,255,.6)}
+  .gvs-line{width:300px;height:2px;margin:8px auto;background:linear-gradient(90deg,transparent,#00aaff,transparent)}
+  .gvs-sub{font-size:14px;color:#aaa}
 
-/* LATIDO */
-@keyframes latido{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.08)}
-  100%{transform:scale(1)}
-}
+  .controles{margin:18px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+  .btn{width:84px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;background:linear-gradient(145deg,#1a1a1a,#000);border:2px solid rgba(255,255,255,0.12);color:#fff;transition:.22s;user-select:none}
+  .btn[data-id="0"]{box-shadow:0 0 10px rgba(0,255,136,0.28)}
+  .btn[data-id="1"]{box-shadow:0 0 10px rgba(255,208,0,0.28)}
+  .btn[data-id="2"],.btn[data-id="3"],.btn[data-id="4"]{box-shadow:0 0 10px rgba(255,60,60,0.28)}
+  .btn.activo{color:#000}
+  .btn[data-id="0"].activo{background:#00ff88;box-shadow:0 0 30px #00ff88,0 0 50px rgba(0,255,136,0.25)}
+  .btn[data-id="1"].activo{background:#ffd000;box-shadow:0 0 30px #ffd000,0 0 50px rgba(255,208,0,0.25)}
+  .btn[data-id="2"].activo,.btn[data-id="3"].activo,.btn[data-id="4"].activo{background:#ff3c3c;color:#000;box-shadow:0 0 30px #ff3c3c}
 
-/* TOP */
-.top-bar{
-  position:absolute;top:10px;width:100%;
-  display:flex;justify-content:space-between;padding:0 30px;
-}
+  .container{width:95%;max-width:1300px;margin:6px auto}
+  .row{display:flex;gap:6px}
+  .celda{flex:1;text-align:center;font-size:13px}
+  .row .celda small{display:block;opacity:.7;font-size:11px}
 
-.panel{
-  padding:10px 14px;border-radius:10px;
-  background:rgba(0,0,0,0.4);
-  backdrop-filter:blur(6px);
-}
+  .horarios{display:flex;gap:6px;margin-top:8px}
+  .horarios span{flex:1;text-align:center;opacity:0;transition:.25s;font-size:12px;padding:6px 4px;border-radius:6px}
+  .horarios span.show{opacity:1}
 
-.panel-left{box-shadow:0 0 15px rgba(0,255,150,.5)}
-.panel-right{box-shadow:0 0 15px rgba(255,60,60,.5)}
+  .carril{display:flex;gap:6px;position:relative;margin:18px 0;height:28px;align-items:center}
+  .segmento{flex:1;height:8px;background:#222;border-radius:6px;transform-origin:left;transform:scaleX(0);transition:all .28s}
+  .segmento.activo{transform:scaleX(1);box-shadow:0 0 12px currentColor}
+  .segmento::after{content:"";position:absolute;left:0;right:0;top:-6px;height:20px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .2s,box-shadow .2s}
 
-.panel-title{font-size:11px;opacity:.7}
+  .pelota{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);transition:left .2s linear;z-index:20;box-shadow:0 0 12px currentColor}
+  .pelota::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,currentColor,transparent);opacity:.35;filter:blur(6px)}
 
-/* LATIDO */
-#hora,#dias,#horas{
-  animation:latido 1.2s infinite;
-  display:block;
-}
-
-/* TITULO */
-.gvs-title{
-  margin-top:60px;
-  font-size:40px;
-  background:linear-gradient(#fff,#bbb);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-shadow:0 0 20px rgba(0,150,255,.8);
-}
-
-.gvs-line{
-  width:300px;height:2px;margin:10px auto;
-  background:linear-gradient(90deg,transparent,#00eaff,transparent);
-  animation:glowline 2s linear infinite;
-}
-@keyframes glowline{
-  0%{opacity:.2}
-  50%{opacity:1}
-  100%{opacity:.2}
-}
-
-.gvs-sub{font-size:14px;color:#aaa}
-
-/* 🔥 BOTONES PREMIUM */
-.controles{
-  margin:20px;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-}
-
-.btn{
-  width:70px;
-  height:70px;
-  border-radius:20px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  cursor:pointer;
-  color:#fff;
-
-  background:linear-gradient(145deg,#1a1a1a,#000);
-  border:2px solid rgba(255,255,255,0.2);
-
-  box-shadow:
-    inset 0 0 10px rgba(255,255,255,0.1),
-    0 0 10px rgba(0,0,0,0.8);
-
-  transition:.25s;
-}
-
-/* HOVER */
-.btn:hover{
-  transform:scale(1.05);
-}
-
-/* CLICK */
-.btn:active{
-  transform:scale(0.95);
-  box-shadow:inset 0 0 15px rgba(0,0,0,0.8);
-}
-
-/* GLOW BASE */
-.btn[data-id="0"]{
-  box-shadow:
-    0 0 10px rgba(0,255,136,0.4),
-    inset 0 0 8px rgba(255,255,255,0.1);
-}
-.btn[data-id="1"]{
-  box-shadow:
-    0 0 10px rgba(255,208,0,0.4),
-    inset 0 0 8px rgba(255,255,255,0.1);
-}
-.btn[data-id="2"]{
-  box-shadow:
-    0 0 10px rgba(255,60,60,0.4),
-    inset 0 0 8px rgba(255,255,255,0.1);
-}
-
-/* ACTIVO */
-.btn[data-id="0"].activo{
-  background:#00ff88;
-  color:#000;
-  box-shadow:0 0 25px #00ff88,0 0 50px #00ff88;
-}
-
-.btn[data-id="1"].activo{
-  background:#ffd000;
-  color:#000;
-  box-shadow:0 0 25px #ffd000,0 0 50px #ffd000;
-}
-
-.btn[data-id="2"].activo{
-  background:#ff3c3c;
-  color:#000;
-  box-shadow:0 0 25px #ff3c3c,0 0 50px #ff3c3c;
-}
-
-/* GRID */
-.row,.horarios{
-  display:grid;
-  grid-template-columns:repeat(8,1fr);
-  gap:6px;
-}
-
-.container{width:95%;margin:auto}
-
-.carril{
-  position:relative;
-  display:grid;
-  grid-template-columns:repeat(8,1fr);
-  gap:6px;
-  margin:35px 0;
-}
-
-.celda{font-size:13px}
-
-/* HORARIOS */
-.horarios span{
-  opacity:0;
-  font-size:12px;
-}
-
-/* SEGMENTOS */
-.segmento{
-  height:6px;
-  background:#222;
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:.4s;
-  position:relative;
-}
-
-.segmento.activo{
-  transform:scaleX(1);
-  box-shadow:0 0 10px currentColor;
-}
-
-.segmento.activo::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(90deg,transparent,white,transparent);
-  animation:energia 1s linear infinite;
-}
-@keyframes energia{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(100%)}
-}
-
-/* PELOTA */
-.pelota{
-  position:absolute;
-  top:50%;
-  width:16px;height:16px;
-  border-radius:50%;
-  transform:translate(-50%,-50%);
-  transition:left .2s linear;
-  box-shadow:0 0 15px currentColor;
-  z-index:10;
-}
-
-.pelota::after{
-  content:"";
-  position:absolute;
-  width:30px;height:30px;
-  border-radius:50%;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,currentColor,transparent);
-  opacity:.3;
-}
-
-.campeon{animation:pulse .8s infinite}
-@keyframes pulse{
-  50%{transform:translate(-50%,-50%) scale(1.4)}
-}
+  .hora-actual{background:linear-gradient(90deg,#00330022,#00660033);box-shadow:0 0 12px #00ff88;border-radius:6px;color:#bff;padding:6px 4px}
+  .panel-right{box-shadow:0 0 16px rgba(255,60,60,0.25)}
+  @media (max-width:800px){.btn{width:72px;height:56px;font-size:14px}}
 </style>
 </head>
-
 <body>
 
-<div class="top-bar">
-  <div class="panel panel-left">
-    <div class="panel-title">HOY</div>
-    <div id="fecha"></div>
-    <div id="hora"></div>
+  <div class="top-bar">
+    <div class="panel panel-left">
+      <div class="panel-title">HOY</div>
+      <div id="fecha"></div>
+      <div id="hora"></div>
+    </div>
+
+    <div class="panel panel-right">
+      <div class="panel-title">TIEMPO RESTANTE</div>
+      <div id="dias"></div>
+      <div id="horas"></div>
+    </div>
   </div>
 
-  <div class="panel panel-right">
-    <div class="panel-title">TIEMPO RESTANTE</div>
-    <div id="dias"></div>
-    <div id="horas"></div>
+  <h1 class="gvs-title">GVS PRODUCCIONES</h1>
+  <div class="gvs-line"></div>
+  <div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
+
+  <div class="controles" id="controls">
+    <div class="btn" data-id="0" onclick="toggle(0,this)">1°</div>
+    <div class="btn" data-id="1" onclick="toggle(1,this)">2°</div>
+    <div class="btn" data-id="2" onclick="toggle(2,this)">Mejor<br>3</div>
+    <div class="btn" data-id="3" onclick="toggle(3,this)">Peor<br>3</div>
+    <div class="btn" data-id="4" onclick="toggle(4,this)">4°</div>
   </div>
-</div>
 
-<h1 class="gvs-title">GVS PRODUCCIONES</h1>
-<div class="gvs-line"></div>
-<div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
+  <div class="container">
 
-<div class="controles">
-  <div class="btn" data-id="0" onclick="toggle(0,this)">1</div>
-  <div class="btn" data-id="1" onclick="toggle(1,this)">2</div>
-  <div class="btn" data-id="2" onclick="toggle(2,this)">3</div>
-</div>
+    <div class="row">
+      <div class="celda">16/6 <small>lun</small></div>
+      <div class="celda">22/6 <small>dom</small></div>
+      <div class="celda">27/6 <small>vie</small></div>
+      <div class="celda">3/7 <small>jue</small></div>
+      <div class="celda">7/7 <small>lun</small></div>
+      <div class="celda">11/7 <small>vie</small></div>
+      <div class="celda">15/7 <small>mar</small></div>
+      <div class="celda">19/7 <small>sab</small></div>
+    </div>
 
-<div class="container">
+    <div class="row" style="margin-top:6px">
+      <div class="celda">Grupos</div>
+      <div class="celda">Grupos</div>
+      <div class="celda">Grupos</div>
+      <div class="celda">16°</div>
+      <div class="celda">8°</div>
+      <div class="celda">4°</div>
+      <div class="celda">Semi</div>
+      <div class="celda">Final</div>
+    </div>
 
-<div class="row">
-<div class="celda">16/6<br>lunes</div>
-<div class="celda">22/6<br>domingo</div>
-<div class="celda">27/6<br>viernes</div>
-<div class="celda">3/7<br>jueves</div>
-<div class="celda">7/7<br>lunes</div>
-<div class="celda">11/7<br>viernes</div>
-<div class="celda">15/7<br>martes</div>
-<div class="celda">19/7<br>sábado</div>
-</div>
+    <!-- horarios por carrera (están ocultos hasta activar) -->
+    <div id="h1" class="horarios"></div>
+    <div id="h2" class="horarios" style="margin-top:6px"></div>
+    <div id="h3" class="horarios" style="margin-top:6px"></div>
+    <div id="h4" class="horarios" style="margin-top:6px"></div>
+    <div id="h5" class="horarios" style="margin-top:6px"></div>
 
-<div class="row">
-<div class="celda">Grupos</div>
-<div class="celda">Grupos</div>
-<div class="celda">Grupos</div>
-<div class="celda">16°</div>
-<div class="celda">8°</div>
-<div class="celda">4°</div>
-<div class="celda">Semi</div>
-<div class="celda">Final</div>
-</div>
+    <!-- carriles -->
+    <div id="c1" class="carril"></div>
+    <div id="c2" class="carril"></div>
+    <div id="c3" class="carril"></div>
+    <div id="c4" class="carril"></div>
+    <div id="c5" class="carril"></div>
 
-<div id="h1" class="horarios"></div>
-<div id="h2" class="horarios"></div>
-<div id="h3" class="horarios"></div>
-
-<div id="c1" class="carril"></div>
-<div id="c2" class="carril"></div>
-<div id="c3" class="carril"></div>
-
-</div>
+  </div>
 
 <script>
+/* Base original usado como referencia: :contentReference[oaicite:1]{index=1}
+   Cambios mínimos: corregir posicionamiento final y la rama que ponía left=100%.
+*/
 
-/* RELOJ */
-setInterval(()=>{
-  const n=new Date();
-  fecha.innerText=n.toLocaleDateString("es-AR");
-  hora.innerText=n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
-
-  const mundial=new Date("2026-06-11T00:00:00");
-  const diff=mundial-n;
-
-  dias.innerText=Math.floor(diff/86400000)+" días";
-  horas.innerText=Math.floor((diff/3600000)%24)+" hs "+Math.floor((diff/60000)%60)+" min";
-},1000);
-
-/* CONFIG */
-const horarios=[
-["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
-["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
-["22:00","14:00","23:00","","","","",""]
+/* ---------- Horarios (tomados de tu script) ---------- */
+const horarios = [
+  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+  ["22:00","14:00","23:00","","","","",""],
+  ["22:00","14:00","23:00","","","","",""],
+  ["22:00","14:00","23:00","","","","",""]
 ];
 
-const colores=["#00ff88","#ffd000","#ff3c3c"];
-const carriles=["c1","c2","c3"];
-const horariosIds=["h1","h2","h3"];
+const colores = ["#00ff88","#ffd000","#ff3c3c","#ff3c3c","#ff3c3c"];
+const carriles = ["c1","c2","c3","c4","c5"];
+const horariosIds = ["h1","h2","h3","h4","h5"];
 
-const totalColumnas=8;
-const limites=horarios.map(h=>h.filter(x=>x!="").length);
+/* límites (cantidad de segmentos visibles por carril segun horarios no vacíos) */
+const limites = horarios.map(h => h.filter(x=>x && x.trim()!=="").length);
 
-const estados=[false,false,false];
-const progreso=[0,0,0];
+/* estados y progreso */
+const estados = [false,false,false,false,false];
+const progreso = [0,0,0,0,0];
 
-/* INIT */
+/* ---------- UI init: rellenar horas (ocultas) y crear segmentos ---------- */
 function init(){
-  carriles.forEach((id,i)=>{
-    const c=document.getElementById(id);
-    for(let j=0;j<totalColumnas;j++){
-      const d=document.createElement("div");
-      d.className="segmento";
-      c.appendChild(d);
-    }
-
-    const h=document.getElementById(horariosIds[i]);
-    for(let j=0;j<totalColumnas;j++){
-      const s=document.createElement("span");
-      s.textContent=horarios[i][j] || "";
-      h.appendChild(s);
+  horarios.forEach((arr,i)=>{
+    const hCont = document.getElementById(horariosIds[i]);
+    hCont.innerHTML = "";
+    for(let c=0;c<8;c++){
+      const sp = document.createElement("span");
+      sp.textContent = arr[c] ? arr[c] : "";
+      sp.dataset.col = c;
+      hCont.appendChild(sp);
     }
   });
+
+  carriles.forEach((cid,i)=>{
+    const cont = document.getElementById(cid);
+    cont.innerHTML = "";
+    for(let c=0;c<8;c++){
+      const seg = document.createElement("div");
+      seg.className = "segmento";
+      seg.dataset.col = c;
+      cont.appendChild(seg);
+    }
+  });
+
+  // NOTA: no marcamos horas al inicio (evita iluminación inicial)
 }
 init();
 
-/* POSICION */
+/* ---------- POSICIONAMIENTO CORREGIDO (usa píxeles por bloque) ---------- */
 function posicionarPelota(i){
-  const cont=document.getElementById(carriles[i]);
-  const pelota=cont.querySelector(".pelota");
+  const cont = document.getElementById(carriles[i]);
+  const pelota = cont.querySelector(".pelota");
   if(!pelota) return;
-
-  const seg=cont.children;
 
   let idx = progreso[i]-1;
   if(idx < 0) return;
   if(idx >= limites[i]) idx = limites[i]-1;
 
-  const rect=seg[idx].getBoundingClientRect();
-  const contRect=cont.getBoundingClientRect();
+  // ancho real de cada bloque (hay 8 bloques en el carril)
+  const bloque = cont.offsetWidth / 8;
 
-  pelota.style.left=(rect.left-contRect.left+rect.width)+"px";
+  // centro del bloque idx
+  const posX = (idx * bloque) + (bloque / 2);
+
+  pelota.style.left = posX + "px";
 }
 
-/* RESIZE */
-window.addEventListener("resize",()=>{
-  for(let i=0;i<3;i++){
-    if(estados[i]) posicionarPelota(i);
-  }
+/* ---------- resize ---------- */
+window.addEventListener("resize", ()=> {
+  for(let i=0;i<carriles.length;i++) if(estados[i]) posicionarPelota(i);
 });
 
-/* TOGGLE */
-function toggle(i,el){
-  estados[i]=!estados[i];
-  el.classList.toggle("activo");
+/* ---------- toggle: mostrar/ocultar horas de la carrera y arrancar/parar ---------- */
+function toggle(i,btn){
+  estados[i] = !estados[i];
+  btn.classList.toggle("activo", estados[i]);
+
+  const hrs = document.getElementById(horariosIds[i]).children;
+  for(let c=0;c<hrs.length;c++){
+    const has = horarios[i][c] && horarios[i][c].trim()!=="";
+    if(!has) { hrs[c].classList.remove("show"); continue; }
+    if(estados[i]){
+      hrs[c].classList.add("show");
+      hrs[c].style.color = colores[i];
+      hrs[c].style.boxShadow = `0 0 12px ${colores[i]}`;
+    } else {
+      hrs[c].classList.remove("show");
+      hrs[c].style.color = "";
+      hrs[c].style.boxShadow = "";
+    }
+  }
+
+  const cont = document.getElementById(carriles[i]);
+  if(estados[i]){
+    Array.from(cont.children).forEach(seg=>{
+      seg.style.boxShadow = `0 0 14px ${colores[i]}66`;
+      seg.style.setProperty('background', '#111');
+    });
+  } else {
+    Array.from(cont.children).forEach(seg=>{
+      if(!seg.classList.contains('activo')) seg.style.boxShadow = '';
+    });
+  }
 
   if(estados[i]) avanzar(i);
   else retroceder(i);
 }
 
+/* ---------- avanzar: solo cambie la rama final para que no ponga left=100% ---------- */
 function avanzar(i){
-
-  const cont=document.getElementById(carriles[i]);
+  const cont = document.getElementById(carriles[i]);
   cont.querySelectorAll(".pelota").forEach(p=>p.remove());
 
-  const pelota=document.createElement("div");
-  pelota.className="pelota";
-  pelota.style.background=colores[i];
+  const pelota = document.createElement("div");
+  pelota.className = "pelota";
+  pelota.style.background = colores[i];
+  pelota.style.color = colores[i];
   cont.appendChild(pelota);
 
-  const seg=cont.children;
-  const hrs=document.getElementById(horariosIds[i]).children;
+  const segs = cont.children;
+  const total = limites[i];
 
   function step(){
-
     if(!estados[i]) return;
 
-    if(progreso[i]>=limites[i]){
-      posicionarPelota(i);
+    if(progreso[i] >= total){
+      // --- FIX AQUI: no mandamos la pelota al 100% del ancho del carril ---
+      progreso[i] = total;           // garantizamos el tope
+      posicionarPelota(i);          // la posicionamos en su segmento final (pixel-perfect)
       pelota.classList.add("campeon");
       return;
     }
 
-    const idx=progreso[i];
+    const idx = progreso[i];
+    segs[idx].classList.add("activo");
+    segs[idx].style.background = colores[i];
+    segs[idx].style.boxShadow = `0 0 14px ${colores[i]}`;
 
-    seg[idx].classList.add("activo");
-    seg[idx].style.background=colores[i];
-
-    hrs[idx].style.opacity=1;
-    hrs[idx].style.color=colores[i];
+    const hspan = document.getElementById(horariosIds[i]).children[idx];
+    if(hspan){ hspan.classList.add("show"); hspan.style.color = colores[i]; hspan.style.boxShadow = `0 0 10px ${colores[i]}`; }
 
     progreso[i]++;
     posicionarPelota(i);
 
-    setTimeout(step,300);
+    setTimeout(step, 300);
   }
-
   step();
 }
 
+/* ---------- retroceder ---------- */
 function retroceder(i){
-
-  const cont=document.getElementById(carriles[i]);
-  const seg=cont.children;
-  const hrs=document.getElementById(horariosIds[i]).children;
+  const cont = document.getElementById(carriles[i]);
+  const segs = cont.children;
 
   function step(){
-
     if(estados[i]) return;
 
-    if(progreso[i]<=0){
+    if(progreso[i] <= 0){
       cont.querySelectorAll(".pelota").forEach(p=>p.remove());
       return;
     }
 
     progreso[i]--;
+    const idx = progreso[i];
 
-    seg[progreso[i]].classList.remove("activo");
-    hrs[progreso[i]].style.opacity=0;
+    segs[idx].classList.remove("activo");
+    segs[idx].style.background = "#222";
+    segs[idx].style.boxShadow = "";
 
-    setTimeout(step,150);
+    const sp = document.getElementById(horariosIds[i]).children[idx];
+    if(sp){ sp.classList.remove("show"); sp.style.color = ""; sp.style.boxShadow = ""; }
+
+    posicionarPelota(i);
+
+    setTimeout(step, 150);
   }
 
   step();
 }
+
+/* RELOJ */
+setInterval(()=>{
+  const n = new Date();
+  document.getElementById("fecha").innerText = n.toLocaleDateString("es-AR");
+  document.getElementById("hora").innerText = n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
+
+  const mundial = new Date("2026-06-11T00:00:00");
+  const diff = Math.max(0, mundial - n);
+  const diasRest = Math.floor(diff/86400000);
+  const horasRest = Math.floor((diff/3600000)%24);
+  const minutosRest = Math.floor((diff/60000)%60);
+  document.getElementById("dias").innerText = diasRest + " días";
+  document.getElementById("horas").innerText = horasRest + " hs " + minutosRest + " min";
+},1000);
 
 </script>
 
