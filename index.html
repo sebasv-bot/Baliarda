@@ -2,332 +2,328 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
-<title>Baliarda - segmentos 8 + tooltips</title>
+<title>Baliarda FULL FINAL - Tooltips OK</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <style>
 *{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
-html,body{height:100%;margin:0;background:radial-gradient(circle,#071726 0%,#001022 60%, #000 100%);color:#fff}
-.container{max-width:1360px;margin:0 auto;padding:18px}
+body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
 
-/* TOP PANELS (sin cambios) */
-.top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.panel{background:rgba(255,255,255,0.06);border-radius:14px;padding:12px 18px;width:260px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
-.panel.ahora{box-shadow:0 8px 40px rgba(255,80,80,0.15)}
-.panel.rest{box-shadow:0 8px 40px rgba(80,255,140,0.12)}
-.value{font-size:16px;font-weight:700;line-height:1}
-
-/* Botones (sin tocar estética) */
-.controles{display:flex;justify-content:center;gap:12px;margin-top:24px;flex-wrap:wrap}
-.btn{width:120px;height:70px;border-radius:14px;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;transition:.12s;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-.btn:active{transform:translateY(2px)}
-
-/* active glows (clases aplicadas dinámicamente) */
-.act0{box-shadow:0 0 30px #00ff88;background:#00ff88}
-.act1{box-shadow:0 0 30px #ffd000;background:#ffd000}
-.act2,.act3,.act4,.act5,.act6,.act7{box-shadow:0 0 30px #ff3c3c;background:#ff3c3c}
-.act8{box-shadow:0 0 30px #00e5ff;background:#00e5ff}
-
-/* Dateline - 8 columnas */
-.dateline{display:flex;margin-top:20px;padding:0 6px}
-.dateline .col{flex:1;text-align:center;font-size:13px;color:#cfe7ff}
-.dateline .col .d{font-weight:700}
-.dateline .col .f{opacity:.75;font-size:12px;margin-top:4px}
-
-/* Schedule / filas */
-.schedule{background:linear-gradient(180deg, rgba(0,10,26,0.6), rgba(0,10,26,0.85));padding:14px;border-radius:12px;margin-top:12px}
-.fila{margin:12px 0}
-.labelFila{font-weight:700;color:#cfe7ff;margin-bottom:8px;font-size:14px}
-
-/* HORARIOS: ahora 8 slots por fila */
-.horarios{display:flex;gap:10px;align-items:center}
-.slot{
-  flex:1;
-  background:rgba(0,0,0,0.48);
-  border-radius:10px;
-  padding:8px 6px;
-  min-height:60px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  color:#a8ffd6;
-  opacity:0; /* oculto si no activo */
-  transition:opacity .18s,box-shadow .12s,transform .12s;
+/* LATIDO */
+@keyframes pulse {
+  0%{transform:scale(1)}
+  50%{transform:scale(1.12)}
+  100%{transform:scale(1)}
 }
-.slot.on{opacity:1;box-shadow:0 8px 28px currentColor;transform:translateY(-2px)}
 
-/* slot texto */
-.h1{font-size:18px;font-weight:700}
-.h2{font-size:12px;opacity:.9;margin-top:6px}
+/* TOP */
+.top-bar{position:absolute;top:10px;width:100%;display:flex;justify-content:space-between;padding:0 30px}
 
-/* carril con 8 segmentos */
-.carril{display:flex;gap:10px;margin-top:8px;align-items:center}
-.segment{flex:1;height:8px;background:#222;border-radius:8px;transform:scaleX(0);transform-origin:left;transition:transform .28s,box-shadow .12s}
-.segment.on{transform:scaleX(1);box-shadow:0 8px 26px currentColor}
+.panel{
+  background:rgba(0,0,0,.5);
+  padding:12px;
+  border-radius:12px;
+  width:220px;
+  text-align:center;
+}
 
-/* pulse (latido) - NO aplicar para fila 8 (index 8) */
-@keyframes beat{0%{transform:scaleX(1)}50%{transform:scaleX(1.02)}100%{transform:scaleX(1)}}
-.segment.pulse{animation:beat 1s infinite}
+.panel.ahora{box-shadow:0 0 30px rgba(255,0,0,.4)}
+.panel.rest{box-shadow:0 0 30px rgba(0,255,100,.3)}
 
-/* tooltip */
+.value{
+  font-size:16px;
+  font-weight:bold;
+  animation:pulse 1.2s infinite;
+}
+
+/* BOTONES */
+.controles{margin-top:90px;display:flex;justify-content:center;gap:14px}
+
+.btn{
+  width:120px;height:80px;border-radius:18px;background:#111;
+  display:flex;justify-content:center;align-items:center;text-align:center;cursor:pointer;
+  transition:box-shadow .18s, transform .12s, background .12s;
+  box-shadow:0 0 8px rgba(255,255,255,0.03);
+}
+
+/* COLORES BOTONES ACTIVOS */
+.btn[data-id="0"].activo{background:#00ff88;box-shadow:0 0 30px rgba(0,255,136,0.35)}
+.btn[data-id="1"].activo{background:#ffd000;box-shadow:0 0 30px rgba(255,208,0,0.35)}
+.btn[data-id="2"].activo{background:#ff3c3c;box-shadow:0 0 30px rgba(255,60,60,0.35)}
+.btn[data-id="3"].activo{background:#ff3c3c;box-shadow:0 0 30px rgba(255,60,60,0.35)}
+.btn[data-id="4"].activo{background:#00e5ff;box-shadow:0 0 30px rgba(0,229,255,0.35)}
+
+/* HEADER */
+.header{margin-top:20px}
+.row{display:flex}
+.cell{flex:1;text-align:center;font-size:12px}
+
+/* HORARIOS */
+.horarios{display:flex;margin-top:10px}
+.horarios span{
+  flex:1;text-align:center;opacity:0;position:relative;padding:4px 2px;
+}
+.horarios span.activo{opacity:1;box-shadow:0 0 10px currentColor}
+
+/* TOOLTIP */
 .tooltip{
-  position:fixed;display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:rgba(0,0,0,0.95);padding:8px;border-radius:8px;min-width:180px;z-index:999;
-  box-shadow:0 10px 30px rgba(0,0,0,0.6);pointer-events:none;opacity:0;transition:opacity .12s,transform .12s;
+  position:absolute;bottom:120%;left:50%;
+  transform:translateX(-50%) scale(0.85);
+  opacity:0;pointer-events:none;
+  background:rgba(0,0,0,.95);
+  padding:10px;border-radius:10px;width:190px;text-align:center;
+  transition:.18s;z-index:999;
+  box-shadow:0 0 12px rgba(0,0,0,0.6);
 }
-.tooltip.show{opacity:1;pointer-events:auto}
-.tooltip img{width:100%;height:90px;object-fit:cover;border-radius:6px}
+.tooltip img{width:100%;border-radius:6px;margin-top:6px}
+.horarios span:hover .tooltip{opacity:1;transform:translateX(-50%) scale(1);pointer-events:auto}
 
-/* brand (sin tocar) */
-.brand{position:fixed;right:20px;bottom:12px;text-align:center}
-.brand h1{margin:0;font-size:20px;color:#cfe7ff}
-.brand .line{height:3px;width:150px;background:#00aaff;margin:6px auto;box-shadow:0 0 12px #00aaff}
-.brand p{font-size:11px;color:#cfe7ff;opacity:.75}
+/* CARRIL */
+.carril{display:flex;margin:10px 0}
+.segmento{flex:1;height:6px;background:#222;border-radius:6px;transform:scaleX(0);transform-origin:left;transition:.3s}
+.segmento.activo{transform:scaleX(1);background:currentColor}
+.segmento.final{animation:pulse 1s infinite}
+
+/* LOGO */
+.logo{position:fixed;bottom:10px;right:20px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.logo h2{margin:0;text-shadow:0 0 10px #00aaff}
+.logo .line{height:2px;width:70%;max-width:140px;background:#00aaff;box-shadow:0 0 10px #00aaff;margin-top:5px}
+.logo p{font-size:10px;color:#ccc;margin-top:5px}
 </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- TOP -->
-  <div class="top-row">
-    <div class="panel ahora">
-      <div class="title">AHORA</div>
-      <div id="horaPanel" class="value">--:--</div>
-    </div>
-
-    <div style="flex:1"></div>
-
-    <div class="panel rest">
-      <div class="title">TIEMPO RESTANTE</div>
-      <div id="restPanel" class="value" style="text-align:center">-- días<br>--h --m</div>
-    </div>
+<div class="top-bar">
+  <div class="panel ahora">
+    <div>AHORA</div>
+    <div id="hora" class="value"></div>
   </div>
 
-  <!-- botones -->
-  <div class="controles" id="botWrap"></div>
-
-  <!-- dateline -->
-  <div class="dateline" id="dateline"></div>
-
-  <!-- schedule -->
-  <div class="schedule" id="schedule"></div>
-
+  <div class="panel rest">
+    <div>TIEMPO RESTANTE</div>
+    <div id="restante" class="value"></div>
+  </div>
 </div>
 
-<!-- tooltip -->
-<div id="tooltip" class="tooltip"><div id="ttTitle" style="font-weight:700"></div><img id="ttImg" src=""><div id="ttCity" style="opacity:.9"></div></div>
+<div class="controles">
+  <div class="btn" data-id="0" onclick="toggle(0,this)">1°</div>
+  <div class="btn" data-id="1" onclick="toggle(1,this)">2°</div>
+  <div class="btn" data-id="2" onclick="toggle(2,this)">Mejor<br>3</div>
+  <div class="btn" data-id="3" onclick="toggle(3,this)">Peor<br>3</div>
+  <div class="btn" data-id="4" onclick="toggle(4,this)">4°</div>
+</div>
 
-<!-- brand -->
-<div class="brand">
-  <h1>GVS PRODUCCIONES</h1>
+<div class="header">
+  <div class="row">
+    <div class="cell">16/06 - LUN</div>
+    <div class="cell">22/06 - DOM</div>
+    <div class="cell">27/06 - VIE</div>
+    <div class="cell">03/07 - JUE</div>
+    <div class="cell">07/07 - LUN</div>
+    <div class="cell">11/07 - VIE</div>
+    <div class="cell">15/07 - MAR</div>
+    <div class="cell">19/07 - SAB</div>
+  </div>
+
+  <div class="row">
+    <div class="cell">Grupos</div>
+    <div class="cell">Grupos</div>
+    <div class="cell">Grupos</div>
+    <div class="cell">16°</div>
+    <div class="cell">8°</div>
+    <div class="cell">4°</div>
+    <div class="cell">Semi</div>
+    <div class="cell">Final</div>
+  </div>
+</div>
+
+<div id="zonas"></div>
+
+<div class="logo">
+  <h2>GVS PRODUCCIONES</h2>
   <div class="line"></div>
   <p>Interactive Experience • Eventos en Vivo</p>
 </div>
 
 <script>
-/* ===== Datos base (no toco la estética) ===== */
-const colores=["#00ff88","#ffd000","#ff3c3c","#ff3c3c","#ff3c3c","#ff3c3c","#ff3c3c","#ff3c3c","#00e5ff"];
-const botonesTxt=["1° GRUPO J","2° GRUPO J","3° (MEJOR)","3° (2° mejor)","3° (3° mejor)","3° (4° mejor)","3° (5° mejor)","3° (PEOR)","4° GRUPO J"];
-/* Ahora cada fila tendrá 8 slots (uno por columna dateline) */
-const filasSlots = [
-  // 1° GRUPO J
-  ["","30/06 22:00","","05/07 22:00","","09/07 22:00","","14/07 22:00"],
-  // 2° GRUPO J
-  ["","29/06 22:00","","04/07 22:00","","08/07 22:00","","13/07 22:00"],
-  // Mejor 3 (1° mejor)
-  ["","28/06 22:00","","03/07 22:00","","07/07 22:00","","12/07 22:00"],
-  // Mejor 3 (2° mejor)
-  ["","28/06 19:00","","03/07 19:00","","07/07 19:00","","12/07 19:00"],
-  // Mejor 3 (3° mejor)
-  ["","29/06 16:00","","04/07 16:00","","08/07 16:00","","13/07 16:00"],
-  // Mejor 3 (4° mejor)
-  ["","29/06 13:00","","04/07 13:00","","08/07 13:00","","13/07 13:00"],
-  // Mejor 3 (5° mejor)
-  ["","30/06 16:00","","05/07 16:00","","09/07 16:00","","14/07 16:00"],
-  // Peor 3
-  ["","30/06 13:00","","05/07 13:00","","09/07 13:00","","14/07 13:00"],
-  // 4° (eliminado) - no latido
-  ["ELIMINADO","","","","","","",""]
+/* Colores por fila (consistentes con botones) */
+const colores = [
+  "#00ff88", // 1°
+  "#ffd000", // 2°
+  "#ff3c3c", // Mejor 3 (rojo)
+  "#ff3c3c", // Peor 3 (rojo)
+  "#00e5ff"  // 4° (turquesa)
 ];
 
-/* dateline columns (8) — formato pedido */
-const datelineCols=[
-"16/06 - LUN","22/06 - DOM","27/06 - VIE","03/07 - JUE",
-"07/07 - LUN","11/07 - VIE","15/07 - MAR","19/07 - SAB"];
-const fases=["GRUPOS","GRUPOS","GRUPOS","16°","8°","4°","SEMI","FINAL"];
+/* Datos de ejemplo para tooltips (5 filas x 8 columnas) */
+const estadiosData = [
+  [
+    {nombre:"Lusail Stadium", ciudad:"Qatar", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Lusail_Stadium.jpg"},
+    {nombre:"MetLife Stadium", ciudad:"USA", img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/MetLife_Stadium.jpg"},
+    {nombre:"Azteca Stadium", ciudad:"México", img:"https://upload.wikimedia.org/wikipedia/commons/1/16/Estadio_Azteca.jpg"},
+    {nombre:"SoFi Stadium", ciudad:"Los Ángeles", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/SoFi_Stadium.jpg"},
+    {nombre:"Hard Rock Stadium", ciudad:"Miami", img:"https://upload.wikimedia.org/wikipedia/commons/6/6c/Hard_Rock_Stadium.jpg"},
+    {nombre:"AT&T Stadium", ciudad:"Dallas", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/ATT_Stadium.jpg"},
+    {nombre:"Levi's Stadium", ciudad:"San Francisco", img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Levis_Stadium.jpg"},
+    {nombre:"Mercedes-Benz Stadium", ciudad:"Atlanta", img:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Mercedes-Benz_Stadium.jpg"}
+  ],
+  [
+    {nombre:"BC Place", ciudad:"Vancouver", img:"https://upload.wikimedia.org/wikipedia/commons/0/0e/BC_Place.jpg"},
+    {nombre:"BMO Field", ciudad:"Toronto", img:"https://upload.wikimedia.org/wikipedia/commons/5/5e/BMO_Field.jpg"},
+    {nombre:"Gillette Stadium", ciudad:"Boston", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Gillette_Stadium.jpg"},
+    {nombre:"NRG Stadium", ciudad:"Houston", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/NRG_Stadium.jpg"},
+    {nombre:"Arrowhead Stadium", ciudad:"Kansas City", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Arrowhead_Stadium.jpg"},
+    {nombre:"Lincoln Financial Field", ciudad:"Philadelphia", img:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Lincoln_Financial_Field.jpg"},
+    {nombre:"Lumen Field", ciudad:"Seattle", img:"https://upload.wikimedia.org/wikipedia/commons/4/4e/Lumen_Field.jpg"},
+    {nombre:"State Farm Stadium", ciudad:"Phoenix", img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/State_Farm_Stadium.jpg"}
+  ],
+  [
+    {nombre:"Estadio BBVA", ciudad:"Monterrey", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Estadio_BBVA.jpg"},
+    {nombre:"Estadio Akron", ciudad:"Guadalajara", img:"https://upload.wikimedia.org/wikipedia/commons/1/1c/Estadio_Akron.jpg"},
+    {nombre:"Rose Bowl", ciudad:"Los Ángeles", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Rose_Bowl.jpg"},
+    {nombre:"Soldier Field", ciudad:"Chicago", img:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Soldier_Field.jpg"},
+    {nombre:"FedEx Field", ciudad:"Washington", img:"https://upload.wikimedia.org/wikipedia/commons/0/0d/FedExField.jpg"},
+    {nombre:"Empower Field", ciudad:"Denver", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Empower_Field.jpg"},
+    {nombre:"Allegiant Stadium", ciudad:"Las Vegas", img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/Allegiant_Stadium.jpg"},
+    {nombre:"Bank of America Stadium", ciudad:"Charlotte", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Bank_of_America_Stadium.jpg"}
+  ],
+  [
+    {nombre:"TQL Stadium", ciudad:"Cincinnati", img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/TQL_Stadium.jpg"},
+    {nombre:"Children’s Mercy Park", ciudad:"Kansas", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Childrens_Mercy_Park.jpg"},
+    {nombre:"Exploria Stadium", ciudad:"Orlando", img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/Exploria_Stadium.jpg"},
+    {nombre:"DRV PNK Stadium", ciudad:"Miami", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/DRV_PNK_Stadium.jpg"},
+    {nombre:"Audi Field", ciudad:"Washington", img:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Audi_Field.jpg"},
+    {nombre:"Red Bull Arena", ciudad:"New York", img:"https://upload.wikimedia.org/wikipedia/commons/6/6e/Red_Bull_Arena.jpg"},
+    {nombre:"Dignity Health Sports Park", ciudad:"LA", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Dignity_Health_Sports_Park.jpg"},
+    {nombre:"Subaru Park", ciudad:"Philadelphia", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Subaru_Park.jpg"}
+  ],
+  [
+    {nombre:"Toyota Stadium", ciudad:"Dallas", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Toyota_Stadium.jpg"},
+    {nombre:"Geodis Park", ciudad:"Nashville", img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/Geodis_Park.jpg"},
+    {nombre:"Q2 Stadium", ciudad:"Austin", img:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Q2_Stadium.jpg"},
+    {nombre:"PayPal Park", ciudad:"San Jose", img:"https://upload.wikimedia.org/wikipedia/commons/3/3d/PayPal_Park.jpg"},
+    {nombre:"Snapdragon Stadium", ciudad:"San Diego", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Snapdragon_Stadium.jpg"},
+    {nombre:"Allianz Field", ciudad:"Minnesota", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Allianz_Field.jpg"},
+    {nombre:"Providence Park", ciudad:"Portland", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Providence_Park.jpg"},
+    {nombre:"Lower.com Field", ciudad:"Columbus", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Lower.com_Field.jpg"}
+  ]
+];
 
-/* stadia (tooltips) - ejemplo por slot */
-const stadia = {};
-for(let r=0;r<filasSlots.length;r++){
-  stadia[r]=filasSlots[r].map((s,idx)=>({
-    nombre: `Estadio R${r+1}C${idx+1}`,
-    ciudad: `Ciudad ${r+1}`,
-    img: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Lusail_Stadium.jpg"
-  }));
-}
+const horarios = [
+  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+  ["22:00","14:00","23:00","","","","",""],
+  ["22:00","14:00","23:00","","","","",""],
+  ["22:00","14:00","23:00","","","","",""]
+];
 
-/* ===== render dateline ===== */
-function renderDateline(){
-  const dl=document.getElementById('dateline');
-  dl.innerHTML='';
-  for(let i=0;i<datelineCols.length;i++){
-    const col=document.createElement('div');
-    col.className='col';
-    col.innerHTML = `<div class="d">${datelineCols[i]}</div><div class="f">${fases[i]}</div>`;
-    dl.appendChild(col);
-  }
-}
-renderDateline();
+const estados=[false,false,false,false,false];
 
-/* ===== render botones ===== */
-function renderButtons(){
-  const wrap=document.getElementById('botWrap');
-  wrap.innerHTML='';
-  botonesTxt.forEach((t,i)=>{
-    const b=document.createElement('div');
-    b.className='btn';
-    b.dataset.id=i;
-    b.innerText=t;
-    b.onclick=()=> toggleRow(i,b);
-    wrap.appendChild(b);
-  });
-}
-renderButtons();
+function init(){
+  const zonas=document.getElementById("zonas");
+  zonas.innerHTML = '';
+  horarios.forEach((fila,i)=>{
+    const h=document.createElement("div"); h.className="horarios";
+    fila.forEach((v,j)=>{
+      const sp=document.createElement("span");
+      if(v){
+        sp.innerText = v;
 
-/* ===== render schedule (filas con 8 slots cada una) ===== */
-function renderSchedule(){
-  const sch=document.getElementById('schedule');
-  sch.innerHTML='';
-  filasSlots.forEach((fila, r)=>{
-    const cont=document.createElement('div'); cont.className='fila';
-    const lbl=document.createElement('div'); lbl.className='labelFila'; lbl.innerText = botonesTxt[r];
-    cont.appendChild(lbl);
-
-    const hwrap=document.createElement('div'); hwrap.className='horarios';
-    for(let c=0;c<8;c++){
-      const slot=document.createElement('div'); slot.className='slot';
-      const val = fila[c] || '';
-      if(val && val.trim()!==""){
-        // show hh/mm on top and date below if needed
-        const parts = val.split(' ');
-        if(parts.length===2){
-          const hh = parts[1];
-          const dd = parts[0];
-          slot.innerHTML = `<div class="h1">${hh}</div><div class="h2">${dd}</div>`;
-        } else {
-          slot.innerHTML = `<div class="h1">${val}</div>`;
+        // crear tooltip con glow del color de la fila
+        const data = estadiosData[i] && estadiosData[i][j];
+        if(data){
+          const tooltip=document.createElement("div");
+          tooltip.className="tooltip";
+          tooltip.style.boxShadow = `0 0 18px ${colores[i] || '#fff'}`;
+          tooltip.innerHTML = `<b style="display:block;margin-bottom:6px">${data.nombre}</b>
+                               <img src="${data.img}" alt="${data.nombre}">
+                               <div style="font-size:11px;margin-top:6px">${data.ciudad}</div>`;
+          sp.appendChild(tooltip);
         }
-        // attach tooltip show/hide
-        slot.onmouseenter = (ev)=> showTooltip(ev, r, c, colores[r]);
-        slot.onmousemove = (ev)=> positionTooltip(ev);
-        slot.onmouseleave = hideTooltip;
-      } else {
-        slot.innerHTML = "";
       }
-      hwrap.appendChild(slot);
-    }
+      h.appendChild(sp);
+    });
 
-    // add final column visible to the right (keeps original visual)
-    const finalCol = document.createElement('div');
-    finalCol.style.width='160px';
-    finalCol.style.marginLeft='10px';
-    finalCol.style.opacity='0.95';
-    finalCol.style.fontSize='13px';
-    finalCol.innerHTML = '<div style="font-weight:700">🏆 FINAL (19/07 22:00)</div><div style="margin-top:6px">🥉 3° PUESTO (18/07 22:00)</div>';
+    const c=document.createElement("div"); c.className="carril";
+    fila.forEach(()=>{ const s=document.createElement("div"); s.className="segmento"; c.appendChild(s); });
 
-    cont.appendChild(hwrap);
-
-    // carril con 8 segments
-    const carr = document.createElement('div'); carr.className='carril';
-    for(let s=0;s<8;s++){
-      const seg = document.createElement('div'); seg.className='segment';
-      // add pulse to last segment only if not fila index 8 (4°)
-      if(s===7 && r!==8) seg.classList.add('pulse');
-      carr.appendChild(seg);
-    }
-    cont.appendChild(carr);
-    cont.appendChild(finalCol);
-    sch.appendChild(cont);
+    zonas.appendChild(h); zonas.appendChild(c);
   });
 }
-renderSchedule();
+init();
 
-/* ===== tooltip functions ===== */
-const tt = document.getElementById('tooltip');
-function showTooltip(ev, r, c, color){
-  const meta = (stadia[r] && stadia[r][c]) || {nombre:'Estadio',ciudad:'',img:''};
-  document.getElementById('ttTitle').innerText = meta.nombre;
-  document.getElementById('ttCity').innerText = meta.ciudad;
-  document.getElementById('ttImg').src = meta.img;
-  tt.style.boxShadow = `0 12px 30px ${color}33`;
-  tt.classList.add('show');
-  positionTooltip(ev);
-}
-function hideTooltip(){ tt.classList.remove('show'); }
-function positionTooltip(ev){
-  const x = ev.clientX, y = ev.clientY;
-  const maxX = window.innerWidth - 220;
-  tt.style.left = Math.min(maxX, Math.max(8, x + 12)) + 'px';
-  tt.style.top = Math.max(60, y - 180) + 'px';
-}
+/* TOGGLE funcional */
+function toggle(i, btn){
+  // mantener data-id en el botón
+  if(btn && !btn.hasAttribute('data-id')) btn.setAttribute('data-id', String(i));
 
-/* ===== toggle rows (modo B - multi) ===== */
-const estados = new Array(filasSlots.length).fill(false);
-function toggleRow(i, btn){
   estados[i] = !estados[i];
-  // update button class (glow)
-  if(estados[i]) btn.classList.add('act'+i); else btn.classList.remove('act'+i);
 
-  const filaEl = document.querySelectorAll('.fila')[i];
-  const slots = filaEl.querySelectorAll('.slot');
-  const segs = filaEl.querySelectorAll('.segment');
+  // actualizamos estado visual del botón seleccionado
+  document.querySelectorAll('.controles .btn').forEach(b=>{
+    if(b.getAttribute('data-id') === String(i)){
+      b.classList.toggle('activo');
+    }
+  });
+
+  const filas = document.querySelectorAll('.horarios')[i];
+  const carril = document.querySelectorAll('.carril')[i];
+  const spans = filas ? filas.children : [];
+  const segs = carril ? carril.children : [];
+
+  let lastValid = -1;
+  for(let k=0;k<spans.length;k++){
+    if(spans[k].innerHTML.trim() !== "") lastValid = k;
+  }
 
   if(estados[i]){
-    // activar: mostrar slots que tengan contenido y encender segments
-    for(let k=0;k<slots.length;k++){
-      (function(idx){
+    for(let s=0; s<=lastValid; s++){
+      ((si)=>{
         setTimeout(()=>{
-          const txt = slots[idx].innerText.trim();
-          if(txt!==''){
-            slots[idx].classList.add('on');
-            slots[idx].style.color = colores[i];
+          if(spans[si].innerHTML.trim() !== ""){
+            segs[si].classList.add('activo');
+            segs[si].style.color = colores[i];
+            spans[si].classList.add('activo');
+            spans[si].style.color = colores[i];
           }
-          segs[idx].classList.add('on');
-          segs[idx].style.background = colores[i];
-        }, idx * 120);
-      })(k);
+        }, si * 140);
+      })(s);
+    }
+    if(lastValid >= 0 && i !== 4){
+      setTimeout(()=>{ segs[lastValid].classList.add('final'); }, lastValid * 140);
     }
   } else {
-    // desactivar: decrecer
-    for(let k=segs.length-1;k>=0;k--){
-      (function(idx){
+    for(let s=lastValid; s>=0; s--){
+      ((si)=>{
         setTimeout(()=>{
-          segs[idx].classList.remove('on');
-          if(slots[idx]) slots[idx].classList.remove('on');
-        }, (segs.length-1-idx)*100);
-      })(k);
+          segs[si].classList.remove('final','activo');
+          spans[si].classList.remove('activo');
+        }, (lastValid - si) * 140);
+      })(s);
     }
   }
 }
 
-/* ===== Reloj y restante (sin cambios en diseño salvo dos líneas ya solicitado) ===== */
+/* RELOJ */
 function actualizarTiempo(){
   const ahora = new Date();
   const fecha = ahora.toLocaleDateString('es-AR');
   const horaTxt = ahora.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('horaPanel').innerHTML = `${fecha}<br>${horaTxt}`;
+  document.getElementById('hora').innerHTML = fecha + '<br>' + horaTxt;
 
-  const target = new Date("2026-07-19T22:00:00-03:00");
-  let diff = target - ahora;
-  if(diff < 0) diff = 0;
+  const mundial = new Date("2026-06-11T00:00:00-03:00");
+  const diff = mundial - ahora;
+  if(diff <= 0){
+    document.getElementById('restante').innerHTML = '0 días<br>0h 0m';
+    return;
+  }
   const dias = Math.floor(diff / 86400000);
   const horas = Math.floor((diff % 86400000) / 3600000);
-  const mins = Math.floor((diff % 3600000) / 60000);
-  document.getElementById('restPanel').innerHTML = `${dias} días<br>${horas}h ${mins}m`;
+  const minutos = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('restante').innerHTML = dias + ' días<br>' + horas + 'h ' + minutos + 'm';
 }
 setInterval(actualizarTiempo,1000);
 actualizarTiempo();
-
 </script>
+
 </body>
 </html>
