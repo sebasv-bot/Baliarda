@@ -58,7 +58,10 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
 .cell{flex:1;text-align:center;font-size:12px}
 
 /* HORARIOS */
-.horarios{display:flex;margin-top:10px}
+.horarios{
+  display:flex;
+  margin-top:10px;
+  padding:0 20px;
 .horarios span{
   flex:1;text-align:center;opacity:0;position:relative;padding:4px 2px;
 }
@@ -78,7 +81,10 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
 .horarios span:hover .tooltip{opacity:1;transform:translateX(-50%) scale(1);pointer-events:auto}
 
 /* CARRIL */
-.carril{display:flex;margin:10px 0}
+.carril{
+  display:flex;
+  margin:10px 0;
+  padding:0 20px;
 .segmento{flex:1;height:6px;background:#222;border-radius:6px;transform:scaleX(0);transform-origin:left;transition:.3s}
 .segmento.activo{transform:scaleX(1);background:currentColor}
 .segmento.final{animation:pulse 1s infinite}
