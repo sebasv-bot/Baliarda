@@ -2,321 +2,318 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
-<title>Baliarda GVS — Pelotas rojas corregidas</title>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Baliarda FINAL</title>
+
 <style>
-  *{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
-  body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff;text-align:center}
-  .top-bar{position:absolute;top:10px;width:100%;display:flex;justify-content:space-between;padding:0 30px}
-  .panel{padding:10px 14px;border-radius:10px;background:rgba(0,0,0,0.36)}
-  .panel-left{border:1px solid rgba(0,255,150,.18);box-shadow:0 0 10px rgba(0,255,150,.18)}
-  .panel-right{border:1px solid rgba(255,60,60,.18);box-shadow:0 0 10px rgba(255,60,60,.18)}
-  .panel-title{font-size:11px;opacity:.8}
-  #hora,#dias,#horas{display:block;animation:latido 1.2s infinite}
-  @keyframes latido{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+*{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
+body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
 
-  .gvs-title{margin-top:60px;font-size:36px;background:linear-gradient(#fff,#bbb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 15px rgba(0,150,255,.6)}
-  .gvs-line{width:300px;height:2px;margin:8px auto;background:linear-gradient(90deg,transparent,#00aaff,transparent)}
-  .gvs-sub{font-size:14px;color:#aaa}
+/* PANEL SUPERIOR */
+.top-bar{
+position:absolute;
+top:10px;
+width:100%;
+display:flex;
+justify-content:space-between;
+padding:0 30px;
+}
 
-  .controles{margin:18px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
-  .btn{width:84px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;background:linear-gradient(145deg,#1a1a1a,#000);border:2px solid rgba(255,255,255,0.12);color:#fff;transition:.22s;user-select:none}
-  .btn[data-id="0"]{box-shadow:0 0 10px rgba(0,255,136,0.28)}
-  .btn[data-id="1"]{box-shadow:0 0 10px rgba(255,208,0,0.28)}
-  .btn[data-id="2"],.btn[data-id="3"],.btn[data-id="4"]{box-shadow:0 0 10px rgba(255,60,60,0.28)}
-  .btn.activo{color:#000}
-  .btn[data-id="0"].activo{background:#00ff88;box-shadow:0 0 30px #00ff88,0 0 50px rgba(0,255,136,0.25)}
-  .btn[data-id="1"].activo{background:#ffd000;box-shadow:0 0 30px #ffd000,0 0 50px rgba(255,208,0,0.25)}
-  .btn[data-id="2"].activo,.btn[data-id="3"].activo,.btn[data-id="4"].activo{background:#ff3c3c;color:#000;box-shadow:0 0 30px #ff3c3c}
+.panel{
+background:rgba(0,0,0,.5);
+padding:12px;
+border-radius:12px;
+width:220px;
+text-align:center;
 
-  .container{width:95%;max-width:1300px;margin:6px auto}
-  .row{display:flex;gap:6px}
-  .celda{flex:1;text-align:center;font-size:13px}
-  .row .celda small{display:block;opacity:.7;font-size:11px}
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
 
-  .horarios{display:flex;gap:6px;margin-top:8px}
-  .horarios span{flex:1;text-align:center;opacity:0;transition:.25s;font-size:12px;padding:6px 4px;border-radius:6px}
-  .horarios span.show{opacity:1}
+.panel.ahora{
+box-shadow:0 0 25px red;
+}
 
-  .carril{display:flex;gap:6px;position:relative;margin:18px 0;height:28px;align-items:center}
-  .segmento{flex:1;height:8px;background:#222;border-radius:6px;transform-origin:left;transform:scaleX(0);transition:all .28s}
-  .segmento.activo{transform:scaleX(1);box-shadow:0 0 12px currentColor}
-  .segmento::after{content:"";position:absolute;left:0;right:0;top:-6px;height:20px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .2s,box-shadow .2s}
+.panel.rest{
+box-shadow:0 0 25px #00ff88;
+}
 
-  .pelota{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);transition:left .2s linear;z-index:20;box-shadow:0 0 12px currentColor}
-  .pelota::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,currentColor,transparent);opacity:.35;filter:blur(6px)}
+.value{
+font-size:16px;
+font-weight:bold;
+}
 
-  .hora-actual{background:linear-gradient(90deg,#00330022,#00660033);box-shadow:0 0 12px #00ff88;border-radius:6px;color:#bff;padding:6px 4px}
-  .panel-right{box-shadow:0 0 16px rgba(255,60,60,0.25)}
-  @media (max-width:800px){.btn{width:72px;height:56px;font-size:14px}}
+/* BOTONES */
+.controles{
+margin-top:90px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+.btn{
+width:120px;
+height:70px;
+border-radius:16px;
+background:#111;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+cursor:pointer;
+box-shadow:0 0 10px rgba(255,255,255,0.08);
+}
+
+/* COLORES */
+.btn.act0{background:#00ff88;box-shadow:0 0 25px #00ff88}
+.btn.act1{background:#ffd000;box-shadow:0 0 25px #ffd000}
+.btn.act2,.btn.act3,.btn.act4,.btn.act5,.btn.act6,.btn.act7{
+background:#ff3c3c;
+box-shadow:0 0 25px #ff3c3c;
+}
+.btn.act8{background:#00e5ff;box-shadow:0 0 25px #00e5ff}
+
+/* DATELINE */
+.dateline{
+display:flex;
+margin-top:20px;
+padding:0 20px;
+}
+
+.col{
+flex:1;
+text-align:center;
+font-size:12px;
+}
+
+.col .d{font-weight:bold}
+.col .f{opacity:.7}
+
+/* FILAS */
+.fila{margin:10px 20px}
+
+.horarios{
+display:flex;
+gap:10px;
+}
+
+.slot{
+flex:1;
+background:#111;
+border-radius:10px;
+padding:10px;
+text-align:center;
+opacity:0;
+transition:.3s;
+}
+
+.slot.on{
+opacity:1;
+box-shadow:0 0 10px currentColor;
+}
+
+/* LINEAS */
+.carril{
+display:flex;
+gap:10px;
+margin-top:6px;
+}
+
+.seg{
+flex:1;
+height:6px;
+background:#222;
+transform:scaleX(0);
+transform-origin:left;
+transition:.3s;
+}
+
+.seg.on{
+transform:scaleX(1);
+background:currentColor;
+}
+
+/* LOGO */
+.logo{
+position:fixed;
+bottom:10px;
+right:20px;
+text-align:center;
+}
+
+.logo h2{margin:0;text-shadow:0 0 10px #00aaff}
+.logo .line{
+height:2px;
+width:120px;
+background:#00aaff;
+margin:5px auto;
+box-shadow:0 0 10px #00aaff;
+}
+.logo p{font-size:10px;color:#ccc}
 </style>
 </head>
+
 <body>
 
-  <div class="top-bar">
-    <div class="panel panel-left">
-      <div class="panel-title">HOY</div>
-      <div id="fecha"></div>
-      <div id="hora"></div>
-    </div>
+<!-- TOP -->
+<div class="top-bar">
+<div class="panel ahora">
+<div>AHORA</div>
+<div id="hora" class="value"></div>
+</div>
 
-    <div class="panel panel-right">
-      <div class="panel-title">TIEMPO RESTANTE</div>
-      <div id="dias"></div>
-      <div id="horas"></div>
-    </div>
-  </div>
+<div class="panel rest">
+<div>TIEMPO RESTANTE</div>
+<div id="restante" class="value"></div>
+</div>
+</div>
 
-  <h1 class="gvs-title">GVS PRODUCCIONES</h1>
-  <div class="gvs-line"></div>
-  <div class="gvs-sub">Interactive Experience • Eventos en Vivo</div>
+<!-- BOTONES -->
+<div class="controles" id="botones"></div>
 
-  <div class="controles" id="controls">
-    <div class="btn" data-id="0" onclick="toggle(0,this)">1°</div>
-    <div class="btn" data-id="1" onclick="toggle(1,this)">2°</div>
-    <div class="btn" data-id="2" onclick="toggle(2,this)">Mejor<br>3</div>
-    <div class="btn" data-id="3" onclick="toggle(3,this)">Peor<br>3</div>
-    <div class="btn" data-id="4" onclick="toggle(4,this)">4°</div>
-  </div>
+<!-- DATELINE -->
+<div class="dateline" id="dateline"></div>
 
-  <div class="container">
+<!-- ZONAS -->
+<div id="zonas"></div>
 
-    <div class="row">
-      <div class="celda">16/6 <small>lun</small></div>
-      <div class="celda">22/6 <small>dom</small></div>
-      <div class="celda">27/6 <small>vie</small></div>
-      <div class="celda">3/7 <small>jue</small></div>
-      <div class="celda">7/7 <small>lun</small></div>
-      <div class="celda">11/7 <small>vie</small></div>
-      <div class="celda">15/7 <small>mar</small></div>
-      <div class="celda">19/7 <small>sab</small></div>
-    </div>
-
-    <div class="row" style="margin-top:6px">
-      <div class="celda">Grupos</div>
-      <div class="celda">Grupos</div>
-      <div class="celda">Grupos</div>
-      <div class="celda">16°</div>
-      <div class="celda">8°</div>
-      <div class="celda">4°</div>
-      <div class="celda">Semi</div>
-      <div class="celda">Final</div>
-    </div>
-
-    <!-- horarios por carrera (están ocultos hasta activar) -->
-    <div id="h1" class="horarios"></div>
-    <div id="h2" class="horarios" style="margin-top:6px"></div>
-    <div id="h3" class="horarios" style="margin-top:6px"></div>
-    <div id="h4" class="horarios" style="margin-top:6px"></div>
-    <div id="h5" class="horarios" style="margin-top:6px"></div>
-
-    <!-- carriles -->
-    <div id="c1" class="carril"></div>
-    <div id="c2" class="carril"></div>
-    <div id="c3" class="carril"></div>
-    <div id="c4" class="carril"></div>
-    <div id="c5" class="carril"></div>
-
-  </div>
+<!-- LOGO -->
+<div class="logo">
+<h2>GVS PRODUCCIONES</h2>
+<div class="line"></div>
+<p>Interactive Experience • Eventos en Vivo</p>
+</div>
 
 <script>
-/* Base original usado como referencia: :contentReference[oaicite:1]{index=1}
-   Cambios mínimos: corregir posicionamiento final y la rama que ponía left=100%.
-*/
 
-/* ---------- Horarios (tomados de tu script) ---------- */
-const horarios = [
-  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
-  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
-  ["22:00","14:00","23:00","","","","",""],
-  ["22:00","14:00","23:00","","","","",""],
-  ["22:00","14:00","23:00","","","","",""]
+/* DATOS */
+const colores=[
+"#00ff88","#ffd000","#ff3c3c","#ff3c3c",
+"#ff3c3c","#ff3c3c","#ff3c3c","#ff3c3c","#00e5ff"
 ];
 
-const colores = ["#00ff88","#ffd000","#ff3c3c","#ff3c3c","#ff3c3c"];
-const carriles = ["c1","c2","c3","c4","c5"];
-const horariosIds = ["h1","h2","h3","h4","h5"];
+const botonesTxt=[
+"1°","2°","Mejor 3","2° Mejor","3° Mejor",
+"4° Mejor","5° Mejor","Peor 3","4°"
+];
 
-/* límites (cantidad de segmentos visibles por carril segun horarios no vacíos) */
-const limites = horarios.map(h => h.filter(x=>x && x.trim()!=="").length);
+const data=[
+["30/06 22:00","05/07 22:00","09/07 22:00","14/07 22:00"],
+["29/06 22:00","04/07 22:00","08/07 22:00","13/07 22:00"],
+["28/06 22:00","03/07 22:00","07/07 22:00","12/07 22:00"],
+["28/06 19:00","03/07 19:00","07/07 19:00","12/07 19:00"],
+["29/06 16:00","04/07 16:00","08/07 16:00","13/07 16:00"],
+["29/06 13:00","04/07 13:00","08/07 13:00","13/07 13:00"],
+["30/06 16:00","05/07 16:00","09/07 16:00","14/07 16:00"],
+["30/06 13:00","05/07 13:00","09/07 13:00","14/07 13:00"],
+["ELIMINADO","","",""]
+];
 
-/* estados y progreso */
-const estados = [false,false,false,false,false];
-const progreso = [0,0,0,0,0];
+const fechas=[
+"16/06 - LUN","22/06 - DOM","27/06 - VIE",
+"03/07 - JUE","07/07 - LUN","11/07 - VIE",
+"15/07 - MAR","19/07 - SAB"
+];
 
-/* ---------- UI init: rellenar horas (ocultas) y crear segmentos ---------- */
-function init(){
-  horarios.forEach((arr,i)=>{
-    const hCont = document.getElementById(horariosIds[i]);
-    hCont.innerHTML = "";
-    for(let c=0;c<8;c++){
-      const sp = document.createElement("span");
-      sp.textContent = arr[c] ? arr[c] : "";
-      sp.dataset.col = c;
-      hCont.appendChild(sp);
-    }
-  });
+const fases=["GRUPOS","GRUPOS","GRUPOS","16°","8°","4°","SEMI","FINAL"];
 
-  carriles.forEach((cid,i)=>{
-    const cont = document.getElementById(cid);
-    cont.innerHTML = "";
-    for(let c=0;c<8;c++){
-      const seg = document.createElement("div");
-      seg.className = "segmento";
-      seg.dataset.col = c;
-      cont.appendChild(seg);
-    }
-  });
+let estados=new Array(9).fill(false);
 
-  // NOTA: no marcamos horas al inicio (evita iluminación inicial)
-}
-init();
-
-/* ---------- POSICIONAMIENTO CORREGIDO (usa píxeles por bloque) ---------- */
-function posicionarPelota(i){
-  const cont = document.getElementById(carriles[i]);
-  const pelota = cont.querySelector(".pelota");
-  if(!pelota) return;
-
-  let idx = progreso[i]-1;
-  if(idx < 0) return;
-  if(idx >= limites[i]) idx = limites[i]-1;
-
-  // ancho real de cada bloque (hay 8 bloques en el carril)
-  const bloque = cont.offsetWidth / 8;
-
-  // centro del bloque idx
-  const posX = (idx * bloque) + (bloque / 2);
-
-  pelota.style.left = posX + "px";
-}
-
-/* ---------- resize ---------- */
-window.addEventListener("resize", ()=> {
-  for(let i=0;i<carriles.length;i++) if(estados[i]) posicionarPelota(i);
+/* BOTONES */
+const botones=document.getElementById("botones");
+botonesTxt.forEach((t,i)=>{
+let b=document.createElement("div");
+b.className="btn";
+b.innerHTML=t;
+b.onclick=()=>toggle(i,b);
+botones.appendChild(b);
 });
 
-/* ---------- toggle: mostrar/ocultar horas de la carrera y arrancar/parar ---------- */
+/* DATELINE */
+const dl=document.getElementById("dateline");
+fechas.forEach((f,i)=>{
+let c=document.createElement("div");
+c.className="col";
+c.innerHTML=`<div class="d">${f}</div><div class="f">${fases[i]}</div>`;
+dl.appendChild(c);
+});
+
+/* FILAS */
+const zonas=document.getElementById("zonas");
+
+data.forEach((fila,i)=>{
+let cont=document.createElement("div");
+cont.className="fila";
+
+let h=document.createElement("div");
+h.className="horarios";
+
+fila.forEach(v=>{
+let s=document.createElement("div");
+s.className="slot";
+s.innerHTML=v;
+h.appendChild(s);
+});
+
+let c=document.createElement("div");
+c.className="carril";
+
+fila.forEach(()=>{
+let seg=document.createElement("div");
+seg.className="seg";
+c.appendChild(seg);
+});
+
+cont.appendChild(h);
+cont.appendChild(c);
+zonas.appendChild(cont);
+});
+
+/* TOGGLE */
 function toggle(i,btn){
-  estados[i] = !estados[i];
-  btn.classList.toggle("activo", estados[i]);
 
-  const hrs = document.getElementById(horariosIds[i]).children;
-  for(let c=0;c<hrs.length;c++){
-    const has = horarios[i][c] && horarios[i][c].trim()!=="";
-    if(!has) { hrs[c].classList.remove("show"); continue; }
-    if(estados[i]){
-      hrs[c].classList.add("show");
-      hrs[c].style.color = colores[i];
-      hrs[c].style.boxShadow = `0 0 12px ${colores[i]}`;
-    } else {
-      hrs[c].classList.remove("show");
-      hrs[c].style.color = "";
-      hrs[c].style.boxShadow = "";
-    }
-  }
+estados[i]=!estados[i];
+btn.classList.toggle("act"+i);
 
-  const cont = document.getElementById(carriles[i]);
-  if(estados[i]){
-    Array.from(cont.children).forEach(seg=>{
-      seg.style.boxShadow = `0 0 14px ${colores[i]}66`;
-      seg.style.setProperty('background', '#111');
-    });
-  } else {
-    Array.from(cont.children).forEach(seg=>{
-      if(!seg.classList.contains('activo')) seg.style.boxShadow = '';
-    });
-  }
+let fila=document.querySelectorAll(".fila")[i];
+let slots=fila.querySelectorAll(".slot");
+let segs=fila.querySelectorAll(".seg");
 
-  if(estados[i]) avanzar(i);
-  else retroceder(i);
+if(estados[i]){
+slots.forEach((s,k)=>{
+setTimeout(()=>{
+s.classList.add("on");
+s.style.color=colores[i];
+segs[k].classList.add("on");
+segs[k].style.background=colores[i];
+},k*120);
+});
+}else{
+slots.forEach((s,k)=>{
+setTimeout(()=>{
+s.classList.remove("on");
+segs[k].classList.remove("on");
+},k*120);
+});
 }
-
-/* ---------- avanzar: solo cambie la rama final para que no ponga left=100% ---------- */
-function avanzar(i){
-  const cont = document.getElementById(carriles[i]);
-  cont.querySelectorAll(".pelota").forEach(p=>p.remove());
-
-  const pelota = document.createElement("div");
-  pelota.className = "pelota";
-  pelota.style.background = colores[i];
-  pelota.style.color = colores[i];
-  cont.appendChild(pelota);
-
-  const segs = cont.children;
-  const total = limites[i];
-
-  function step(){
-    if(!estados[i]) return;
-
-    if(progreso[i] >= total){
-      // --- FIX AQUI: no mandamos la pelota al 100% del ancho del carril ---
-      progreso[i] = total;           // garantizamos el tope
-      posicionarPelota(i);          // la posicionamos en su segmento final (pixel-perfect)
-      pelota.classList.add("campeon");
-      return;
-    }
-
-    const idx = progreso[i];
-    segs[idx].classList.add("activo");
-    segs[idx].style.background = colores[i];
-    segs[idx].style.boxShadow = `0 0 14px ${colores[i]}`;
-
-    const hspan = document.getElementById(horariosIds[i]).children[idx];
-    if(hspan){ hspan.classList.add("show"); hspan.style.color = colores[i]; hspan.style.boxShadow = `0 0 10px ${colores[i]}`; }
-
-    progreso[i]++;
-    posicionarPelota(i);
-
-    setTimeout(step, 300);
-  }
-  step();
-}
-
-/* ---------- retroceder ---------- */
-function retroceder(i){
-  const cont = document.getElementById(carriles[i]);
-  const segs = cont.children;
-
-  function step(){
-    if(estados[i]) return;
-
-    if(progreso[i] <= 0){
-      cont.querySelectorAll(".pelota").forEach(p=>p.remove());
-      return;
-    }
-
-    progreso[i]--;
-    const idx = progreso[i];
-
-    segs[idx].classList.remove("activo");
-    segs[idx].style.background = "#222";
-    segs[idx].style.boxShadow = "";
-
-    const sp = document.getElementById(horariosIds[i]).children[idx];
-    if(sp){ sp.classList.remove("show"); sp.style.color = ""; sp.style.boxShadow = ""; }
-
-    posicionarPelota(i);
-
-    setTimeout(step, 150);
-  }
-
-  step();
 }
 
 /* RELOJ */
 setInterval(()=>{
-  const n = new Date();
-  document.getElementById("fecha").innerText = n.toLocaleDateString("es-AR");
-  document.getElementById("hora").innerText = n.toLocaleTimeString("es-AR",{hour:'2-digit',minute:'2-digit'});
+let a=new Date();
+hora.innerHTML=a.toLocaleDateString()+"<br>"+a.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
 
-  const mundial = new Date("2026-06-11T00:00:00");
-  const diff = Math.max(0, mundial - n);
-  const diasRest = Math.floor(diff/86400000);
-  const horasRest = Math.floor((diff/3600000)%24);
-  const minutosRest = Math.floor((diff/60000)%60);
-  document.getElementById("dias").innerText = diasRest + " días";
-  document.getElementById("horas").innerText = horasRest + " hs " + minutosRest + " min";
+let target=new Date("2026-07-19");
+let diff=target-a;
+
+let d=Math.floor(diff/86400000);
+let h=Math.floor(diff/3600000%24);
+let m=Math.floor(diff/60000%60);
+
+restante.innerHTML=d+" días<br>"+h+"h "+m+"m";
+
 },1000);
 
 </script>
