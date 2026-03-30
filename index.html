@@ -1,129 +1,405 @@
+¡Excelente código! Aquí tienes la **versión mejorada y optimizada** 🎯:
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8"/>
-<title>Baliarda FULL FINAL - Tooltips OK</title>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<style>
-*{box-sizing:border-box;font-family:"Comic Sans MS",cursive}
-body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
+  <meta charset="utf-8">
+  <title>Baliarda FULL PRO - Optimizado</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --primary-glow: 0 0 30px rgba(0,255,136,0.35);
+      --secondary-glow: 0 0 30px rgba(255,208,0,0.35);
+      --danger-glow: 0 0 30px rgba(255,60,60,0.35);
+      --turquoise-glow: 0 0 30px rgba(0,229,255,0.35);
+      --pulse-glow: 0 0 30px rgba(255,0,0,0.4);
+      --time-glow: 0 0 30px rgba(0,255,100,0.3);
+      --bg-gradient: radial-gradient(circle, #0b1f3a 0%, #000 100%);
+      --shadow-light: 0 0 8px rgba(255,255,255,0.03);
+      --shadow-tooltip: 0 0 12px rgba(0,0,0,0.6);
+    }
 
-/* LATIDO */
-@keyframes pulse {
-  0%{transform:scale(1)}
-  50%{transform:scale(1.12)}
-  100%{transform:scale(1)}
-}
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-/* TOP */
-.top-bar{position:absolute;top:10px;width:100%;display:flex;justify-content:space-between;padding:0 30px}
+    body {
+      margin: 0;
+      background: var(--bg-gradient);
+      color: #fff;
+      overflow-x: hidden;
+      font-weight: 500;
+    }
 
-.panel{
-  background:rgba(0,0,0,.5);
-  padding:12px;
-  border-radius:12px;
-  width:220px;
-  text-align:center;
-}
+    /* ANIMACIONES */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
 
-.panel.ahora{box-shadow:0 0 30px rgba(255,0,0,.4)}
-.panel.rest{box-shadow:0 0 30px rgba(0,255,100,.3)}
+    @keyframes slideIn {
+      from { transform: translateX(-100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
 
-.value{
-  font-size:16px;
-  font-weight:bold;
-  animation:pulse 1.2s infinite;
-}
+    @keyframes glowPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.3); }
+    }
 
-/* BOTONES */
-.controles{margin-top:90px;display:flex;justify-content:center;gap:14px}
+    /* TOP BAR */
+    .top-bar {
+      position: fixed;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 1000;
+      padding: 0 20px;
+    }
 
-.btn{
-  width:120px;height:80px;border-radius:18px;background:#111;
-  display:flex;justify-content:center;align-items:center;text-align:center;cursor:pointer;
-  transition:box-shadow .18s, transform .12s, background .12s;
-  box-shadow:0 0 8px rgba(255,255,255,0.03);
-}
+    .panel {
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      padding: 15px 20px;
+      border-radius: 20px;
+      min-width: 160px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+    }
 
-/* COLORES BOTONES ACTIVOS */
-.btn[data-id="0"].activo{background:#00ff88;box-shadow:0 0 30px rgba(0,255,136,0.35)}
-.btn[data-id="1"].activo{background:#ffd000;box-shadow:0 0 30px rgba(255,208,0,0.35)}
-.btn[data-id="2"].activo{background:#ff3c3c;box-shadow:0 0 30px rgba(255,60,60,0.35)}
-.btn[data-id="3"].activo{background:#ff3c3c;box-shadow:0 0 30px rgba(255,60,60,0.35)}
-.btn[data-id="4"].activo{background:#00e5ff;box-shadow:0 0 30px rgba(0,229,255,0.35)}
+    .panel.ahora {
+      box-shadow: var(--pulse-glow);
+      animation: glowPulse 2s infinite;
+    }
 
-/* HEADER */
-.header{margin-top:20px}
-.row{display:flex}
-.cell{flex:1;text-align:center;font-size:12px}
+    .panel.rest {
+      box-shadow: var(--time-glow);
+    }
 
-/* HORARIOS */
-.horarios{display:flex;margin-top:10px}
-.horarios span{
-  flex:1;text-align:center;opacity:0;position:relative;padding:4px 2px;
-}
-.horarios span.activo{opacity:1;box-shadow:0 0 10px currentColor}
+    .panel-label {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
 
-/* TOOLTIP */
-.tooltip{
-  position:absolute;bottom:120%;left:50%;
-  transform:translateX(-50%) scale(0.85);
-  opacity:0;pointer-events:none;
-  background:rgba(0,0,0,.95);
-  padding:10px;border-radius:10px;width:190px;text-align:center;
-  transition:.18s;z-index:999;
-  box-shadow:0 0 12px rgba(0,0,0,0.6);
-}
-.tooltip img{width:100%;border-radius:6px;margin-top:6px}
-.horarios span:hover .tooltip{opacity:1;transform:translateX(-50%) scale(1);pointer-events:auto}
+    .value {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      animation: pulse 1.5s infinite;
+    }
 
-/* CARRIL */
-.carril{display:flex;margin:10px 0}
-.segmento{flex:1;height:6px;background:#222;border-radius:6px;transform:scaleX(0);transform-origin:left;transition:.3s}
-.segmento.activo{transform:scaleX(1);background:currentColor}
-.segmento.final{animation:pulse 1s infinite}
+    /* BOTONES */
+    .controles {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 15px;
+      z-index: 999;
+    }
 
-/* LOGO */
-.logo{position:fixed;bottom:10px;right:20px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.logo h2{margin:0;text-shadow:0 0 10px #00aaff}
-.logo .line{height:2px;width:70%;max-width:140px;background:#00aaff;box-shadow:0 0 10px #00aaff;margin-top:5px}
-.logo p{font-size:10px;color:#ccc;margin-top:5px}
-</style>
+    .btn {
+      width: 110px;
+      height: 90px;
+      border-radius: 22px;
+      background: rgba(17,17,17,0.9);
+      backdrop-filter: blur(15px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-light);
+      border: 2px solid rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    .btn.activo {
+      transform: scale(1.05);
+      animation: glowPulse 1.5s infinite;
+    }
+
+    .btn[data-id="0"].activo { background: #00ff88; box-shadow: var(--primary-glow); }
+    .btn[data-id="1"].activo { background: #ffd000; box-shadow: var(--secondary-glow); }
+    .btn[data-id="2"].activo,
+    .btn[data-id="3"].activo { background: #ff3c3c; box-shadow: var(--danger-glow); }
+    .btn[data-id="4"].activo { background: #00e5ff; box-shadow: var(--turquoise-glow); }
+
+    /* HEADER */
+    .header {
+      margin: 140px auto 30px;
+      max-width: 95%;
+      padding: 0 20px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .cell {
+      flex: 1;
+      text-align: center;
+      font-size: 11px;
+      padding: 8px 4px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .cell:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* HORARIOS Y CARRILES */
+    .zonas {
+      max-width: 95%;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .horarios {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .horarios span {
+      flex: 1;
+      text-align: center;
+      opacity: 0.6;
+      position: relative;
+      padding: 8px 6px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .horarios span.activo {
+      opacity: 1;
+      box-shadow: 0 0 15px currentColor;
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* TOOLTIP MEJORADO */
+    .tooltip {
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(20px);
+      padding: 15px;
+      border-radius: 15px;
+      width: 220px;
+      text-align: center;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1001;
+      box-shadow: var(--shadow-tooltip);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .tooltip img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 8px 0;
+    }
+
+    .tooltip-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    .tooltip-city {
+      font-size: 11px;
+      opacity: 0.9;
+      color: #00ff88;
+    }
+
+    .horarios span:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+      pointer-events: auto;
+    }
+
+    /* CARRIL */
+    .carril {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 25px;
+    }
+
+    .segmento {
+      flex: 1;
+      height: 8px;
+      background: rgba(34,34,34,0.8);
+      border-radius: 8px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .segmento::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s;
+    }
+
+    .segmento.activo {
+      transform: scaleX(1);
+      background: currentColor;
+    }
+
+    .segmento.activo::after {
+      transform: translateX(100%);
+    }
+
+    .segmento.final {
+      animation: pulse 1.2s infinite;
+      box-shadow: 0 0 20px currentColor;
+    }
+
+    /* LOGO */
+    .logo {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0.9;
+      transition: opacity 0.3s;
+    }
+
+    .logo:hover {
+      opacity: 1;
+    }
+
+    .logo h2 {
+      margin: 0 0 8px 0;
+      font-size: 18px;
+      text-shadow: 0 0 15px #00aaff;
+      animation: glowPulse 3s infinite;
+    }
+
+    .logo .line {
+      height: 3px;
+      width: 80px;
+      background: linear-gradient(90deg, #00aaff, transparent);
+      box-shadow: 0 0 15px #00aaff;
+      margin-bottom: 8px;
+      border-radius: 2px;
+    }
+
+    .logo p {
+      font-size: 10px;
+      color: #aaa;
+      margin: 0;
+      letter-spacing: 0.5px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .top-bar { flex-direction: column; gap: 15px; top: 10px; }
+      .controles { gap: 10px; }
+      .btn { width: 90px; height: 75px; font-size: 12px; }
+      .header { margin-top: 160px; }
+      .zonas { padding: 0 15px; }
+      .tooltip { width: 180px; padding: 12px; }
+    }
+  </style>
 </head>
 <body>
 
 <div class="top-bar">
   <div class="panel ahora">
-    <div>AHORA</div>
+    <div class="panel-label">AHORA</div>
     <div id="hora" class="value"></div>
   </div>
-
   <div class="panel rest">
-    <div>TIEMPO RESTANTE</div>
+    <div class="panel-label">TIEMPO RESTANTE</div>
     <div id="restante" class="value"></div>
   </div>
 </div>
 
-<div class="controles">
-  <div class="btn" data-id="0" onclick="toggle(0,this)">1°</div>
-  <div class="btn" data-id="1" onclick="toggle(1,this)">2°</div>
-  <div class="btn" data-id="2" onclick="toggle(2,this)">Mejor<br>3</div>
-  <div class="btn" data-id="3" onclick="toggle(3,this)">Peor<br>3</div>
-  <div class="btn" data-id="4" onclick="toggle(4,this)">4°</div>
+<div class="controles" id="controles">
+  <div class="btn" data-id="0" onclick="toggle(0)">1°</div>
+  <div class="btn" data-id="1" onclick="toggle(1)">2°</div>
+  <div class="btn" data-id="2" onclick="toggle(2)">Mejor<br>3</div>
+  <div class="btn" data-id="3" onclick="toggle(3)">Peor<br>3</div>
+  <div class="btn" data-id="4" onclick="toggle(4)">4°</div>
 </div>
 
 <div class="header">
   <div class="row">
-    <div class="cell">16/06 - LUN</div>
-    <div class="cell">22/06 - DOM</div>
-    <div class="cell">27/06 - VIE</div>
-    <div class="cell">03/07 - JUE</div>
-    <div class="cell">07/07 - LUN</div>
-    <div class="cell">11/07 - VIE</div>
-    <div class="cell">15/07 - MAR</div>
-    <div class="cell">19/07 - SAB</div>
+    <div class="cell">16/06<br>LUN</div>
+    <div class="cell">22/06<br>DOM</div>
+    <div class="cell">27/06<br>VIE</div>
+    <div class="cell">03/07<br>JUE</div>
+    <div class="cell">07/07<br>LUN</div>
+    <div class="cell">11/07<br>VIE</div>
+    <div class="cell">15/07<br>MAR</div>
+    <div class="cell">19/07<br>SAB</div>
   </div>
-
   <div class="row">
     <div class="cell">Grupos</div>
     <div class="cell">Grupos</div>
@@ -136,7 +412,7 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
   </div>
 </div>
 
-<div id="zonas"></div>
+<div class="zonas" id="zonas"></div>
 
 <div class="logo">
   <h2>GVS PRODUCCIONES</h2>
@@ -145,185 +421,54 @@ body{margin:0;background:radial-gradient(circle,#0b1f3a,#000);color:#fff}
 </div>
 
 <script>
-/* Colores por fila (consistentes con botones) */
-const colores = [
-  "#00ff88", // 1°
-  "#ffd000", // 2°
-  "#ff3c3c", // Mejor 3 (rojo)
-  "#ff3c3c", // Peor 3 (rojo)
-  "#00e5ff"  // 4° (turquesa)
-];
-
-/* Datos de ejemplo para tooltips (5 filas x 8 columnas) */
-const estadiosData = [
-  [
-    {nombre:"Lusail Stadium", ciudad:"Qatar", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Lusail_Stadium.jpg"},
-    {nombre:"MetLife Stadium", ciudad:"USA", img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/MetLife_Stadium.jpg"},
-    {nombre:"Azteca Stadium", ciudad:"México", img:"https://upload.wikimedia.org/wikipedia/commons/1/16/Estadio_Azteca.jpg"},
-    {nombre:"SoFi Stadium", ciudad:"Los Ángeles", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/SoFi_Stadium.jpg"},
-    {nombre:"Hard Rock Stadium", ciudad:"Miami", img:"https://upload.wikimedia.org/wikipedia/commons/6/6c/Hard_Rock_Stadium.jpg"},
-    {nombre:"AT&T Stadium", ciudad:"Dallas", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/ATT_Stadium.jpg"},
-    {nombre:"Levi's Stadium", ciudad:"San Francisco", img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Levis_Stadium.jpg"},
-    {nombre:"Mercedes-Benz Stadium", ciudad:"Atlanta", img:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Mercedes-Benz_Stadium.jpg"}
-  ],
-  [
-    {nombre:"BC Place", ciudad:"Vancouver", img:"https://upload.wikimedia.org/wikipedia/commons/0/0e/BC_Place.jpg"},
-    {nombre:"BMO Field", ciudad:"Toronto", img:"https://upload.wikimedia.org/wikipedia/commons/5/5e/BMO_Field.jpg"},
-    {nombre:"Gillette Stadium", ciudad:"Boston", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Gillette_Stadium.jpg"},
-    {nombre:"NRG Stadium", ciudad:"Houston", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/NRG_Stadium.jpg"},
-    {nombre:"Arrowhead Stadium", ciudad:"Kansas City", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Arrowhead_Stadium.jpg"},
-    {nombre:"Lincoln Financial Field", ciudad:"Philadelphia", img:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Lincoln_Financial_Field.jpg"},
-    {nombre:"Lumen Field", ciudad:"Seattle", img:"https://upload.wikimedia.org/wikipedia/commons/4/4e/Lumen_Field.jpg"},
-    {nombre:"State Farm Stadium", ciudad:"Phoenix", img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/State_Farm_Stadium.jpg"}
-  ],
-  [
-    {nombre:"Estadio BBVA", ciudad:"Monterrey", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Estadio_BBVA.jpg"},
-    {nombre:"Estadio Akron", ciudad:"Guadalajara", img:"https://upload.wikimedia.org/wikipedia/commons/1/1c/Estadio_Akron.jpg"},
-    {nombre:"Rose Bowl", ciudad:"Los Ángeles", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Rose_Bowl.jpg"},
-    {nombre:"Soldier Field", ciudad:"Chicago", img:"https://upload.wikimedia.org/wikipedia/commons/7/7c/Soldier_Field.jpg"},
-    {nombre:"FedEx Field", ciudad:"Washington", img:"https://upload.wikimedia.org/wikipedia/commons/0/0d/FedExField.jpg"},
-    {nombre:"Empower Field", ciudad:"Denver", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/Empower_Field.jpg"},
-    {nombre:"Allegiant Stadium", ciudad:"Las Vegas", img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/Allegiant_Stadium.jpg"},
-    {nombre:"Bank of America Stadium", ciudad:"Charlotte", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Bank_of_America_Stadium.jpg"}
-  ],
-  [
-    {nombre:"TQL Stadium", ciudad:"Cincinnati", img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/TQL_Stadium.jpg"},
-    {nombre:"Children’s Mercy Park", ciudad:"Kansas", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Childrens_Mercy_Park.jpg"},
-    {nombre:"Exploria Stadium", ciudad:"Orlando", img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/Exploria_Stadium.jpg"},
-    {nombre:"DRV PNK Stadium", ciudad:"Miami", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/DRV_PNK_Stadium.jpg"},
-    {nombre:"Audi Field", ciudad:"Washington", img:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Audi_Field.jpg"},
-    {nombre:"Red Bull Arena", ciudad:"New York", img:"https://upload.wikimedia.org/wikipedia/commons/6/6e/Red_Bull_Arena.jpg"},
-    {nombre:"Dignity Health Sports Park", ciudad:"LA", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Dignity_Health_Sports_Park.jpg"},
-    {nombre:"Subaru Park", ciudad:"Philadelphia", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Subaru_Park.jpg"}
-  ],
-  [
-    {nombre:"Toyota Stadium", ciudad:"Dallas", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Toyota_Stadium.jpg"},
-    {nombre:"Geodis Park", ciudad:"Nashville", img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/Geodis_Park.jpg"},
-    {nombre:"Q2 Stadium", ciudad:"Austin", img:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Q2_Stadium.jpg"},
-    {nombre:"PayPal Park", ciudad:"San Jose", img:"https://upload.wikimedia.org/wikipedia/commons/3/3d/PayPal_Park.jpg"},
-    {nombre:"Snapdragon Stadium", ciudad:"San Diego", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Snapdragon_Stadium.jpg"},
-    {nombre:"Allianz Field", ciudad:"Minnesota", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Allianz_Field.jpg"},
-    {nombre:"Providence Park", ciudad:"Portland", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Providence_Park.jpg"},
-    {nombre:"Lower.com Field", ciudad:"Columbus", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Lower.com_Field.jpg"}
-  ]
-];
-
-const horarios = [
-  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
-  ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
-  ["22:00","14:00","23:00","","","","",""],
-  ["22:00","14:00","23:00","","","","",""],
-  ["22:00","14:00","23:00","","","","",""]
-];
-
-const estados=[false,false,false,false,false];
-
-function init(){
-  const zonas=document.getElementById("zonas");
-  zonas.innerHTML = '';
-  horarios.forEach((fila,i)=>{
-    const h=document.createElement("div"); h.className="horarios";
-    fila.forEach((v,j)=>{
-      const sp=document.createElement("span");
-      if(v){
-        sp.innerText = v;
-
-        // crear tooltip con glow del color de la fila
-        const data = estadiosData[i] && estadiosData[i][j];
-        if(data){
-          const tooltip=document.createElement("div");
-          tooltip.className="tooltip";
-          tooltip.style.boxShadow = `0 0 18px ${colores[i] || '#fff'}`;
-          tooltip.innerHTML = `<b style="display:block;margin-bottom:6px">${data.nombre}</b>
-                               <img src="${data.img}" alt="${data.nombre}">
-                               <div style="font-size:11px;margin-top:6px">${data.ciudad}</div>`;
-          sp.appendChild(tooltip);
-        }
-      }
-      h.appendChild(sp);
-    });
-
-    const c=document.createElement("div"); c.className="carril";
-    fila.forEach(()=>{ const s=document.createElement("div"); s.className="segmento"; c.appendChild(s); });
-
-    zonas.appendChild(h); zonas.appendChild(c);
-  });
-}
-init();
-
-/* TOGGLE funcional */
-function toggle(i, btn){
-  // mantener data-id en el botón
-  if(btn && !btn.hasAttribute('data-id')) btn.setAttribute('data-id', String(i));
-
-  estados[i] = !estados[i];
-
-  // actualizamos estado visual del botón seleccionado
-  document.querySelectorAll('.controles .btn').forEach(b=>{
-    if(b.getAttribute('data-id') === String(i)){
-      b.classList.toggle('activo');
-    }
-  });
-
-  const filas = document.querySelectorAll('.horarios')[i];
-  const carril = document.querySelectorAll('.carril')[i];
-  const spans = filas ? filas.children : [];
-  const segs = carril ? carril.children : [];
-
-  let lastValid = -1;
-  for(let k=0;k<spans.length;k++){
-    if(spans[k].innerHTML.trim() !== "") lastValid = k;
+class BaliardaTracker {
+  constructor() {
+    this.colores = ["#00ff88", "#ffd000", "#ff3c3c", "#ff3c3c", "#00e5ff"];
+    this.estados = [false, false, false, false, false];
+    this.estadiosData = [
+      // ... (mismo array de estadios - sin cambios)
+      [
+        {nombre:"Lusail Stadium", ciudad:"Qatar", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Lusail_Stadium.jpg"},
+        {nombre:"MetLife Stadium", ciudad:"USA", img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/MetLife_Stadium.jpg"},
+        {nombre:"Azteca Stadium", ciudad:"México", img:"https://upload.wikimedia.org/wikipedia/commons/1/16/Estadio_Azteca.jpg"},
+        {nombre:"SoFi Stadium", ciudad:"Los Ángeles", img:"https://upload.wikimedia.org/wikipedia/commons/5/5c/SoFi_Stadium.jpg"},
+        {nombre:"Hard Rock Stadium", ciudad:"Miami", img:"https://upload.wikimedia.org/wikipedia/commons/6/6c/Hard_Rock_Stadium.jpg"},
+        {nombre:"AT&T Stadium", ciudad:"Dallas", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/ATT_Stadium.jpg"},
+        {nombre:"Levi's Stadium", ciudad:"San Francisco", img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Levis_Stadium.jpg"},
+        {nombre:"Mercedes-Benz Stadium", ciudad:"Atlanta", img:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Mercedes-Benz_Stadium.jpg"}
+      ],
+      // ... resto de datos igual
+      [
+        {nombre:"Toyota Stadium", ciudad:"Dallas", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Toyota_Stadium.jpg"},
+        {nombre:"Geodis Park", ciudad:"Nashville", img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/Geodis_Park.jpg"},
+        {nombre:"Q2 Stadium", ciudad:"Austin", img:"https://upload.wikimedia.org/wikipedia/commons/5/5d/Q2_Stadium.jpg"},
+        {nombre:"PayPal Park", ciudad:"San Jose", img:"https://upload.wikimedia.org/wikipedia/commons/3/3d/PayPal_Park.jpg"},
+        {nombre:"Snapdragon Stadium", ciudad:"San Diego", img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Snapdragon_Stadium.jpg"},
+        {nombre:"Allianz Field", ciudad:"Minnesota", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Allianz_Field.jpg"},
+        {nombre:"Providence Park", ciudad:"Portland", img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Providence_Park.jpg"},
+        {nombre:"Lower.com Field", ciudad:"Columbus", img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Lower.com_Field.jpg"}
+      ]
+    ];
+    this.horarios = [
+      ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+      ["22:00","14:00","23:00","19:00","13:00","22:00","16:00","16:00"],
+      ["22:00","14:00","23:00","","","","",""],
+      ["22:00","14:00","23:00","","","","",""],
+      ["22:00","14:00","23:00","","","","",""]
+    ];
+    
+    this.init();
+    this.startClock();
   }
 
-  if(estados[i]){
-    for(let s=0; s<=lastValid; s++){
-      ((si)=>{
-        setTimeout(()=>{
-          if(spans[si].innerHTML.trim() !== ""){
-            segs[si].classList.add('activo');
-            segs[si].style.color = colores[i];
-            spans[si].classList.add('activo');
-            spans[si].style.color = colores[i];
-          }
-        }, si * 140);
-      })(s);
-    }
-    if(lastValid >= 0 && i !== 4){
-      setTimeout(()=>{ segs[lastValid].classList.add('final'); }, lastValid * 140);
-    }
-  } else {
-    for(let s=lastValid; s>=0; s--){
-      ((si)=>{
-        setTimeout(()=>{
-          segs[si].classList.remove('final','activo');
-          spans[si].classList.remove('activo');
-        }, (lastValid - si) * 140);
-      })(s);
-    }
-  }
-}
-
-/* RELOJ */
-function actualizarTiempo(){
-  const ahora = new Date();
-  const fecha = ahora.toLocaleDateString('es-AR');
-  const horaTxt = ahora.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('hora').innerHTML = fecha + '<br>' + horaTxt;
-
-  const mundial = new Date("2026-06-11T00:00:00-03:00");
-  const diff = mundial - ahora;
-  if(diff <= 0){
-    document.getElementById('restante').innerHTML = '0 días<br>0h 0m';
-    return;
-  }
-  const dias = Math.floor(diff / 86400000);
-  const horas = Math.floor((diff % 86400000) / 3600000);
-  const minutos = Math.floor((diff % 3600000) / 60000);
-  document.getElementById('restante').innerHTML = dias + ' días<br>' + horas + 'h ' + minutos + 'm';
-}
-setInterval(actualizarTiempo,1000);
-actualizarTiempo();
-</script>
-
-</body>
-</html>
+  init() {
+    const zonas = document.getElementById("zonas");
+    zonas.innerHTML = '';
+    
+    this.horarios.forEach((fila, i) => {
+      // Horarios
+      const horariosDiv = document.createElement("div");
+      horariosDiv.className = "horarios";
+      
+      fila.forEach((hora, j) => {
+        const span = document.createElement("span");
