@@ -3,248 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundial Baliarda - Control Point Táctico Final</title>
+    <title>Mundial Baliarda - Control Point Táctico 2026</title>
     <style>
         :root { 
-            --red: #ff3c3c; 
-            --green: #00ff88; 
-            --blue: #00aaff;
-            --yellow: #ffd000;
-            --turq: #00e5ff;
-            --bg-dark: #010306;
+            --red: #ff3c3c; --green: #00ff88; --blue: #00aaff;
+            --yellow: #ffd000; --turq: #00e5ff; --bg-dark: #010306;
         }
 
         body { 
-            margin: 0; 
-            background: #000; 
-            color: #fff; 
-            font-family: 'Segoe UI', sans-serif; 
-            height: 100vh; 
-            overflow: hidden; 
+            margin: 0; background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; 
+            height: 100vh; overflow: hidden; display: flex; flex-direction: column;
+            align-items: center; padding: 15px 20px; box-sizing: border-box;
             background-image: radial-gradient(circle at center, #0a1a30 0%, #000 100%); 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
         }
 
-        /* --- CABECERA --- */
-        .header-line { 
-            width: 100%; 
-            max-width: 1400px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 5px; 
-        }
-
-        .panel-box { 
-            background: rgba(0,0,0,0.4); 
-            padding: 8px 15px; 
-            border-radius: 8px; 
-            text-align: center; 
-            border: 1px solid currentColor; 
-            min-width: 140px; 
-            animation: pulseGeneric 2.5s infinite ease-in-out; 
-        }
-        
+        .header-line { width: 100%; max-width: 1400px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .panel-box { background: rgba(0,0,0,0.4); padding: 8px 15px; border-radius: 8px; text-align: center; border: 1px solid currentColor; min-width: 140px; animation: pulseGeneric 2.5s infinite ease-in-out; }
         .neon-red { color: var(--red); animation-delay: 0s; }
         .neon-green { color: var(--green); animation-delay: 1.2s; }
-
-        @keyframes pulseGeneric {
-            0%, 100% { box-shadow: 0 0 5px currentColor; border-color: currentColor; }
-            50% { box-shadow: 0 0 20px currentColor; border-color: #fff; }
-        }
-
-        .shining-title { 
-            font-size: 18px; 
-            letter-spacing: 3px; 
-            text-align: center; 
-            font-weight: 800; 
-            background: linear-gradient(90deg, #555, #fff, #555); 
-            background-size: 200%; 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            animation: shine 6s linear infinite; 
-            margin: 0; 
-            line-height: 1.2; 
-        }
+        @keyframes pulseGeneric { 0%, 100% { box-shadow: 0 0 5px currentColor; border-color: currentColor; } 50% { box-shadow: 0 0 20px currentColor; border-color: #fff; } }
+        .shining-title { font-size: 18px; letter-spacing: 2px; text-align: center; font-weight: 800; background: linear-gradient(90deg, #555, #fff, #555); background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shine 6s linear infinite; margin: 0; }
         @keyframes shine { to { background-position: 200% center; } }
 
-        /* --- BOTONES (11 en línea) --- */
-        .button-row { 
-            display: flex; 
-            gap: 6px; 
-            margin: 15px 0; 
-            flex-wrap: nowrap; 
-            justify-content: center; 
-            z-index: 100; 
-        }
+        .button-row { display: flex; gap: 6px; margin: 8px 0; flex-wrap: nowrap; justify-content: center; z-index: 100; width: 100%; }
+        .action-btn { width: 85px; height: 35px; background: #0a0a0a; border: 1px solid #333; color: rgba(255,255,255,0.4); border-radius: 4px; cursor: pointer; font-size: 8px; font-weight: bold; transition: 0.3s; text-transform: uppercase; display: flex; align-items: center; justify-content: center; text-align: center; white-space: pre-wrap; }
 
-        .action-btn { 
-            width: 85px; 
-            height: 35px; 
-            background: #0a0a0a; 
-            border: 1px solid #333; 
-            color: rgba(255,255,255,0.4); 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 8px; 
-            font-weight: bold; 
-            transition: 0.3s; 
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        /* --- MAPA Y GLOBO --- */
-        .map-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 1000px;
-            height: 550px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-        }
-
-        .globe-sphere {
-            position: relative;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle at 30% 30%, #0a1525 0%, #020508 80%);
-            border-radius: 50%;
-            box-shadow: 0px 30px 60px rgba(0,0,0,0.9) inset, 0 0 40px rgba(0, 170, 255, 0.1);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .map-bg {
-            position: absolute;
-            top: 5%; left: 5%; width: 90%; height: 90%;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ef/Outline_Map_of_North_America.svg'); 
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.3;
-            filter: drop-shadow(0 0 5px #00aaff) brightness(150%) sepia(100%) hue-rotate(180deg) saturate(300%);
-        }
-
-        svg#routes-svg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; 
-            z-index: 5;
-        }
-
-        .node {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #000;
-            border: 2px solid white;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 8px white;
-            z-index: 10;
-            cursor: crosshair;
-            transition: 0.3s;
-        }
+        .map-wrapper { position: relative; width: 100%; max-width: 1000px; height: 450px; display: flex; justify-content: center; align-items: center; flex-grow: 1; }
+        .globe-sphere { position: relative; width: 480px; height: 480px; background: radial-gradient(circle at 30% 30%, #0a1525 0%, #020508 80%); border-radius: 50%; box-shadow: 0px 30px 60px rgba(0,0,0,0.9) inset, 0 0 40px rgba(0, 170, 255, 0.1); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .map-bg { position: absolute; top: 5%; left: 5%; width: 90%; height: 90%; background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Outline_Map_of_North_America.svg/1024px-Outline_Map_of_North_America.svg.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.5; filter: invert(1) sepia(1) saturate(5000%) hue-rotate(180deg) drop-shadow(0 0 5px var(--turq)); }
         
-        .node:hover { transform: translate(-50%, -50%) scale(1.8); background: white; }
+        svg#routes-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+        .node { position: absolute; width: 10px; height: 10px; background: #000; border: 2px solid white; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 8px white; z-index: 10; cursor: crosshair; transition: 0.3s; }
+        .node-label { position: absolute; color: white; font-size: 9px; font-weight: bold; text-shadow: 1px 1px 4px black; transform: translate(-50%, -20px); z-index: 11; pointer-events: none; }
 
-        .node-label {
-            position: absolute;
-            color: white;
-            font-size: 9px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 4px black;
-            transform: translate(-50%, -20px);
-            z-index: 11;
-            pointer-events: none;
-        }
-
-        /* --- TOOLTIP DINÁMICO --- */
-        #dynamic-tooltip {
-            position: absolute;
-            background: rgba(5, 10, 16, 0.95);
-            border: 2px solid #fff;
-            border-radius: 8px;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            transform: translate(15px, -50%);
-            opacity: 0; 
-            visibility: hidden; 
-            transition: opacity 0.2s;
-            pointer-events: none;
-        }
-
+        #dynamic-tooltip { position: absolute; background: rgba(5, 10, 16, 0.95); border: 2px solid #fff; border-radius: 8px; padding: 8px; display: flex; align-items: center; gap: 12px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); z-index: 200; transform: translate(15px, -50%); opacity: 0; visibility: hidden; transition: opacity 0.2s; pointer-events: none; }
         #dynamic-tooltip.show { opacity: 1; visibility: visible; }
-
-        #dynamic-tooltip img {
-            width: 100px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        #dynamic-tooltip .info { font-size: 10px; line-height: 1.3; min-width: 110px; }
-        #dynamic-tooltip b { display: block; font-size: 11px; margin-bottom: 2px; }
+        #dynamic-tooltip img { width: 100px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2); }
         #tt-time { font-weight: bold; color: var(--yellow); }
-
-        .main-footer { position: absolute; bottom: 15px; right: 25px; opacity: 0.2; font-size: 8px; letter-spacing: 2px; }
+        .main-footer { position: absolute; bottom: 10px; right: 25px; opacity: 0.2; font-size: 8px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <header class="header-line">
-        <div class="panel-box neon-red">
-            <div style="font-size: 9px; opacity: 0.6;">HOY</div>
-            <div id="hora" style="font-weight: bold; font-size: 11px;">--</div>
-        </div>
-
+        <div class="panel-box neon-red"><div style="font-size: 9px; opacity: 0.6;">HOY</div><div id="hora" style="font-weight: bold; font-size: 11px;">--</div></div>
         <h1 class="shining-title">ESTAS SON LAS POSIBLES RUTAS DE<br>ARGENTINA EN EL MUNDIAL 2026</h1>
-
-        <div class="panel-box neon-green">
-            <div style="font-size: 9px; opacity: 0.6;">TIEMPO RESTANTE</div>
-            <div id="restante" style="font-weight: bold; font-size: 11px;">--</div>
-        </div>
+        <div class="panel-box neon-green"><div style="font-size: 9px; opacity: 0.6;">TIEMPO RESTANTE</div><div id="restante" style="font-weight: bold; font-size: 11px;">--</div></div>
     </header>
 
-    <div id="btn-container" class="button-row"></div>
+    <div id="top-btn-container" class="button-row"></div>
 
-    <div class="map-wrapper" id="tactic-map">
+    <div class="map-wrapper">
         <div class="globe-sphere" id="globe-container">
             <div class="map-bg"></div>
             <svg id="routes-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
         </div>
-        
         <div id="dynamic-tooltip">
             <img id="tt-img" src="" alt="">
-            <div class="info">
-                <b id="tt-name">Estadio</b>
-                <span id="tt-city">Ciudad</span><br>
-                <span id="tt-time">00:00 HS</span>
-            </div>
+            <div class="info"><b id="tt-name">Estadio</b><span id="tt-city">Ciudad</span><br><span id="tt-time">00:00 HS</span></div>
         </div>
     </div>
+
+    <div id="bottom-btn-container" class="button-row"></div>
 
     <footer class="main-footer"><b>GVS PRODUCCIONES</b></footer>
 
     <script>
-        // 1. DICCIONARIO DE IMÁGENES (Actualizado con tus links)
         const imgSedes = {
             "Dallas": "https://www.hksinc.com/wp-content/uploads/2009/10/ATT_economic-1.jpg",
             "CDMX": "https://dnclcgcvl4f14.cloudfront.net/siila-cm/prd/1280w/7996-1687546713335.jpg",
@@ -259,158 +83,111 @@
             "Vancouver": "https://images.spaicelabs.com/images/flus6j8v/production/37d069f71f67b4591905dfab4aa98bb4c9703e07-2048x1360.jpg?rect=30%2C0%2C1989%2C1360&w=3840&fm=webp&q=75&fit=max",
             "Houston": "https://www.stadiumscene.tv/img/stadium/nfl/nrgstadium.jpg",
             "Toronto": "https://static.cfl.ca/wp-content/uploads/sites/8/2017/06/DJI_0053-1600x803.jpg",
-            "Kansas City": "https://assets.newsweek.com/wp-content/uploads/2026/02/GettyImages-2171246994.jpg?w=1600&quality=80&webp=1",
-            "Guadalajara": "https://www.ole.com.ar/images/2025/03/17/m8w06RWNo_1200x630__1.jpg",
-            "Monterrey": "https://www.bbva.com/wp-content/uploads/2016/09/EstadioBancomer3.jpg"
+            "Kansas City": "https://assets.newsweek.com/wp-content/uploads/2026/02/GettyImages-2171246994.jpg?w=1600&quality=80&webp=1"
         };
 
-        // 2. MATRIZ DE RUTAS (Tu código exacto de la tabla)
-        const datosRutas = [
-            { n: "1 PUESTO", c: "#00ff88", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","04/07","08/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Nueva Jersey"] },
-            { n: "2 PUESTO", c: "#ffd000", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","29/06","03/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Nueva Jersey"] },
-            { n: "1 PRIMER\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","30/06","04/07","09/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Nueva Jersey"] },
-            { n: "2 SEGUNDO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Nueva Jersey"] },
-            { n: "3 TERCERO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:00","22:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","06/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","San Francisco","Dallas","Miami","Dallas","Nueva Jersey"] },
-            { n: "4 CUARTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","23:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","07/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Seattle","Vancouver","Kansas City","Atlanta","Nueva Jersey"] },
-            { n: "5 QUINTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","19:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","CDMX","CDMX","Los Ángeles","Atlanta","Nueva Jersey"] },
-            { n: "6 SEXTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","02/07","04/07","09/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Los Ángeles","Houston","Boston","Dallas","Nueva Jersey"] },
-            { n: "7 SEPTIMO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","20:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Miami","Atlanta","Miami","Dallas","Nueva Jersey"] },
-            { n: "8 OCTAVO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Dallas","Houston","Kansas City","Atlanta","Nueva Jersey"] },
-            { n: "4 PUESTO", c: "#00ffff", h: ["22:00","14:00","23:00"], f: ["12/06","16/06","20/06"], s: ["Dallas","CDMX","Miami"] }
-        ];
+        const sequenceLabels = ["F1", "F2", "F3", "16AVOS", "8AVOS", "4TOS", "SEMIS", "FINAL", "3ER PUESTO"];
+        const baseNodesPos = [{id:0,x:48,y:55},{id:1,x:45,y:75},{id:2,x:75,y:72},{id:3,x:80,y:48},{id:4,x:65,y:53},{id:5,x:28,y:46},{id:6,x:63,y:65},{id:7,x:68,y:55},{id:8,x:82,y:68}];
+        
+        const pathFinal = [0,1,2,3,4,5,6,7], pathTercero = [0,1,2,3,4,5,6,8], pathGrupos = [0,1,2];
 
-        // 3. POSICIONES DE LOS NODOS EN EL MAPA (Coordenadas Tácticas)
-        const sequenceLabels = ["F1", "F2", "F3", "16AVOS", "8AVOS", "4TOS", "SEMIS", "FINAL"];
-        const baseNodesPos = [
-            { x: 48, y: 55 }, { x: 45, y: 75 }, { x: 75, y: 72 }, { x: 80, y: 48 }, 
-            { x: 65, y: 53 }, { x: 28, y: 46 }, { x: 63, y: 65 }, { x: 68, y: 55 }
+        const datosRutas = [
+            // TOP
+            { pos: "top", path: pathFinal, n: "1 PUESTO", c: "#00ff88", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","04/07","08/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "2 PUESTO", c: "#ffd000", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","29/06","03/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "1 PRIMER\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","30/06","04/07","09/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "2 SEGUNDO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "3 TERCERO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:00","22:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","06/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","San Francisco","Dallas","Miami","Dallas","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "4 CUARTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","23:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","07/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Seattle","Vancouver","Kansas City","Atlanta","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "5 QUINTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","19:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","CDMX","CDMX","Los Ángeles","Atlanta","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "6 SEXTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","02/07","04/07","09/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Los Ángeles","Houston","Boston","Dallas","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "7 SEPTIMO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","20:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Miami","Atlanta","Miami","Dallas","Nueva Jersey"] },
+            { pos: "top", path: pathFinal, n: "8 OCTAVO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Dallas","Houston","Kansas City","Atlanta","Nueva Jersey"] },
+            { pos: "top", path: pathGrupos, n: "4 PUESTO", c: "#00ffff", h: ["22:00","14:00","23:00"], f: ["12/06","16/06","20/06"], s: ["Dallas","CDMX","Miami"] },
+            // BOTTOM
+            { pos: "bottom", path: pathTercero, n: "3 PUESTO", c: "#00e5ff", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","04/07","08/07","11/07","15/07","18/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "1 PUESTO", c: "#00ff88", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","04/07","08/07","11/07","15/07","18/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "2 PUESTO", c: "#ffd000", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","29/06","03/07","11/07","14/07","18/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "1 PRIMER\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","30/06","04/07","09/07","14/07","18/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "2 SEGUNDO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","18/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "3 TERCERO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:00","22:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","06/07","11/07","14/07","18/07"], s: ["Dallas","CDMX","Miami","San Francisco","Dallas","Miami","Dallas","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "4 CUARTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","23:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","07/07","11/07","15/07","18/07"], s: ["Dallas","CDMX","Miami","Seattle","Vancouver","Kansas City","Atlanta","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "5 QUINTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","19:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","18/07"], s: ["Dallas","CDMX","Miami","CDMX","CDMX","Los Ángeles","Atlanta","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "6 SEXTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","02/07","04/07","09/07","14/07","18/07"], s: ["Dallas","CDMX","Miami","Los Ángeles","Houston","Boston","Dallas","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "7 SEPTIMO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","20:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","14/07","18/07"], s: ["Dallas","CDMX","Miami","Miami","Atlanta","Miami","Dallas","Miami"] },
+            { pos: "bottom", path: pathTercero, n: "8 OCTAVO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","15/07","18/07"], s: ["Dallas","CDMX","Miami","Dallas","Houston","Kansas City","Atlanta","Miami"] }
         ];
 
         let activoActual = -1;
+        document.addEventListener('DOMContentLoaded', () => { initRelojes(); buildInterface(); setTimeout(() => selectRuta(0), 500); });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initTime();
-            buildInterface();
-            setTimeout(() => { selectRuta(0); }, 500);
-        });
-
-        function initTime() {
+        function initRelojes() {
             setInterval(() => {
-                const ahora = new Date(); 
-                document.getElementById('hora').innerHTML = ahora.toLocaleDateString() + "<br>" + ahora.toLocaleTimeString();
-                const m = new Date("2026-06-11T00:00:00"); 
-                const d = m - ahora;
-                document.getElementById('restante').innerHTML = Math.floor(d/86400000) + " días<br>" + Math.floor((d%86400000)/3600000) + " hs restantes";
+                const ahora = new Date(); document.getElementById('hora').innerHTML = ahora.toLocaleDateString() + "<br>" + ahora.toLocaleTimeString();
+                const m = new Date("2026-06-11T00:00:00"); const d = m - ahora;
+                document.getElementById('restante').innerHTML = Math.floor(d/86400000) + " días<br>" + Math.floor((d%86400000)/3600000) + " hs";
             }, 1000);
         }
 
         function buildInterface() {
-            const btns = document.getElementById("btn-container");
-            datosRutas.forEach((ruta, i) => {
-                const b = document.createElement("button");
-                b.className = "action-btn";
-                b.id = `btn-${i}`;
-                b.innerText = ruta.n;
-                b.onclick = () => selectRuta(i);
-                btns.appendChild(b);
+            const top = document.getElementById("top-btn-container"), bot = document.getElementById("bottom-btn-container");
+            datosRutas.forEach((r, i) => {
+                const b = document.createElement("button"); b.className = "action-btn"; b.id = `btn-${i}`; b.innerText = r.n; b.onclick = () => selectRuta(i);
+                (r.pos === "top") ? top.appendChild(b) : bot.appendChild(b);
             });
-
             const globe = document.getElementById('globe-container');
-            baseNodesPos.forEach((pos, i) => {
-                const dot = document.createElement('div');
-                dot.className = 'node';
-                dot.id = `node-${i}`;
-                dot.style.left = pos.x + '%'; dot.style.top = pos.y + '%';
-                dot.addEventListener('mouseenter', () => mostrarTooltip(i));
-                dot.addEventListener('mouseleave', ocultarTooltip);
-
-                const lbl = document.createElement('div');
-                lbl.className = 'node-label';
-                lbl.id = `label-${i}`;
-                lbl.innerText = sequenceLabels[i];
-                lbl.style.left = pos.x + '%'; lbl.style.top = pos.y + '%';
-
-                globe.appendChild(dot);
-                globe.appendChild(lbl);
+            baseNodesPos.forEach((pos) => {
+                const dot = document.createElement('div'); dot.className = 'node'; dot.id = `node-${pos.id}`; dot.style.left = pos.x + '%'; dot.style.top = pos.y + '%';
+                dot.addEventListener('mouseenter', () => mostrarTooltip(pos.id)); dot.addEventListener('mouseleave', ocultarTooltip);
+                const lbl = document.createElement('div'); lbl.className = 'node-label'; lbl.id = `label-${pos.id}`; lbl.innerText = sequenceLabels[pos.id]; lbl.style.left = pos.x + '%'; lbl.style.top = pos.y + '%';
+                globe.appendChild(dot); globe.appendChild(lbl);
             });
         }
 
         function selectRuta(index) {
-            if (activoActual === index) { 
-                desactivarTodo(); 
-                return; 
-            }
-            
-            desactivarTodo();
-            activoActual = index; 
-            const ruta = datosRutas[index]; 
-            const btn = document.getElementById(`btn-${index}`);
-            
-            btn.style.background = ruta.c; btn.style.borderColor = ruta.c; btn.style.color = "#000"; btn.style.boxShadow = `0 0 15px ${ruta.c}`;
-
-            // Control de visibilidad de estadios (Efecto Turquesa)
-            const count = ruta.f.length;
-            baseNodesPos.forEach((_, i) => {
-                const node = document.getElementById(`node-${i}`);
-                const lbl = document.getElementById(`label-${i}`);
-                if (i < count) {
-                    node.style.display = 'block'; lbl.style.display = 'block';
-                    node.style.borderColor = ruta.c; node.style.boxShadow = `0 0 10px ${ruta.c}`;
-                } else {
-                    node.style.display = 'none'; lbl.style.display = 'none';
-                }
+            if (activoActual === index) { desactivarTodo(); return; }
+            desactivarTodo(); activoActual = index; const r = datosRutas[index]; const b = document.getElementById(`btn-${index}`);
+            b.style.background = r.c; b.style.borderColor = r.c; b.style.color = "#000"; b.style.boxShadow = `0 0 15px ${r.c}`;
+            baseNodesPos.forEach((p) => {
+                const n = document.getElementById(`node-${p.id}`), l = document.getElementById(`label-${p.id}`);
+                if (r.path.includes(p.id)) { n.style.display = 'block'; l.style.display = 'block'; n.style.borderColor = r.c; n.style.boxShadow = `0 0 10px ${r.c}`; }
+                else { n.style.display = 'none'; l.style.display = 'none'; }
             });
-
-            dibujarRuta(ruta, count);
+            dibujarRuta(r);
         }
 
         function desactivarTodo() {
-            if (activoActual !== -1) {
-                const btn = document.getElementById(`btn-${activoActual}`);
-                btn.style = "";
-            }
-            document.getElementById('routes-svg').innerHTML = '';
-            activoActual = -1;
-            baseNodesPos.forEach((_, i) => {
-                const n = document.getElementById(`node-${i}`);
-                n.style.display = 'block'; n.style.borderColor = 'white'; n.style.boxShadow = '0 0 8px white';
-                document.getElementById(`label-${i}`).style.display = 'block';
+            if (activoActual !== -1) document.getElementById(`btn-${activoActual}`).style = "";
+            document.getElementById('routes-svg').innerHTML = ''; activoActual = -1;
+            baseNodesPos.forEach((p) => {
+                const n = document.getElementById(`node-${p.id}`), l = document.getElementById(`label-${p.id}`);
+                if (pathFinal.includes(p.id)) { n.style.display = 'block'; n.style.borderColor = 'white'; n.style.boxShadow = '0 0 8px white'; l.style.display = 'block'; }
+                else { n.style.display = 'none'; l.style.display = 'none'; }
             });
         }
 
-        function dibujarRuta(ruta, count) {
+        function dibujarRuta(r) {
             const svg = document.getElementById('routes-svg');
-            for (let i = 0; i < count - 1; i++) {
-                const p1 = baseNodesPos[i]; const p2 = baseNodesPos[i+1];
+            for (let i = 0; i < r.path.length - 1; i++) {
+                const p1 = baseNodesPos.find(n => n.id === r.path[i]), p2 = baseNodesPos.find(n => n.id === r.path[i+1]);
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
                 line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
-                line.setAttribute('stroke', ruta.c); line.setAttribute('stroke-width', '0.6');
-                
+                line.setAttribute('stroke', r.c); line.setAttribute('stroke-width', '0.6');
                 const len = Math.sqrt(Math.pow(p2.x-p1.x, 2) + Math.pow(p2.y-p1.y, 2));
                 line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
                 line.style.transition = `stroke-dashoffset 0.4s linear ${i*0.4}s`;
-                svg.appendChild(line);
-                setTimeout(() => line.style.strokeDashoffset = '0', 50);
+                svg.appendChild(line); setTimeout(() => line.style.strokeDashoffset = '0', 50);
             }
         }
 
-        function mostrarTooltip(i) {
-            if (activoActual === -1) return;
-            const ruta = datosRutas[activoActual];
-            if (i >= ruta.s.length) return;
-
-            const ciudad = ruta.s[i];
-            const tt = document.getElementById('dynamic-tooltip');
-            document.getElementById('tt-img').src = imgSedes[ciudad] || "";
-            document.getElementById('tt-name').innerText = ciudad;
-            document.getElementById('tt-city').innerText = ruta.f[i];
-            document.getElementById('tt-time').innerText = ruta.h[i] + " HS";
-            
-            const pos = baseNodesPos[i];
-            tt.style.left = (pos.x + 2) + '%'; tt.style.top = (pos.y - 3) + '%';
-            tt.style.borderColor = ruta.c;
-            tt.classList.add('show');
+        function mostrarTooltip(nodeId) {
+            if (activoActual === -1) return; const r = datosRutas[activoActual]; const step = r.path.indexOf(nodeId);
+            if (step === -1) return; const city = r.s[step]; const tt = document.getElementById('dynamic-tooltip');
+            document.getElementById('tt-img').src = imgSedes[city] || ""; document.getElementById('tt-name').innerText = city;
+            document.getElementById('tt-city').innerText = r.f[step]; document.getElementById('tt-time').innerText = r.h[step] + " HS";
+            const p = baseNodesPos.find(n => n.id === nodeId); tt.style.left = (p.x + 2) + '%'; tt.style.top = (p.y - 3) + '%';
+            tt.style.borderColor = r.c; tt.classList.add('show');
         }
 
         function ocultarTooltip() { document.getElementById('dynamic-tooltip').classList.remove('show'); }
