@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundial Baliarda - Control Point Táctico 2026</title>
+    <title>Mundial Baliarda - Control Point Táctico Final 2026</title>
     <style>
         :root {
             --bg-dark: #010306;
@@ -73,7 +73,7 @@
             to { text-shadow: 0 0 30px rgba(255, 255, 255, 1); color: #eee; }
         }
 
-        /* BOTONES (Grilla Perspectiva 3D) */
+        /* BOTONES (Grilla de Dos Filas Alineada) */
         .button-area {
             display: flex;
             flex-direction: column;
@@ -100,7 +100,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
-            width: 110px;
+            width: 130px;
             text-transform: uppercase;
             font-weight: bold;
             box-shadow: var(--3d-box-shadow);
@@ -122,7 +122,7 @@
             transform: translateZ(15px);
         }
 
-        /* MAPA / GLOBO TÁCTICO (Flotante) */
+        /* MAPA / GLOBO TÁCTICO (Flotante y de Contornos) */
         .map-wrapper {
             position: relative;
             width: 90%;
@@ -301,21 +301,19 @@
 
     <div class="button-area">
         <div class="button-row">
-            <button class="btn-ruta">1 PUESTO</button>
+            <button class="btn-ruta" id="btn-campeon">CAMPEÓN DEL MUNDO</button>
             <button class="btn-ruta active" id="btn-2-puesto">2 PUESTO</button>
             <button class="btn-ruta">1 PRIMER<br>3 TERCERO</button>
             <button class="btn-ruta">2 SEGUNDO<br>3 TERCERO</button>
-        </div>
-        <div class="button-row">
             <button class="btn-ruta">3 TERCERO<br>3 TERCERO</button>
             <button class="btn-ruta">4 CUARTO<br>3 TERCERO</button>
-            <button class="btn-ruta">5 QUINTO<br>3 TERCERO</button>
-            <button class="btn-ruta">6 SEXTO<br>3 TERCERO</button>
         </div>
         <div class="button-row">
+            <button class="btn-ruta">5 QUINTO<br>3 TERCERO</button>
+            <button class="btn-ruta">6 SEXTO<br>3 TERCERO</button>
             <button class="btn-ruta">7 SEPTIMO<br>3 TERCERO</button>
             <button class="btn-ruta">8 OCTAVO<br>3 TERCERO</button>
-            <button class="btn-ruta">4 PUESTO</button>
+            <button class="btn-ruta" id="btn-3-puesto">3 PUESTO</button>
         </div>
     </div>
 
@@ -349,12 +347,11 @@
             
             // Auto-activar la ruta 2 PUESTO al cargar
             setTimeout(() => {
-                document.getElementById('btn-2-puesto').classList.add('active');
                 drawActiveRoute();
             }, 500);
         });
 
-        // 1. RELOJ Y FECHA (Activación)
+        // 1. RELOJ Y FECHA
         function initClock() {
             function updateClock() {
                 const now = new Date();
