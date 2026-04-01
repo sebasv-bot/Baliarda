@@ -3,442 +3,417 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mundial Baliarda - Control Point Táctico Final 2026</title>
+    <title>Mundial Baliarda - Control Point Táctico Final</title>
     <style>
-        :root {
+        :root { 
+            --red: #ff3c3c; 
+            --green: #00ff88; 
+            --blue: #00aaff;
+            --yellow: #ffd000;
+            --turq: #00e5ff;
             --bg-dark: #010306;
-            --neon-red: #ff3333;
-            --neon-green: #00ff66;
-            --neon-blue: #00aaff;
-            --neon-yellow: #ffcc00;
-            --neon-cyan: #00ffff;
-            --3d-box-shadow: 0px 5px 15px rgba(0,0,0,0.8), 0 0 10px rgba(0, 170, 255, 0.2);
         }
 
-        body {
-            margin: 0;
+        body { 
+            margin: 0; 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Segoe UI', sans-serif; 
+            height: 100vh; 
+            overflow: hidden; 
+            background-image: radial-gradient(circle at center, #0a1a30 0%, #000 100%); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Arial', sans-serif;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            box-sizing: border-box;
         }
 
-        /* HEADER */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 90%;
-            max-width: 1400px;
-            margin-bottom: 25px;
-            z-index: 100;
+        /* --- CABECERA --- */
+        .header-line { 
+            width: 100%; 
+            max-width: 1400px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 5px; 
         }
 
-        .neon-box {
-            padding: 10px 20px;
-            border-radius: 12px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            box-shadow: var(--3d-box-shadow);
+        .panel-box { 
+            background: rgba(0,0,0,0.4); 
+            padding: 8px 15px; 
+            border-radius: 8px; 
+            text-align: center; 
+            border: 1px solid currentColor; 
+            min-width: 140px; 
+            animation: pulseGeneric 2.5s infinite ease-in-out; 
+        }
+        
+        .neon-red { color: var(--red); animation-delay: 0s; }
+        .neon-green { color: var(--green); animation-delay: 1.2s; }
+
+        @keyframes pulseGeneric {
+            0%, 100% { box-shadow: 0 0 5px currentColor; border-color: currentColor; }
+            50% { box-shadow: 0 0 20px currentColor; border-color: #fff; }
         }
 
-        .neon-box.red {
-            border: 2px solid var(--neon-red);
-            color: var(--neon-red);
-            text-shadow: 0 0 10px var(--neon-red);
+        .shining-title { 
+            font-size: 18px; 
+            letter-spacing: 3px; 
+            text-align: center; 
+            font-weight: 800; 
+            background: linear-gradient(90deg, #555, #fff, #555); 
+            background-size: 200%; 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            animation: shine 6s linear infinite; 
+            margin: 0; 
+            line-height: 1.2; 
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* --- BOTONES (11 en línea) --- */
+        .button-row { 
+            display: flex; 
+            gap: 6px; 
+            margin: 15px 0; 
+            flex-wrap: nowrap; 
+            justify-content: center; 
+            z-index: 100; 
         }
 
-        .neon-box.green {
-            border: 2px solid var(--neon-green);
-            color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
-        }
-
-        h1.glow-title {
-            text-align: center;
-            font-size: 26px;
-            letter-spacing: 2.5px;
+        .action-btn { 
+            width: 85px; 
+            height: 35px; 
+            background: #0a0a0a; 
+            border: 1px solid #333; 
+            color: rgba(255,255,255,0.4); 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 8px; 
+            font-weight: bold; 
+            transition: 0.3s; 
             text-transform: uppercase;
-            margin: 0;
-            animation: slowShadow 5s infinite alternate ease-in-out;
-        }
-
-        @keyframes slowShadow {
-            from { text-shadow: 0 0 12px rgba(255, 255, 255, 0.5); color: #fff; }
-            to { text-shadow: 0 0 30px rgba(255, 255, 255, 1); color: #eee; }
-        }
-
-        /* BOTONES (Grilla de Dos Filas Alineada) */
-        .button-area {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 35px;
-            perspective: 1000px;
-        }
-
-        .button-row {
-            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            transform: rotateX(10deg); /* Perspectiva */
-        }
-
-        .btn-ruta {
-            background: rgba(0, 170, 255, 0.05);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.3s ease;
             text-align: center;
-            width: 130px;
-            text-transform: uppercase;
-            font-weight: bold;
-            box-shadow: var(--3d-box-shadow);
-            transform-style: preserve-3d;
         }
 
-        .btn-ruta:hover {
-            border-color: var(--neon-cyan);
-            color: var(--neon-cyan);
-            transform: translateY(-3px) translateZ(10px);
-            background: rgba(0, 255, 255, 0.1);
-        }
-
-        .btn-ruta.active {
-            border-color: var(--neon-yellow);
-            color: var(--neon-yellow);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
-            background: rgba(255, 204, 0, 0.1);
-            transform: translateZ(15px);
-        }
-
-        /* MAPA / GLOBO TÁCTICO (Flotante y de Contornos) */
+        /* --- MAPA Y GLOBO --- */
         .map-wrapper {
             position: relative;
-            width: 90%;
-            max-width: 1300px;
-            height: 650px;
+            width: 100%;
+            max-width: 1000px;
+            height: 550px;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* No hay recuadro ni fondo radial */
+            flex-grow: 1;
         }
 
-        /* Grilla de perspectiva de fondo */
-        .grid-bg {
-            position: absolute;
-            width: 200%; height: 200%;
-            background-image: linear-gradient(rgba(0,170,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,170,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: rotateX(60deg) translateY(-25%) translateZ(-100px);
-            opacity: 0.3;
-            z-index: 1;
-        }
-
-        /* Globo terráqueo como esfera */
         .globe-sphere {
             position: relative;
-            width: 600px;
-            height: 600px;
+            width: 550px;
+            height: 550px;
             background: radial-gradient(circle at 30% 30%, #0a1525 0%, #020508 80%);
             border-radius: 50%;
-            box-shadow: 0px 30px 60px rgba(0,0,0,0.9) inset, 0 0 40px rgba(0, 170, 255, 0.2);
+            box-shadow: 0px 30px 60px rgba(0,0,0,0.9) inset, 0 0 40px rgba(0, 170, 255, 0.1);
             overflow: hidden;
-            z-index: 2;
-            border: 1px solid rgba(0, 170, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Mapa de contornos nítidos (América del Norte) */
         .map-bg {
             position: absolute;
             top: 5%; left: 5%; width: 90%; height: 90%;
-            /* Mapa SVG de contornos nítidos y transparentes (América del Norte, estados incluidos) */
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ef/Outline_Map_of_North_America.svg'); 
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.8;
-            /* Filtro neón verde preciso solo en contornos */
-            filter: invert(1) sepia(1) saturate(10000%) hue-rotate(85deg) drop-shadow(0 0 6px var(--neon-green));
+            opacity: 0.3;
+            filter: drop-shadow(0 0 5px #00aaff) brightness(150%) sepia(100%) hue-rotate(180deg) saturate(300%);
         }
 
-        /* SVG de rutas (Responsive con viewBox) */
         svg#routes-svg {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            pointer-events: none;
+            pointer-events: none; 
             z-index: 5;
         }
 
-        .route-line {
-            fill: none;
-            stroke: var(--neon-yellow);
-            stroke-width: 9;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            filter: drop-shadow(0 0 12px var(--neon-yellow));
-            stroke-dasharray: 2500;
-            stroke-dashoffset: 2500;
-            animation: drawLine 3s forwards ease-in-out;
-        }
-
-        @keyframes drawLine {
-            to { stroke-dashoffset: 0; }
-        }
-
-        /* Nodos de Estadios */
         .node {
             position: absolute;
-            width: 14px;
-            height: 14px;
-            background: var(--bg-dark);
-            border: 3px solid var(--neon-yellow);
+            width: 10px;
+            height: 10px;
+            background: #000;
+            border: 2px solid white;
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 12px var(--neon-yellow);
+            box-shadow: 0 0 8px white;
             z-index: 10;
+            cursor: crosshair;
+            transition: 0.3s;
         }
+        
+        .node:hover { transform: translate(-50%, -50%) scale(1.8); background: white; }
 
         .node-label {
             position: absolute;
             color: white;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: bold;
-            letter-spacing: 1.2px;
-            text-shadow: 1px 1px 4px black, 0 0 6px white;
-            transform: translate(-50%, -28px);
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 4px black;
+            transform: translate(-50%, -20px);
             z-index: 11;
+            pointer-events: none;
         }
 
-        /* TOOLTIP CYBERPUNK (Estadio Azteca F1) */
-        .cyber-tooltip {
+        /* --- TOOLTIP DINÁMICO --- */
+        #dynamic-tooltip {
             position: absolute;
-            background: rgba(5, 10, 16, 0.9);
-            border: 2px solid var(--neon-cyan);
-            border-radius: 10px;
-            padding: 12px;
+            background: rgba(5, 10, 16, 0.95);
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 8px;
             display: flex;
             align-items: center;
-            gap: 18px;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+            gap: 12px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(8px);
-            z-index: 30;
-            transform: translate(20px, -50%);
-            opacity: 0;
-            animation: fadeIn 0.6s 2s forwards; /* Entrada con retraso tras la ruta */
+            z-index: 200;
+            transform: translate(15px, -50%);
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.2s;
+            pointer-events: none;
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
+        #dynamic-tooltip.show { opacity: 1; visibility: visible; }
 
-        .cyber-tooltip img {
+        #dynamic-tooltip img {
             width: 100px;
             height: 60px;
             object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .cyber-tooltip .info {
-            font-size: 12px;
-            line-height: 1.5;
-            color: #eee;
-        }
+        #dynamic-tooltip .info { font-size: 10px; line-height: 1.3; min-width: 110px; }
+        #dynamic-tooltip b { display: block; font-size: 11px; margin-bottom: 2px; }
+        #tt-time { font-weight: bold; color: var(--yellow); }
 
-        .cyber-tooltip .info strong {
-            color: white;
-            font-size: 14px;
-            text-shadow: 0 0 6px var(--neon-cyan);
-        }
-
-        .cyber-tooltip .badge {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 12px var(--neon-cyan);
-            padding-left: 12px;
-            border-left: 1px solid rgba(0, 255, 255, 0.4);
-        }
-
-        /* GVS Badge */
-        .gvs-badge {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            font-size: 10px;
-            color: rgba(255,255,255,0.3);
-            letter-spacing: 1px;
-            z-index: 100;
-        }
-
+        .main-footer { position: absolute; bottom: 15px; right: 25px; opacity: 0.2; font-size: 8px; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="neon-box red">
-            <div id="date-display" style="font-size: 12px; margin-bottom: 5px;">--:--</div>
-            <div id="clock-display" style="font-size: 18px; font-weight: bold;">--:--:--</div>
+    <header class="header-line">
+        <div class="panel-box neon-red">
+            <div style="font-size: 9px; opacity: 0.6;">HOY</div>
+            <div id="hora" style="font-weight: bold; font-size: 11px;">--</div>
         </div>
-        <h1 class="glow-title">POSIBLES RUTAS DE ARGENTINA<br>MUNDIAL 2026</h1>
-        <div class="neon-box green">
-            <div style="font-size: 10px; margin-bottom: 5px;">CUENTA REGRESIVA</div>
-            <div id="countdown-display" style="font-size: 16px; font-weight: bold;">--D --H --M --S</div>
+
+        <h1 class="shining-title">ESTAS SON LAS POSIBLES RUTAS DE<br>ARGENTINA EN EL MUNDIAL 2026</h1>
+
+        <div class="panel-box neon-green">
+            <div style="font-size: 9px; opacity: 0.6;">TIEMPO RESTANTE</div>
+            <div id="restante" style="font-weight: bold; font-size: 11px;">--</div>
         </div>
     </header>
 
-    <div class="button-area">
-        <div class="button-row">
-            <button class="btn-ruta" id="btn-campeon">CAMPEÓN DEL MUNDO</button>
-            <button class="btn-ruta active" id="btn-2-puesto">2 PUESTO</button>
-            <button class="btn-ruta">1 PRIMER<br>3 TERCERO</button>
-            <button class="btn-ruta">2 SEGUNDO<br>3 TERCERO</button>
-            <button class="btn-ruta">3 TERCERO<br>3 TERCERO</button>
-            <button class="btn-ruta">4 CUARTO<br>3 TERCERO</button>
-        </div>
-        <div class="button-row">
-            <button class="btn-ruta">5 QUINTO<br>3 TERCERO</button>
-            <button class="btn-ruta">6 SEXTO<br>3 TERCERO</button>
-            <button class="btn-ruta">7 SEPTIMO<br>3 TERCERO</button>
-            <button class="btn-ruta">8 OCTAVO<br>3 TERCERO</button>
-            <button class="btn-ruta" id="btn-3-puesto">3 PUESTO</button>
-        </div>
-    </div>
+    <div id="btn-container" class="button-row"></div>
 
     <div class="map-wrapper" id="tactic-map">
-        <div class="grid-bg"></div>
-        <div class="globe-sphere">
+        <div class="globe-sphere" id="globe-container">
             <div class="map-bg"></div>
-            </div>
+            <svg id="routes-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        </div>
         
-        <svg id="routes-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-        
-        <div class="cyber-tooltip" style="left: 45%; top: 75%;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Estadio_Azteca_2015.jpg/320px-Estadio_Azteca_2015.jpg" alt="Estadio Azteca">
+        <div id="dynamic-tooltip">
+            <img id="tt-img" src="" alt="">
             <div class="info">
-                <strong>Estadio Azteca</strong><br>
-                Ciudad de México<br>
-                16/06 22:00
+                <b id="tt-name">Estadio</b>
+                <span id="tt-city">Ciudad</span><br>
+                <span id="tt-time">00:00 HS</span>
             </div>
-            <div class="badge">F1</div>
         </div>
     </div>
 
-    <div class="gvs-badge">GVS PRODUCCIONES</div>
+    <footer class="main-footer"><b>GVS PRODUCCIONES</b></footer>
 
     <script>
-        // Inicializar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', () => {
-            initClock();
-            initCountdown();
-            initNodesAndRoutes();
-            
-            // Auto-activar la ruta 2 PUESTO al cargar
-            setTimeout(() => {
-                drawActiveRoute();
-            }, 500);
-        });
+        // 1. DICCIONARIO DE IMÁGENES (Actualizado con tus links)
+        const imgSedes = {
+            "Dallas": "https://www.hksinc.com/wp-content/uploads/2009/10/ATT_economic-1.jpg",
+            "CDMX": "https://dnclcgcvl4f14.cloudfront.net/siila-cm/prd/1280w/7996-1687546713335.jpg",
+            "Miami": "https://de1.sportal365images.com/process/smp-bet365-images/news.bet365.es-es/08102025/941ae6c5-5b87-4d16-9e8d-e1fae1c4a030.jpg",
+            "Nueva Jersey": "https://as1.ftcdn.net/v2/jpg/16/16/94/38/1000_F_1616943813_UoOgcHMlJxrgYapJG2wAHOxFNt9fIRaL.jpg",
+            "Filadelfia": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/29/e6/28/38/lincoln-financial-field.jpg?w=1400&h=-1&s=1",
+            "Boston": "https://grupormultimedio.com/wp-content/uploads/2026/02/F1-8.jpg",
+            "Atlanta": "https://media.architecturaldigest.com/photos/55f9e1d99bff6eeb3a241a7b/16:9/w_2240,c_limit/dam-images-daily-2015-08-atlanta-falcons-stadium-atlanta-falcons-mercedes-benz-stadium-01.jpg",
+            "Los Ángeles": "https://www.hksinc.com/wp-content/uploads/2022/01/SoFi_Factsbody2.jpg",
+            "San Francisco": "https://media.admagazine.com/photos/69829971dea91f04e6ae7326/16:9/w_2240,c_limit/GettyImages-2255009698.jpg",
+            "Seattle": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Qwest_Field%2C_Seattle%2C_USA-1June2009.jpg",
+            "Vancouver": "https://images.spaicelabs.com/images/flus6j8v/production/37d069f71f67b4591905dfab4aa98bb4c9703e07-2048x1360.jpg?rect=30%2C0%2C1989%2C1360&w=3840&fm=webp&q=75&fit=max",
+            "Houston": "https://www.stadiumscene.tv/img/stadium/nfl/nrgstadium.jpg",
+            "Toronto": "https://static.cfl.ca/wp-content/uploads/sites/8/2017/06/DJI_0053-1600x803.jpg",
+            "Kansas City": "https://assets.newsweek.com/wp-content/uploads/2026/02/GettyImages-2171246994.jpg?w=1600&quality=80&webp=1",
+            "Guadalajara": "https://www.ole.com.ar/images/2025/03/17/m8w06RWNo_1200x630__1.jpg",
+            "Monterrey": "https://www.bbva.com/wp-content/uploads/2016/09/EstadioBancomer3.jpg"
+        };
 
-        // 1. RELOJ Y FECHA
-        function initClock() {
-            function updateClock() {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('es-AR', { hour12: true });
-                const days = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
-                const dateStr = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth()+1).padStart(2, '0')}`;
-                document.getElementById('clock-display').innerText = timeStr;
-                document.getElementById('date-display').innerText = dateStr;
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-        }
-
-        // 2. CUENTA REGRESIVA (Activación a 11 Junio 2026)
-        function initCountdown() {
-            const worldCupDate = new Date('June 11, 2026 00:00:00').getTime();
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const distance = worldCupDate - now;
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById('countdown-display').innerText = `${days}D ${String(hours).padStart(2, '0')}H ${String(minutes).padStart(2, '0')}M ${String(seconds).padStart(2, '0')}S`;
-            }
-            setInterval(updateCountdown, 1000);
-            updateCountdown();
-        }
-
-        // 3. NODOS Y RUTAS (Datos Precisos de Referencia)
-        // Posiciones relativas (en %) dentro de la esfera
-        const nodesData = [
-            { id: '8avos', label: '8AVOS', x: 25, y: 35 },
-            { id: 'f2', label: 'F2', x: 38, y: 65 },
-            { id: 'f1', label: 'F1', x: 45, y: 75 }, // Ciudad de México
-            { id: 'f3', label: 'F3', x: 48, y: 55 },
-            { id: '16avos', label: '16AVOS', x: 62, y: 40 },
-            { id: '4tos', label: '4TOS', x: 60, y: 55 },
-            { id: 'semis', label: 'SEMIS', x: 70, y: 35 },
-            { id: 'final', label: 'FINAL', x: 80, y: 48 },
-            { id: 'vuelta', label: 'NOS VOLVEMOS', x: 82, y: 52 }
+        // 2. MATRIZ DE RUTAS (Tu código exacto de la tabla)
+        const datosRutas = [
+            { n: "1 PUESTO", c: "#00ff88", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","04/07","08/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Nueva Jersey"] },
+            { n: "2 PUESTO", c: "#ffd000", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","29/06","03/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Nueva Jersey"] },
+            { n: "1 PRIMER\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","30/06","04/07","09/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Nueva Jersey","Filadelfia","Boston","Dallas","Nueva Jersey"] },
+            { n: "2 SEGUNDO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","17:00","17:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Atlanta","Nueva Jersey","Los Ángeles","Atlanta","Nueva Jersey"] },
+            { n: "3 TERCERO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:00","22:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","06/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","San Francisco","Dallas","Miami","Dallas","Nueva Jersey"] },
+            { n: "4 CUARTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","23:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","07/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Seattle","Vancouver","Kansas City","Atlanta","Nueva Jersey"] },
+            { n: "5 QUINTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","19:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","01/07","05/07","10/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","CDMX","CDMX","Los Ángeles","Atlanta","Nueva Jersey"] },
+            { n: "6 SEXTO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","23:30","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","02/07","04/07","09/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Los Ángeles","Houston","Boston","Dallas","Nueva Jersey"] },
+            { n: "7 SEPTIMO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","21:00","20:00","16:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","14/07","19/07"], s: ["Dallas","CDMX","Miami","Miami","Atlanta","Miami","Dallas","Nueva Jersey"] },
+            { n: "8 OCTAVO\n3 TERCERO", c: "#ff3c3c", h: ["22:00","14:00","23:00","22:00","22:00","22:00","21:00","17:00"], f: ["12/06","16/06","20/06","03/07","07/07","11/07","15/07","19/07"], s: ["Dallas","CDMX","Miami","Dallas","Houston","Kansas City","Atlanta","Nueva Jersey"] },
+            { n: "4 PUESTO", c: "#00ffff", h: ["22:00","14:00","23:00"], f: ["12/06","16/06","20/06"], s: ["Dallas","CDMX","Miami"] }
         ];
 
-        function initNodesAndRoutes() {
-            const globeSphere = document.querySelector('.globe-sphere');
-            
-            // Inyectar Nodos
-            nodesData.forEach(node => {
+        // 3. POSICIONES DE LOS NODOS EN EL MAPA (Coordenadas Tácticas)
+        const sequenceLabels = ["F1", "F2", "F3", "16AVOS", "8AVOS", "4TOS", "SEMIS", "FINAL"];
+        const baseNodesPos = [
+            { x: 48, y: 55 }, { x: 45, y: 75 }, { x: 75, y: 72 }, { x: 80, y: 48 }, 
+            { x: 65, y: 53 }, { x: 28, y: 46 }, { x: 63, y: 65 }, { x: 68, y: 55 }
+        ];
+
+        let activoActual = -1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTime();
+            buildInterface();
+            setTimeout(() => { selectRuta(0); }, 500);
+        });
+
+        function initTime() {
+            setInterval(() => {
+                const ahora = new Date(); 
+                document.getElementById('hora').innerHTML = ahora.toLocaleDateString() + "<br>" + ahora.toLocaleTimeString();
+                const m = new Date("2026-06-11T00:00:00"); 
+                const d = m - ahora;
+                document.getElementById('restante').innerHTML = Math.floor(d/86400000) + " días<br>" + Math.floor((d%86400000)/3600000) + " hs restantes";
+            }, 1000);
+        }
+
+        function buildInterface() {
+            const btns = document.getElementById("btn-container");
+            datosRutas.forEach((ruta, i) => {
+                const b = document.createElement("button");
+                b.className = "action-btn";
+                b.id = `btn-${i}`;
+                b.innerText = ruta.n;
+                b.onclick = () => selectRuta(i);
+                btns.appendChild(b);
+            });
+
+            const globe = document.getElementById('globe-container');
+            baseNodesPos.forEach((pos, i) => {
                 const dot = document.createElement('div');
                 dot.className = 'node';
-                dot.style.left = node.x + '%';
-                dot.style.top = node.y + '%';
-                
-                const label = document.createElement('div');
-                label.className = 'node-label';
-                label.innerText = node.label;
-                label.style.left = node.x + '%';
-                label.style.top = node.y + '%';
-                
-                globeSphere.appendChild(dot);
-                globeSphere.appendChild(label);
+                dot.id = `node-${i}`;
+                dot.style.left = pos.x + '%'; dot.style.top = pos.y + '%';
+                dot.addEventListener('mouseenter', () => mostrarTooltip(i));
+                dot.addEventListener('mouseleave', ocultarTooltip);
+
+                const lbl = document.createElement('div');
+                lbl.className = 'node-label';
+                lbl.id = `label-${i}`;
+                lbl.innerText = sequenceLabels[i];
+                lbl.style.left = pos.x + '%'; lbl.style.top = pos.y + '%';
+
+                globe.appendChild(dot);
+                globe.appendChild(lbl);
             });
         }
 
-        // Trazado de Ruta para '2 PUESTO' (Zigzag idéntico a la referencia)
-        function drawActiveRoute() {
-            const svg = document.getElementById('routes-svg');
-            svg.innerHTML = ''; 
+        function selectRuta(index) {
+            if (activoActual === index) { 
+                desactivarTodo(); 
+                return; 
+            }
             
-            // Ruta precisa en zigzag
-            const pathData = `
-                M ${nodesData.find(n=>n.id==='8avos').x} ${nodesData.find(n=>n.id==='8avos').y} 
-                L ${nodesData.find(n=>n.id==='16avos').x} ${nodesData.find(n=>n.id==='16avos').y}
-                L ${nodesData.find(n=>n.id==='f2').x} ${nodesData.find(n=>n.id==='f2').y}
-                L ${nodesData.find(n=>n.id==='f1').x} ${nodesData.find(n=>n.id==='f1').y}
-                L ${nodesData.find(n=>n.id==='f3').x} ${nodesData.find(n=>n.id==='f3').y}
-                L ${nodesData.find(n=>n.id==='semis').x} ${nodesData.find(n=>n.id==='semis').y}
-                L ${nodesData.find(n=>n.id==='4tos').x} ${nodesData.find(n=>n.id==='4tos').y}
-                L ${nodesData.find(n=>n.id==='final').x} ${nodesData.find(n=>n.id==='final').y}
-            `;
+            desactivarTodo();
+            activoActual = index; 
+            const ruta = datosRutas[index]; 
+            const btn = document.getElementById(`btn-${index}`);
+            
+            btn.style.background = ruta.c; btn.style.borderColor = ruta.c; btn.style.color = "#000"; btn.style.boxShadow = `0 0 15px ${ruta.c}`;
 
-            const realPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            realPath.setAttribute('d', pathData);
-            realPath.className = 'route-line';
-            svg.appendChild(realPath);
+            // Control de visibilidad de estadios (Efecto Turquesa)
+            const count = ruta.f.length;
+            baseNodesPos.forEach((_, i) => {
+                const node = document.getElementById(`node-${i}`);
+                const lbl = document.getElementById(`label-${i}`);
+                if (i < count) {
+                    node.style.display = 'block'; lbl.style.display = 'block';
+                    node.style.borderColor = ruta.c; node.style.boxShadow = `0 0 10px ${ruta.c}`;
+                } else {
+                    node.style.display = 'none'; lbl.style.display = 'none';
+                }
+            });
+
+            dibujarRuta(ruta, count);
         }
 
+        function desactivarTodo() {
+            if (activoActual !== -1) {
+                const btn = document.getElementById(`btn-${activoActual}`);
+                btn.style = "";
+            }
+            document.getElementById('routes-svg').innerHTML = '';
+            activoActual = -1;
+            baseNodesPos.forEach((_, i) => {
+                const n = document.getElementById(`node-${i}`);
+                n.style.display = 'block'; n.style.borderColor = 'white'; n.style.boxShadow = '0 0 8px white';
+                document.getElementById(`label-${i}`).style.display = 'block';
+            });
+        }
+
+        function dibujarRuta(ruta, count) {
+            const svg = document.getElementById('routes-svg');
+            for (let i = 0; i < count - 1; i++) {
+                const p1 = baseNodesPos[i]; const p2 = baseNodesPos[i+1];
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+                line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+                line.setAttribute('stroke', ruta.c); line.setAttribute('stroke-width', '0.6');
+                
+                const len = Math.sqrt(Math.pow(p2.x-p1.x, 2) + Math.pow(p2.y-p1.y, 2));
+                line.style.strokeDasharray = len; line.style.strokeDashoffset = len;
+                line.style.transition = `stroke-dashoffset 0.4s linear ${i*0.4}s`;
+                svg.appendChild(line);
+                setTimeout(() => line.style.strokeDashoffset = '0', 50);
+            }
+        }
+
+        function mostrarTooltip(i) {
+            if (activoActual === -1) return;
+            const ruta = datosRutas[activoActual];
+            if (i >= ruta.s.length) return;
+
+            const ciudad = ruta.s[i];
+            const tt = document.getElementById('dynamic-tooltip');
+            document.getElementById('tt-img').src = imgSedes[ciudad] || "";
+            document.getElementById('tt-name').innerText = ciudad;
+            document.getElementById('tt-city').innerText = ruta.f[i];
+            document.getElementById('tt-time').innerText = ruta.h[i] + " HS";
+            
+            const pos = baseNodesPos[i];
+            tt.style.left = (pos.x + 2) + '%'; tt.style.top = (pos.y - 3) + '%';
+            tt.style.borderColor = ruta.c;
+            tt.classList.add('show');
+        }
+
+        function ocultarTooltip() { document.getElementById('dynamic-tooltip').classList.remove('show'); }
     </script>
 </body>
 </html>
