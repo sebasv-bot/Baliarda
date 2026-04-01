@@ -1,237 +1,447 @@
-<style>
-    :root { --blue: #00aaff; --red: #ff3c3c; --green: #00ff88; --turq: #00e5ff; --yellow: #ffd000; }
-    body { margin: 0; background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
-    
-    .dashboard-container { padding: 20px; display: flex; flex-direction: column; align-items: center; height: 100vh; box-sizing: border-box; background: radial-gradient(circle at 50% 50%, #0a1018 0%, #000 100%); position: relative; }
-
-    /* CABECERA CON TÍTULO ANIMADO */
-    .header-line { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin-bottom: 5px; gap: 20px; }
-    .panel-box { background: rgba(0,0,0,0.6); padding: 8px 15px; border-radius: 8px; text-align: center; min-width: 140px; }
-    .time-now { border: 2px solid var(--red); color: var(--red); box-shadow: 0 0 15px var(--red); justify-self: start; }
-    .time-remaining { border: 2px solid var(--green); color: var(--green); box-shadow: 0 0 15px var(--green); justify-self: end; }
-
-    .shining-title { 
-        font-size: 1.1rem; letter-spacing: 4px; text-align: center; font-weight: 800; margin: 0; text-transform: uppercase;
-        background: linear-gradient(90deg, #222 0%, #666 45%, #fff 50%, #666 55%, #222 100%);
-        background-size: 200% auto; 
-        -webkit-background-clip: text; 
-        -webkit-text-fill-color: transparent;
-        animation: shine 5s linear infinite; /* Animación activada aquí */
-    }
-    @keyframes shine { 
-        0% { background-position: -100% center; }
-        100% { background-position: 100% center; }
-    }
-
-    /* BOTONES */
-    .control-panel { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; width: 100%; max-width: 1250px; z-index: 10; }
-    .button-row { display: grid; grid-template-columns: repeat(11, 1fr); gap: 8px; }
-    .action-btn { width: 100%; height: 38px; background: #080808; border: 1px solid #1a1a1a; color: #444; border-radius: 4px; cursor: pointer; font-size: 8px; font-weight: 900; transition: 0.3s; text-transform: uppercase; }
-
-    .on-verde { background: var(--green)!important; color: #000!important; box-shadow: 0 0 20px var(--green); border-color: #fff!important; }
-    .on-amarillo { background: var(--yellow)!important; color: #000!important; box-shadow: 0 0 20px var(--yellow); border-color: #fff!important; }
-    .on-rojo { background: var(--red)!important; color: #000!important; box-shadow: 0 0 20px var(--red); border-color: #fff!important; }
-    .on-turq { background: var(--turq)!important; color: #000!important; box-shadow: 0 0 20px var(--turq); border-color: #fff!important; }
-
-    /* DISPLAY AREA */
-    .display-area { flex-grow: 1; width: 100%; max-width: 1250px; display: flex; flex-direction: column; justify-content: center; position: relative; }
-    .grid-header { display: flex; width: 100%; gap: 10px; margin-bottom: 125px; opacity: 0; transition: 0.3s; }
-    .grid-header.active { opacity: 1; }
-    
-    .seg-box { flex: 1; text-align: center; color: #222; transition: 0.3s; }
-    .seg-name { font-size: 16px; font-weight: 900; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px; }
-    .seg-date { font-size: 22px; font-weight: 800; letter-spacing: -1px; }
-
-    .rows-stack { position: relative; height: 50px; width: 100%; }
-    .horarios-row { display: flex; width: 100%; gap: 10px; position: absolute; top:0; left:0; right:0; opacity: 0; pointer-events: none; transition: 0.4s; z-index: 1; }
-    .horarios-row.active { opacity: 1; pointer-events: all; z-index: 100; }
-
-    /* GLASS BOX & TOOLTIP */
-    .glass-box { 
-        flex: 1; height: 48px; background: #050505; border: 1px solid #111; border-radius: 6px; 
-        display: flex; align-items: center; justify-content: center; font-size: 14px; 
-        font-weight: bold; color: #111; position: relative; cursor: help;
-    }
-    
-    .tooltip {
-        position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%);
-        background: rgba(5, 10, 20, 0.98); color: #fff; padding: 12px; border-radius: 8px;
-        font-size: 10px; width: 200px; text-align: center; pointer-events: none;
-        opacity: 0; transition: 0.25s; border: 1px solid #444; z-index: 9999;
-        box-shadow: 0 10px 40px rgba(0,0,0,1); visibility: hidden;
-    }
-    
-    .glass-box:hover .tooltip { opacity: 1; visibility: visible; bottom: 130%; border-color: var(--turq); }
-    .tooltip b { color: var(--turq); display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; }
-    
-    .tooltip-img {
-        width: 100%; height: 110px; border-radius: 4px;
-        margin-bottom: 10px; object-fit: cover; display: block;
-        background: #1a1a1a;
-    }
-
-    .hidden-segment { display: none !important; }
-    .regreso-box { flex: 6; color: var(--turq)!important; border-color: var(--turq)!important; text-shadow: 0 0 10px var(--turq); background: rgba(0,229,255,0.05); font-size: 16px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; border-style: dashed; }
-
-    .carril-centrado { width: 100%; height: 3px; background: #111; margin-top: 60px; opacity: 0; transition: 0.5s; position: relative; }
-    .carril-centrado.active { opacity: 1; }
-    .progreso-bar { height: 100%; width: 0%; transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
-
-    .pulse { animation: p 2s infinite ease-in-out; }
-    @keyframes p { 0%, 100% { box-shadow: 0 0 5px currentColor; } 50% { box-shadow: 0 0 15px currentColor; } }
-
-    .main-footer { position: absolute; bottom: 15px; right: 25px; color: #333; font-size: 9px; letter-spacing: 2px; font-weight: bold; }
-</style>
-
-<div class="dashboard-container">
-    <div class="header-line">
-        <div class="panel-box time-now"><div id="hora">--:--:--</div></div>
-        <h1 class="shining-title">POSIBLES RUTAS DE ARGENTINA<br>MUNDIAL 2026</h1>
-        <div class="panel-box time-remaining"><div id="restante">-- DÍAS</div></div>
-    </div>
-
-    <div class="control-panel">
-        <div id="row-1" class="button-row"></div>
-        <div id="row-2" class="button-row"></div>
-    </div>
-
-    <div class="display-area">
-        <div class="grid-header" id="main-header">
-            <div class="seg-box" id="s0"><div class="seg-name">F1</div><div class="seg-date">12/06 - Jue</div></div>
-            <div class="seg-box" id="s1"><div class="seg-name">F2</div><div class="seg-date">16/06 - Mar</div></div>
-            <div class="seg-box" id="s2"><div class="seg-name">F3</div><div class="seg-date">20/06 - Sab</div></div>
-            <div class="seg-box" id="s3"><div class="seg-name">16avos</div><div class="seg-date">04/07 - Sab</div></div>
-            <div class="seg-box" id="s4"><div class="seg-name">8avos</div><div class="seg-date">08/07 - Mie</div></div>
-            <div class="seg-box" id="s5"><div class="seg-name">4tos</div><div class="seg-date">11/07 - Sab</div></div>
-            <div class="seg-box" id="s6"><div class="seg-name">Semis</div><div class="seg-date">15/07 - Mie</div></div>
-            <div class="seg-box" id="s7"><div class="seg-name">3er P.</div><div class="seg-date">18/07 - Sab</div></div>
-            <div class="seg-box" id="s8"><div class="seg-name">Final</div><div class="seg-date">19/07 - Dom</div></div>
-        </div>
-        <div class="rows-stack" id="dynamic-grid"></div>
-        <div id="wrapper-carril" style="width:100%"><div class="carril-centrado" id="main-carril"><div id="main-progreso" class="progreso-bar"></div></div></div>
-    </div>
-    <footer class="main-footer">GVS PRODUCCIONES</footer>
-</div>
-
-<script>
-    const config = [
-        { t: "1 PUESTO", on: "on-verde", c: "#00ff88" },
-        { t: "2 PUESTO", on: "on-amarillo", c: "#ffd000" },
-        { t: "1 PRIMER<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "2 SEGUNDO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "3 TERCERO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "4 CUARTO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "5 QUINTO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "6 SEXTO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "7 SEPTIMO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "8 OCTAVO<br>3 TERCERO", on: "on-rojo", c: "#ff3c3c" },
-        { t: "4 PUESTO", on: "on-turq", c: "#00e5ff" }
-    ];
-
-    const dataPartidos = [
-        { f: "Fase de Grupos", e: "Estadio Azteca", l: "CDMX", i: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=400" },
-        { f: "Fase de Grupos", e: "MetLife Stadium", l: "New Jersey", i: "https://images.unsplash.com/photo-1564112105441-32b0051df099?auto=format&fit=crop&w=400" },
-        { f: "Fase de Grupos", e: "Hard Rock Stadium", l: "Miami", i: "https://images.unsplash.com/photo-1513297856429-055d1df64376?auto=format&fit=crop&w=400" },
-        { f: "Dieciseisavos", e: "SoFi Stadium", l: "Los Ángeles", i: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=400" },
-        { f: "Octavos de Final", e: "AT&T Stadium", l: "Dallas", i: "https://images.unsplash.com/photo-1495366554757-a0203a5703eb?auto=format&fit=crop&w=400" },
-        { f: "Cuartos de Final", e: "Arrowhead Stadium", l: "Kansas City", i: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=400" },
-        { f: "Semifinal", e: "Mercedes-Benz Stadium", l: "Atlanta", i: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=400" },
-        { f: "Tercer Puesto", e: "Hard Rock Stadium", l: "Miami", i: "https://images.unsplash.com/photo-1522770179533-24471fcdba45?auto=format&fit=crop&w=400" },
-        { f: "Gran Final", e: "MetLife Stadium", l: "New Jersey", i: "https://images.unsplash.com/photo-1551290464-666324a0d95e?auto=format&fit=crop&w=400" }
-    ];
-
-    const horarios = ["22:00","14:00","23:00","22:00","17:00","22:00","21:00","21:00","17:00"];
-    let seleccionado = -1;
-
-    function resetVisuals() {
-        document.querySelectorAll('.action-btn').forEach(b => b.className = "action-btn");
-        document.querySelectorAll('.horarios-row').forEach(r => r.classList.remove('active'));
-        document.querySelectorAll('.seg-box').forEach(s => { s.classList.remove('hidden-segment'); s.style.color = "#222"; });
-        document.querySelectorAll('.glass-box').forEach(b => { b.classList.remove('hidden-segment', 'pulse'); b.style.color = "#111"; b.style.borderColor = "#111"; });
-        document.getElementById('main-header').classList.remove('active');
-        document.getElementById('main-carril').classList.remove('active');
-        document.getElementById('wrapper-carril').style.width = "100%";
-    }
-
-    function activar(idx, fila) {
-        const id = fila === 1 ? idx : idx + 100;
-        if (seleccionado === id) { resetVisuals(); seleccionado = -1; return; }
-        resetVisuals();
-        seleccionado = id;
-        const c = config[idx];
-        document.getElementById(`btn-${fila}-${idx}`).classList.add(c.on);
-        document.getElementById('main-header').classList.add('active');
-        const row = document.getElementById(`grid-${fila}-${idx}`);
-        row.classList.add('active');
-        
-        const boxes = row.getElementsByClassName('glass-box');
-        for(let i=0; i<boxes.length; i++) {
-            if(idx === 10) { 
-                if(i < 3) {
-                    boxes[i].style.color = c.c; boxes[i].style.borderColor = c.c; boxes[i].classList.add('pulse');
-                    document.getElementById(`s${i}`).style.color = c.c;
-                } else {
-                    if(document.getElementById(`s${i}`)) document.getElementById(`s${i}`).classList.add('hidden-segment');
-                    if(!boxes[i].classList.contains('regreso-box')) boxes[i].classList.add('hidden-segment');
-                }
-                document.getElementById('wrapper-carril').style.width = "31.5%";
-            } else {
-                let apagado = (fila === 1 && i === 7) || (fila === 2 && i === 8);
-                if(!apagado) {
-                    boxes[i].style.color = c.c; boxes[i].style.borderColor = c.c; boxes[i].classList.add('pulse');
-                    document.getElementById(`s${i}`).style.color = c.c;
-                }
-            }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mundial Baliarda - Control Point Táctico 2026</title>
+    <style>
+        :root {
+            --bg-dark: #010306;
+            --neon-red: #ff3333;
+            --neon-green: #00ff66;
+            --neon-blue: #00aaff;
+            --neon-yellow: #ffcc00;
+            --neon-cyan: #00ffff;
+            --3d-box-shadow: 0px 5px 15px rgba(0,0,0,0.8), 0 0 10px rgba(0, 170, 255, 0.2);
         }
-        document.getElementById('main-carril').classList.add('active');
-        const bar = document.getElementById('main-progreso');
-        bar.style.background = c.c;
-        bar.style.boxShadow = `0 0 15px ${c.c}`;
-        bar.style.width = (idx === 10) ? "100%" : (fila === 2 ? "88%" : "100%");
-    }
 
-    function getTooltipHTML(pData) {
-        return `<div class="tooltip">
-                    <img src="${pData.i}" class="tooltip-img" alt="Estadio">
-                    <b>${pData.f}</b>
-                    ${pData.e}<br>
-                    ${pData.l}
-                </div>`;
-    }
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    function init() {
-        const r1 = document.getElementById("row-1");
-        const r2 = document.getElementById("row-2");
-        const grid = document.getElementById("dynamic-grid");
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1400px;
+            margin-bottom: 25px;
+            z-index: 100;
+        }
 
-        config.forEach((btn, i) => {
-            const b1 = document.createElement("button");
-            b1.className = "action-btn"; b1.id = `btn-1-${i}`; b1.innerHTML = btn.t;
-            b1.onclick = () => activar(i, 1); r1.appendChild(b1);
+        .neon-box {
+            padding: 10px 20px;
+            border-radius: 12px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            box-shadow: var(--3d-box-shadow);
+        }
+
+        .neon-box.red {
+            border: 2px solid var(--neon-red);
+            color: var(--neon-red);
+            text-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .neon-box.green {
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        h1.glow-title {
+            text-align: center;
+            font-size: 26px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin: 0;
+            animation: slowShadow 5s infinite alternate ease-in-out;
+        }
+
+        @keyframes slowShadow {
+            from { text-shadow: 0 0 12px rgba(255, 255, 255, 0.5); color: #fff; }
+            to { text-shadow: 0 0 30px rgba(255, 255, 255, 1); color: #eee; }
+        }
+
+        /* BOTONES (Grilla Perspectiva 3D) */
+        .button-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 35px;
+            perspective: 1000px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            transform: rotateX(10deg); /* Perspectiva */
+        }
+
+        .btn-ruta {
+            background: rgba(0, 170, 255, 0.05);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 110px;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: var(--3d-box-shadow);
+            transform-style: preserve-3d;
+        }
+
+        .btn-ruta:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            transform: translateY(-3px) translateZ(10px);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .btn-ruta.active {
+            border-color: var(--neon-yellow);
+            color: var(--neon-yellow);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+            background: rgba(255, 204, 0, 0.1);
+            transform: translateZ(15px);
+        }
+
+        /* MAPA / GLOBO TÁCTICO (Flotante) */
+        .map-wrapper {
+            position: relative;
+            width: 90%;
+            max-width: 1300px;
+            height: 650px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* No hay recuadro ni fondo radial */
+        }
+
+        /* Grilla de perspectiva de fondo */
+        .grid-bg {
+            position: absolute;
+            width: 200%; height: 200%;
+            background-image: linear-gradient(rgba(0,170,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,170,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(60deg) translateY(-25%) translateZ(-100px);
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        /* Globo terráqueo como esfera */
+        .globe-sphere {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle at 30% 30%, #0a1525 0%, #020508 80%);
+            border-radius: 50%;
+            box-shadow: 0px 30px 60px rgba(0,0,0,0.9) inset, 0 0 40px rgba(0, 170, 255, 0.2);
+            overflow: hidden;
+            z-index: 2;
+            border: 1px solid rgba(0, 170, 255, 0.15);
+        }
+
+        /* Mapa de contornos nítidos (América del Norte) */
+        .map-bg {
+            position: absolute;
+            top: 5%; left: 5%; width: 90%; height: 90%;
+            /* Mapa SVG de contornos nítidos y transparentes (América del Norte, estados incluidos) */
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ef/Outline_Map_of_North_America.svg'); 
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.8;
+            /* Filtro neón verde preciso solo en contornos */
+            filter: invert(1) sepia(1) saturate(10000%) hue-rotate(85deg) drop-shadow(0 0 6px var(--neon-green));
+        }
+
+        /* SVG de rutas (Responsive con viewBox) */
+        svg#routes-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .route-line {
+            fill: none;
+            stroke: var(--neon-yellow);
+            stroke-width: 9;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 0 12px var(--neon-yellow));
+            stroke-dasharray: 2500;
+            stroke-dashoffset: 2500;
+            animation: drawLine 3s forwards ease-in-out;
+        }
+
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Nodos de Estadios */
+        .node {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: var(--bg-dark);
+            border: 3px solid var(--neon-yellow);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 12px var(--neon-yellow);
+            z-index: 10;
+        }
+
+        .node-label {
+            position: absolute;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.2px;
+            text-shadow: 1px 1px 4px black, 0 0 6px white;
+            transform: translate(-50%, -28px);
+            z-index: 11;
+        }
+
+        /* TOOLTIP CYBERPUNK (Estadio Azteca F1) */
+        .cyber-tooltip {
+            position: absolute;
+            background: rgba(5, 10, 16, 0.9);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 30;
+            transform: translate(20px, -50%);
+            opacity: 0;
+            animation: fadeIn 0.6s 2s forwards; /* Entrada con retraso tras la ruta */
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .cyber-tooltip img {
+            width: 100px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .cyber-tooltip .info {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #eee;
+        }
+
+        .cyber-tooltip .info strong {
+            color: white;
+            font-size: 14px;
+            text-shadow: 0 0 6px var(--neon-cyan);
+        }
+
+        .cyber-tooltip .badge {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 12px var(--neon-cyan);
+            padding-left: 12px;
+            border-left: 1px solid rgba(0, 255, 255, 0.4);
+        }
+
+        /* GVS Badge */
+        .gvs-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+            z-index: 100;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="neon-box red">
+            <div id="date-display" style="font-size: 12px; margin-bottom: 5px;">--:--</div>
+            <div id="clock-display" style="font-size: 18px; font-weight: bold;">--:--:--</div>
+        </div>
+        <h1 class="glow-title">POSIBLES RUTAS DE ARGENTINA<br>MUNDIAL 2026</h1>
+        <div class="neon-box green">
+            <div style="font-size: 10px; margin-bottom: 5px;">CUENTA REGRESIVA</div>
+            <div id="countdown-display" style="font-size: 16px; font-weight: bold;">--D --H --M --S</div>
+        </div>
+    </header>
+
+    <div class="button-area">
+        <div class="button-row">
+            <button class="btn-ruta">1 PUESTO</button>
+            <button class="btn-ruta active" id="btn-2-puesto">2 PUESTO</button>
+            <button class="btn-ruta">1 PRIMER<br>3 TERCERO</button>
+            <button class="btn-ruta">2 SEGUNDO<br>3 TERCERO</button>
+        </div>
+        <div class="button-row">
+            <button class="btn-ruta">3 TERCERO<br>3 TERCERO</button>
+            <button class="btn-ruta">4 CUARTO<br>3 TERCERO</button>
+            <button class="btn-ruta">5 QUINTO<br>3 TERCERO</button>
+            <button class="btn-ruta">6 SEXTO<br>3 TERCERO</button>
+        </div>
+        <div class="button-row">
+            <button class="btn-ruta">7 SEPTIMO<br>3 TERCERO</button>
+            <button class="btn-ruta">8 OCTAVO<br>3 TERCERO</button>
+            <button class="btn-ruta">4 PUESTO</button>
+        </div>
+    </div>
+
+    <div class="map-wrapper" id="tactic-map">
+        <div class="grid-bg"></div>
+        <div class="globe-sphere">
+            <div class="map-bg"></div>
+            </div>
+        
+        <svg id="routes-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        
+        <div class="cyber-tooltip" style="left: 45%; top: 75%;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Estadio_Azteca_2015.jpg/320px-Estadio_Azteca_2015.jpg" alt="Estadio Azteca">
+            <div class="info">
+                <strong>Estadio Azteca</strong><br>
+                Ciudad de México<br>
+                16/06 22:00
+            </div>
+            <div class="badge">F1</div>
+        </div>
+    </div>
+
+    <div class="gvs-badge">GVS PRODUCCIONES</div>
+
+    <script>
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            initClock();
+            initCountdown();
+            initNodesAndRoutes();
             
-            const g = document.createElement("div"); g.className = "horarios-row"; g.id = `grid-1-${i}`;
-            if(i === 10) {
-                [0,1,2].forEach(idx => { g.innerHTML += `<div class="glass-box">${horarios[idx]}${getTooltipHTML(dataPartidos[idx])}</div>`; });
-                g.innerHTML += `<div class="glass-box regreso-box pulse">Nos Volvemos</div>`;
-            } else {
-                horarios.forEach((h, idx) => { g.innerHTML += `<div class="glass-box">${h}${getTooltipHTML(dataPartidos[idx])}</div>`; });
-                const g2 = document.createElement("div"); g2.className = "horarios-row"; g2.id = `grid-2-${i}`;
-                horarios.forEach((h, idx) => { g2.innerHTML += `<div class="glass-box">${h}${getTooltipHTML(dataPartidos[idx])}</div>`; });
-                grid.appendChild(g2);
-                const b2 = document.createElement("button");
-                b2.className = "action-btn"; b2.id = `btn-2-${i}`; 
-                b2.innerHTML = btn.t.replace("PRIMER", "1°").replace("SEGUNDO", "2°");
-                b2.onclick = () => activar(i, 2); r2.appendChild(b2);
-            }
-            grid.appendChild(g);
+            // Auto-activar la ruta 2 PUESTO al cargar
+            setTimeout(() => {
+                document.getElementById('btn-2-puesto').classList.add('active');
+                drawActiveRoute();
+            }, 500);
         });
 
-        setInterval(() => {
-            const n = new Date();
-            document.getElementById('hora').innerHTML = `${n.getDate()}/${n.getMonth()+1}/${n.getFullYear()}<br>${n.toLocaleTimeString()}`;
-            const res = new Date("2026-06-11T00:00:00") - n;
-            document.getElementById('restante').innerHTML = `${Math.floor(res/86400000)} DÍAS`;
-        }, 1000);
-    }
-    init();
-</script>
+        // 1. RELOJ Y FECHA (Activación)
+        function initClock() {
+            function updateClock() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('es-AR', { hour12: true });
+                const days = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
+                const dateStr = `${days[now.getDay()]}, ${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth()+1).padStart(2, '0')}`;
+                document.getElementById('clock-display').innerText = timeStr;
+                document.getElementById('date-display').innerText = dateStr;
+            }
+            setInterval(updateClock, 1000);
+            updateClock();
+        }
+
+        // 2. CUENTA REGRESIVA (Activación a 11 Junio 2026)
+        function initCountdown() {
+            const worldCupDate = new Date('June 11, 2026 00:00:00').getTime();
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = worldCupDate - now;
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById('countdown-display').innerText = `${days}D ${String(hours).padStart(2, '0')}H ${String(minutes).padStart(2, '0')}M ${String(seconds).padStart(2, '0')}S`;
+            }
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }
+
+        // 3. NODOS Y RUTAS (Datos Precisos de Referencia)
+        // Posiciones relativas (en %) dentro de la esfera
+        const nodesData = [
+            { id: '8avos', label: '8AVOS', x: 25, y: 35 },
+            { id: 'f2', label: 'F2', x: 38, y: 65 },
+            { id: 'f1', label: 'F1', x: 45, y: 75 }, // Ciudad de México
+            { id: 'f3', label: 'F3', x: 48, y: 55 },
+            { id: '16avos', label: '16AVOS', x: 62, y: 40 },
+            { id: '4tos', label: '4TOS', x: 60, y: 55 },
+            { id: 'semis', label: 'SEMIS', x: 70, y: 35 },
+            { id: 'final', label: 'FINAL', x: 80, y: 48 },
+            { id: 'vuelta', label: 'NOS VOLVEMOS', x: 82, y: 52 }
+        ];
+
+        function initNodesAndRoutes() {
+            const globeSphere = document.querySelector('.globe-sphere');
+            
+            // Inyectar Nodos
+            nodesData.forEach(node => {
+                const dot = document.createElement('div');
+                dot.className = 'node';
+                dot.style.left = node.x + '%';
+                dot.style.top = node.y + '%';
+                
+                const label = document.createElement('div');
+                label.className = 'node-label';
+                label.innerText = node.label;
+                label.style.left = node.x + '%';
+                label.style.top = node.y + '%';
+                
+                globeSphere.appendChild(dot);
+                globeSphere.appendChild(label);
+            });
+        }
+
+        // Trazado de Ruta para '2 PUESTO' (Zigzag idéntico a la referencia)
+        function drawActiveRoute() {
+            const svg = document.getElementById('routes-svg');
+            svg.innerHTML = ''; 
+            
+            // Ruta precisa en zigzag
+            const pathData = `
+                M ${nodesData.find(n=>n.id==='8avos').x} ${nodesData.find(n=>n.id==='8avos').y} 
+                L ${nodesData.find(n=>n.id==='16avos').x} ${nodesData.find(n=>n.id==='16avos').y}
+                L ${nodesData.find(n=>n.id==='f2').x} ${nodesData.find(n=>n.id==='f2').y}
+                L ${nodesData.find(n=>n.id==='f1').x} ${nodesData.find(n=>n.id==='f1').y}
+                L ${nodesData.find(n=>n.id==='f3').x} ${nodesData.find(n=>n.id==='f3').y}
+                L ${nodesData.find(n=>n.id==='semis').x} ${nodesData.find(n=>n.id==='semis').y}
+                L ${nodesData.find(n=>n.id==='4tos').x} ${nodesData.find(n=>n.id==='4tos').y}
+                L ${nodesData.find(n=>n.id==='final').x} ${nodesData.find(n=>n.id==='final').y}
+            `;
+
+            const realPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            realPath.setAttribute('d', pathData);
+            realPath.className = 'route-line';
+            svg.appendChild(realPath);
+        }
+
+    </script>
+</body>
+</html>
